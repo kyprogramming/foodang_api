@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import path from "path";
+import fs from "fs";
 
 import { AdminRoute, DeliveryRoute, VandorRoute } from "../routes";
 import { CustomerRoute } from "../routes/CustomerRoute";
@@ -12,6 +13,11 @@ export default async (app: Application) => {
   app.use(express.json());
 
   const imagePath = path.join(__dirname, "../images");
+
+  if (!fs.existsSync(imagePath)) {
+    fs.mkdirSync(imagePath, { recursive: true });
+     console.log(`${imagePath} directory created.`);
+  }
 
   app.use("/images", express.static(imagePath));
 

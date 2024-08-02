@@ -24,7 +24,7 @@ const imageStorage = multer.diskStorage({
     cb(null, "images");
   },
   filename: function (req, file, cb) {
-    cb(null, new Date().toISOString() + "_" + file.originalname);
+   cb(null, new Date().toISOString().replace(/:/g, "-") + file.originalname);
   },
 });
 
@@ -39,7 +39,7 @@ router.patch("/profile", UpdateVendorProfile);
 router.patch("/service", UpdateVendorService);
 router.patch("/coverimage", images, UpdateVendorCoverImage);
 
-router.post("/food", AddFood);
+router.post("/food", images, AddFood);
 router.get("/foods", GetFoods);
 
 router.get("/orders", GetOrders);
