@@ -88,7 +88,7 @@ export const DeliveryLogin = async (req: Request, res: Response, next: NextFunct
 
         if(validation){
 
-            const signature = GenerateSignature({
+            const signature = await GenerateSignature({
                 _id: deliveryUser._id,
                 email: deliveryUser.email,
                 verified: deliveryUser.verified
