@@ -7,25 +7,25 @@ import { CustomerRoute } from "../routes/CustomerRoute";
 import { ShoppingRoute } from "../routes/ShoppingRoutes";
 
 export default async (app: Application) => {
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
+ app.use(express.json());
+ app.use(express.urlencoded({ extended: true }));
 
-  app.use(express.json());
+ app.use(express.json());
 
-  const imagePath = path.join(__dirname, "../images");
+ const imagePath = path.join(__dirname, "../images");
 
-  if (!fs.existsSync(imagePath)) {
-    fs.mkdirSync(imagePath, { recursive: true });
-     console.log(`${imagePath} directory created.`);
-  }
+ if (!fs.existsSync(imagePath)) {
+  fs.mkdirSync(imagePath, { recursive: true });
+  console.log(`${imagePath} directory created.`);
+ }
 
-  app.use("/images", express.static(imagePath));
+ app.use("/images", express.static(imagePath));
 
-  app.use("/admin", AdminRoute);
-  app.use("/vendor", VandorRoute);
-  app.use("/customer", CustomerRoute);
-  app.use("/delivery", DeliveryRoute);
-  app.use(ShoppingRoute);
+ app.use("/admin", AdminRoute);
+ app.use("/vendor", VandorRoute);
+ app.use("/customer", CustomerRoute);
+ app.use("/delivery", DeliveryRoute);
+ app.use(ShoppingRoute);
 
-  return app;
+ return app;
 };

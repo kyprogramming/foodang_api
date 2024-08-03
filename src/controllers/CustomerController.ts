@@ -27,7 +27,7 @@ export const CustomerSignUp = async (req: Request, res: Response, next: NextFunc
 
     const existingCustomer =  await Customer.find({ email: email});
     
-    if(existingCustomer !== null){
+    if(!existingCustomer){
         return res.status(400).json({message: 'Email already exist!'});
     }
 
@@ -63,8 +63,6 @@ export const CustomerSignUp = async (req: Request, res: Response, next: NextFunc
     }
 
     return res.status(400).json({ msg: 'Error while creating user'});
-
-
 }
 
 export const CustomerLogin = async (req: Request, res: Response, next: NextFunction) => {

@@ -95,13 +95,10 @@ export const UpdateVendorCoverImage = async (
 
     if (vendor !== null) {
       const files = req.files as [Express.Multer.File];
-
       const images = files.map((file: Express.Multer.File) => file.filename);
 
       vendor.coverImages.push(...images);
-
       const saveResult = await vendor.save();
-
       return res.json(saveResult);
     }
   }
