@@ -158,8 +158,6 @@ export const EditDeliveryProfile = async (req: Request, res: Response, next: Nex
 }
 
 /* ------------------- Delivery Notification --------------------- */
-
-
 export const UpdateDeliveryUserStatus = async (req: Request, res: Response, next: NextFunction) => {
 
     const deliveryUser = req.user;
