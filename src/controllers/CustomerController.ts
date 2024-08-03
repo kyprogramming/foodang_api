@@ -340,6 +340,7 @@ export const GetOrderById = async (req: Request, res: Response, next: NextFuncti
 };
 
 //  Cart Section **************************
+// Add to cart 
 export const AddToCart = async (req: Request, res: Response, next: NextFunction) => {
  const customer = req.user;
 
@@ -386,6 +387,7 @@ export const AddToCart = async (req: Request, res: Response, next: NextFunction)
  return res.status(404).json({ msg: "Unable to add to cart!" });
 };
 
+// Get customer cart items
 export const GetCart = async (req: Request, res: Response, next: NextFunction) => {
  const customer = req.user;
 
@@ -400,6 +402,7 @@ export const GetCart = async (req: Request, res: Response, next: NextFunction) =
  return res.status(400).json({ message: "Cart is Empty!" });
 };
 
+// Delete customer cart 
 export const DeleteCart = async (req: Request, res: Response, next: NextFunction) => {
  const customer = req.user;
 

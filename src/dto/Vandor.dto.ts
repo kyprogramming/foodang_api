@@ -43,3 +43,7 @@ export interface CreateOfferInputs {
   pincode: string;
   isActive: boolean;
 }
+
+export interface InactivateOfferInputs {
+ isActive: boolean;
+}

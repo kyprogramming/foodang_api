@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import {
   AddFood,
   AddOffer,
+  DeleteOffer,
   EditOffer,
   GetFoods,
   GetOffers,
@@ -47,9 +48,10 @@ router.put("/order/:id/process", ProcessOrder);
 router.get("/order/:id", GetOrderDetails);
 
 //Offers
-router.get("/offers", GetOffers);
 router.post("/offer", AddOffer);
+router.get("/offers", GetOffers);
 router.put("/offer/:id", EditOffer);
+router.delete("/offer/:id", DeleteOffer);
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.json({ message: "Hello from Vandor" });

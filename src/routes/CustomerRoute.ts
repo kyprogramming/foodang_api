@@ -1,19 +1,19 @@
 import express, { Request, Response, NextFunction } from "express";
 import {
-  AddToCart,
-  CreateOrder,
-  CreatePayment,
-  CustomerLogin,
-  CustomerSignUp,
-  CustomerVerify,
-  DeleteCart,
-  EditCustomerProfile,
-  GetCart,
-  GetCustomerProfile,
-  GetOrderById,
-  GetOrders,
-  RequestOtp,
-  VerifyOffer,
+ AddToCart,
+ CreateOrder,
+ CreatePayment,
+ CustomerLogin,
+ CustomerSignUp,
+ CustomerVerify,
+ DeleteCart,
+ EditCustomerProfile,
+ GetCart,
+ GetCustomerProfile,
+ GetOrderById,
+ GetOrders,
+ RequestOtp,
+ VerifyOffer,
 } from "../controllers";
 import { Authenticate } from "../middleware";
 import { Offer } from "../models/Offer";
@@ -42,6 +42,7 @@ router.patch("/profile", EditCustomerProfile);
 // Cart
 router.post("/cart", AddToCart);
 router.get("/cart", GetCart);
+// TODO: implement edit cart functionality
 router.delete("/cart", DeleteCart);
 
 // Apply Offers
