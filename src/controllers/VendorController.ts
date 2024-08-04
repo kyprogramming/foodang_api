@@ -5,7 +5,7 @@ import { Offer } from "../models/Offer";
 import { Order } from "../models/Order";
 import { GenerateSignature, ValidatePassword } from "../utility";
 import { FindVendor } from "./AdminController";
-import cloudinary from "../config/cloudinaryConfig";
+import { cloudinary } from "../config";
 import { deleteFile } from "../utility/deleteFiles";
 
 //  Vendor login

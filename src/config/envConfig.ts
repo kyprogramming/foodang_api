@@ -19,6 +19,10 @@ export const envConfig = {
     CLOUDINARY_API_KEY: process?.env?.CLOUDINARY_API_KEY,
     CLOUDINARY_API_SECRET: process?.env?.CLOUDINARY_API_SECRET,
 
+    MAILJET_SENDER: process?.env?.MAILJET_SENDER,
+    MAILJET_API_KEY: process?.env?.MAILJET_API_KEY,
+    MAILJET_API_SECRET: process?.env?.MAILJET_API_SECRET,
+
     // TOKEN_SECRET: process?.env?.TOKEN_SECRET, JWT_EXPIRE_TIME: process?.env?.JWT_EXPIRE_TIME,
 
     // WEBSITE_URL: process?.env?.WEBSITE_URL, API_URL: process?.env?.API_URL, API_VERSION: process?.env?.API_VERSION,

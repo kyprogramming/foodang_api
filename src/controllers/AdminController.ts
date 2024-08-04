@@ -5,6 +5,8 @@ import { Transaction } from "../models/Transaction";
 import { GeneratePassword, GenerateSalt, GenerateSignature, ValidatePassword } from "../utility";
 import { Admin } from "../models/Admin";
 import { AdminLoginInput } from "../dto/Admin.dto";
+import { sendEmail } from "../config";
+
 
 //  Create a new vendor
 export const CreateAdmin = async (req: Request, res: Response, next: NextFunction) => {
@@ -28,6 +30,7 @@ export const CreateAdmin = async (req: Request, res: Response, next: NextFunctio
         salt: salt,
         phone: phone,
     });
+    await sendEmail();
     return res.json(createdAdmin);
 };
 
