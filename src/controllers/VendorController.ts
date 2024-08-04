@@ -5,6 +5,8 @@ import { Offer } from "../models/Offer";
 import { Order } from "../models/Order";
 import { GenerateSignature, ValidatePassword } from "../utility";
 import { FindVendor } from "./AdminController";
+import cloudinary from "../config/cloudinaryConfig";
+import { deleteFile } from "../utility/deleteFiles";
 
 //  Vendor login
 export const VendorLogin = async (req: Request, res: Response, next: NextFunction) => {
@@ -68,11 +70,29 @@ export const UpdateVendorCoverImage = async (req: Request, res: Response, next: 
     if (user) {
         const vendor = await FindVendor(user._id);
 
-        if (vendor !== null) {
-            const files = req.files as [Express.Multer.File];
-            const images = files.map((file: Express.Multer.File) => file.filename);
+        const imageUrlList: any[] = [];
 
-            vendor.coverImages.push(...images);
+        if (vendor !== null) {
+            if (req.files) {
+                const files = req?.files;
+
+                for (let i = 0; i < req?.files?.length; i += 1) {
+                    const element = req.files && req.files[i].filename;
+
+                    const localFilePath = `${process.env.PWD}/public/uploads/vendors/${element}`;
+
+                    // eslint-disable-next-line no-await-in-loop
+                    const result = await cloudinary.uploader.upload(localFilePath, {
+                        folder: "vendors",
+                    });
+
+                    imageUrlList.push({ url: result?.secure_url, cloudinary_id: result?.public_id });
+
+                    // remove files from local filesystem
+                    await deleteFile(localFilePath);
+                }
+            }
+            vendor.coverImages.push(imageUrlList);
             const saveResult = await vendor.save();
             return res.json(saveResult);
         }

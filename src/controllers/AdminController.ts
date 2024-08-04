@@ -1,16 +1,63 @@
 import { Request, Response, NextFunction } from "express";
-import { CreateVendorInput } from "../dto";
+import { CreateAdminInput, CreateVendorInput } from "../dto";
 import { DeliveryUser, Vendor } from "../models";
 import { Transaction } from "../models/Transaction";
-import { GeneratePassword, GenerateSalt } from "../utility";
+import { GeneratePassword, GenerateSalt, GenerateSignature, ValidatePassword } from "../utility";
+import { Admin } from "../models/Admin";
+import { AdminLoginInput } from "../dto/Admin.dto";
+
+//  Create a new vendor
+export const CreateAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    const { name, address, email, password, phone } = <CreateAdminInput>req.body;
+
+    const existingAdmin = await FindAdmin("", email);
+    if (existingAdmin !== null) {
+        return res.json({ message: "An admin is exist with this email ID" });
+    }
+
+    //generate a salt
+    const salt = await GenerateSalt();
+    const adminPassword = await GeneratePassword(password, salt);
+
+    // encrypt the password using the salt
+    const createdAdmin = await Admin.create({
+        name: name,
+        address: address,
+        email: email,
+        password: adminPassword,
+        salt: salt,
+        phone: phone,
+    });
+    return res.json(createdAdmin);
+};
 
 // Find Vendor by email address and id
-export const FindVendor = async (id: String | undefined, email?: string) => {
+export const FindAdmin = async (id: String | undefined, email?: string) => {
     if (email) {
-        return await Vendor.findOne({ email: email });
+        return await Admin.findOne({ email: email });
     } else {
-        return await Vendor.findById(id);
+        return await Admin.findById(id);
     }
+};
+
+//  Vendor login
+export const AdminLogin = async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = <AdminLoginInput>req.body;
+
+    const existingUser = await FindAdmin("", email);
+
+    if (existingUser !== null) {
+        const validation = await ValidatePassword(password, existingUser.password, existingUser.salt);
+        if (validation) {
+            const signature = await GenerateSignature({
+                _id: existingUser._id,
+                email: existingUser.email,
+                name: existingUser.name,
+            });
+            return res.json(signature);
+        }
+    }
+    return res.json({ message: "Login credential is not valid" });
 };
 
 //  Create a new vendor
@@ -44,6 +91,15 @@ export const CreateVendor = async (req: Request, res: Response, next: NextFuncti
         lng: 0,
     });
     return res.json(createdVandor);
+};
+
+// Find Vendor by email address and id
+export const FindVendor = async (id: String | undefined, email?: string) => {
+    if (email) {
+        return await Vendor.findOne({ email: email });
+    } else {
+        return await Vendor.findById(id);
+    }
 };
 
 // Get a list of all the available vendors

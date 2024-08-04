@@ -12,7 +12,7 @@ export interface IVendor extends Document {
     password: string;
     salt: string;
     serviceAvailable: boolean;
-    coverImages: [string];
+    coverImages: any[];
     rating: number;
     foods: [IFood];
     lat: number;
@@ -31,7 +31,7 @@ const VendorSchema = new Schema(
         password: { type: String, required: true },
         salt: { type: String, required: true },
         serviceAvailable: { type: Boolean },
-        coverImages: { type: [String] },
+        coverImages: { type: Array },
         rating: { type: Number },
         foods: [
             {

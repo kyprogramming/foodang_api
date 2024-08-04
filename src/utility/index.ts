@@ -1,2 +1,3 @@
-export * from './PasswordUnility';
+export * from "./PasswordUtility";
 export * from './NotificationUtility';
+export * from './getImageExtensionUtility';

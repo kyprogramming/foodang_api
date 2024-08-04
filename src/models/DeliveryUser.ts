@@ -28,6 +28,7 @@ const DeliveryUserSchema = new Schema(
         address: { type: String },
         phone: { type: String, required: true },
         pincode: { type: String },
+        profileImage: { type: String },
         verified: { type: Boolean },
         otp: { type: Number },
         otp_expiry: { type: Date },

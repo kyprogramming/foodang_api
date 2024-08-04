@@ -1,5 +1,5 @@
 import mongoose, { ConnectOptions, Error } from "mongoose";
-mongoose.set("strictQuery", true);
+// mongoose.set("strictQuery", true);
 
 import { envConfig } from "./envConfig";
 
@@ -46,6 +46,9 @@ export const connectDB = async () => {
             mongoose.connect(MONGODB_CON, {
                 socketTimeoutMS: 3000,
                 connectTimeoutMS: 3000,
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+                useCreateIndex: true,
             } as ConnectOptions);
         }, 3000);
     });
