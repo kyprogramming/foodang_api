@@ -9,11 +9,7 @@ export interface IFood extends Document {
     readyTime: number;
     price: number;
     rating: number;
-    // images: [string];
-    images: {
-        url: string;
-        cloudinary_id: string;
-    }[];
+    images: any[];
 }
 
 const FoodSchema = new Schema(
@@ -26,8 +22,7 @@ const FoodSchema = new Schema(
         readyTime: { type: Number },
         price: { type: Number },
         rating: { type: Number },
-        images: { type: [String] },
-        
+        images: { type: Array },
     },
     {
         toJSON: {

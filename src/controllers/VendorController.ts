@@ -123,31 +123,45 @@ export const UpdateVendorService = async (req: Request, res: Response, next: Nex
 // Add food to the vendor profile
 export const AddFood = async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
-
     const { name, description, category, foodType, readyTime, price } = <CreateFoodInput>req.body;
 
     if (user) {
         const vendor = await FindVendor(user._id);
-
         if (vendor !== null) {
-            const files = req.files as [Express.Multer.File];
-            const images = files.map((file: Express.Multer.File) => file.filename);
+            const imageUrlList: any[] = [];
+            if (req.files) {
+                const files = req.files as MulterFile[];
+                if (!files || files.length === 0) {
+                    return res.json({ message: "No files were uploaded." });
+                }
 
-            const food = await Food.create({
-                vendorId: vendor._id,
-                name: name,
-                description: description,
-                category: category,
-                price: price,
-                rating: 0,
-                readyTime: readyTime,
-                foodType: foodType,
-                images: images,
-            });
+                for (let i = 0; i < files.length; i += 1) {
+                    const element = req.files && req.files[i].filename;
+                    const localFilePath = `${process.env.PWD}/public/uploads/foods/${element}`;
+                    const result = await cloudinary.uploader.upload(localFilePath, {
+                        folder: "foods",
+                    });
+                    imageUrlList.push({ url: result?.secure_url, cloudinary_id: result?.public_id });
+                    // remove files from local filesystem
+                    await deleteFile(localFilePath);
+                }
 
-            vendor.foods.push(food);
-            const result = await vendor.save();
-            return res.json(result);
+                const food = await Food.create({
+                    vendorId: vendor._id,
+                    name: name,
+                    description: description,
+                    category: category,
+                    price: price,
+                    rating: 0,
+                    readyTime: readyTime,
+                    foodType: foodType,
+                    images: imageUrlList,
+                });
+
+                vendor.foods.push(food);
+                const result = await vendor.save();
+                return res.json(result);
+            }
         }
     }
     return res.json({ message: "Unable to Update vendor profile " });
