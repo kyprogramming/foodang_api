@@ -1,8 +1,9 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
+import { IVendor } from "./Vendor";
 
 export interface IOffer extends Document {
  offerType: string; 
- vendors: [any];
+ vendors: [IVendor];
  title: string;
  description: string;
  minValue: number;

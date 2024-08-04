@@ -210,7 +210,7 @@ const assignOrderForDelivery = async (orderId: string, vendorId: string) => {
 
         //find the available Delivery person
         const deliveryPerson = await DeliveryUser.find({ pincode: areaCode, verified: true, isAvailable: true });
-        if (deliveryPerson) {
+        if (deliveryPerson && deliveryPerson?.length > 0) {
             // Check the nearest delivery person and assign the order
 
             const currentOrder = await Order.findById(orderId);
@@ -385,7 +385,7 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
 
         const orderId = `${Math.floor(Math.random() * 89999) + 1000}`;
 
-        const cart = <[CartItem]>req.body;
+        const { items } = req.body;
 
         let cartItems = Array();
 
@@ -395,11 +395,11 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
 
         const foods = await Food.find()
             .where("_id")
-            .in(cart.map((item) => item._id))
+            .in(items.map((item) => item._id))
             .exec();
 
         foods.map((food) => {
-            cart.map(({ _id, unit }) => {
+            items.map(({ _id, unit }) => {
                 if (food._id == _id) {
                     vendorId = food.vendorId;
                     netAmount += food.price * unit;
