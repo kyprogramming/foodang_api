@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { CreateFoodInput, CreateOfferInputs, EditVendorInput, InactivateOfferInputs, VendorLoginInput } from "../dto";
+import { CreateFoodInput, CreateOfferInputs, EditVendorInput, InactivateOfferInputs, MulterFile, VendorLoginInput } from "../dto";
 import { Food } from "../models";
 import { Offer } from "../models/Offer";
 import { Order } from "../models/Order";
@@ -66,28 +66,25 @@ export const UpdateVendorProfile = async (req: Request, res: Response, next: Nex
 // Update vendor cover image
 export const UpdateVendorCoverImage = async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
-
     if (user) {
         const vendor = await FindVendor(user._id);
-
         const imageUrlList: any[] = [];
 
         if (vendor !== null) {
             if (req.files) {
-                const files = req?.files;
+                const files = req?.files as MulterFile[];
 
-                for (let i = 0; i < req?.files?.length; i += 1) {
+                if (!files || files.length === 0) {
+                    return res.json({ message: "No files were uploaded." });
+                }
+
+                for (let i = 0; i < files.length; i += 1) {
                     const element = req.files && req.files[i].filename;
-
                     const localFilePath = `${process.env.PWD}/public/uploads/vendors/${element}`;
-
-                    // eslint-disable-next-line no-await-in-loop
                     const result = await cloudinary.uploader.upload(localFilePath, {
                         folder: "vendors",
                     });
-
                     imageUrlList.push({ url: result?.secure_url, cloudinary_id: result?.public_id });
-
                     // remove files from local filesystem
                     await deleteFile(localFilePath);
                 }
