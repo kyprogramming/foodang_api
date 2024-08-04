@@ -6,7 +6,7 @@ import { Customer, DeliveryUser, Food, Vendor } from "../models";
 import { Offer } from "../models/Offer";
 import { Order } from "../models/Order";
 import { Transaction } from "../models/Transaction";
-import { GenerateOtp, GeneratePassword, GenerateSalt, GenerateSignature, onRequestOTP, ValidatePassword } from "../utility";
+import { GenerateOtp, GeneratePassword, GenerateSalt, GenerateSignature, SendOTP, ValidatePassword } from "../utility";
 
 // Customer signup
 export const CustomerSignUp = async (req: Request, res: Response, next: NextFunction) => {
@@ -49,7 +49,7 @@ export const CustomerSignUp = async (req: Request, res: Response, next: NextFunc
 
     if (result) {
         // send OTP to customer
-        await onRequestOTP(otp, phone);
+        await SendOTP(otp, phone);
 
         //Generate the Signature
         const signature = await GenerateSignature({
@@ -141,7 +141,7 @@ export const RequestOtp = async (req: Request, res: Response, next: NextFunction
             profile.otp_expiry = expiry;
 
             await profile.save();
-            const sendCode = await onRequestOTP(otp, profile.phone);
+            const sendCode = await SendOTP(otp, profile.phone);
 
             if (!sendCode) {
                 return res.status(400).json({ message: "Failed to verify your phone number" });

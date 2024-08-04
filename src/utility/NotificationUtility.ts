@@ -1,4 +1,6 @@
-import { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER } from "../config";
+// import { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER } from "../twilioConfig";
+import { twilioConfig, twilioClient } from "../config";
+
 /* ------------------- Email --------------------- */
 
 /* ------------------- Notification --------------------- */
@@ -6,30 +8,24 @@ import { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER } from "../c
 /* ------------------- OTP --------------------- */
 
 export const GenerateOtp = () => {
- const otp = Math.floor(10000 + Math.random() * 900000);
- let expiry = new Date();
- expiry.setTime(new Date().getTime() + 30 * 60 * 1000);
+    const otp = Math.floor(10000 + Math.random() * 900000);
+    let expiry = new Date();
+    expiry.setTime(new Date().getTime() + 30 * 60 * 1000);
 
- return { otp, expiry };
+    return { otp, expiry };
 };
 
-export const onRequestOTP = async (otp: number, toPhoneNumber: string) => {
- try {
-  const accountSid = TWILIO_ACCOUNT_SID;
-  const authToken = TWILIO_AUTH_TOKEN;
-  const client = require("twilio")(accountSid, authToken);
-
-  const response = await client.messages.create({
-   body: `Your OTP is ${otp}`,
-   from: TWILIO_PHONE_NUMBER,
-   to: `+44${toPhoneNumber}`,
-  });
-
-  return response;
- } catch (error) {
-  console.log(error);
-  return false;
- }
+export const SendOTP = async (otp: number, toPhoneNumber: string) => {
+    try {
+        return await twilioClient.messages.create({
+            body: `Your OTP is ${otp}`,
+            from: twilioConfig.TWILIO_PHONE_NUMBER,
+            to: `+44${toPhoneNumber}`,
+        });
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
 };
 
 /* ------------------- Payment --------------------- */
