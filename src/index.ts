@@ -1,12 +1,12 @@
 import express from "express";
 import App from "./services/ExpressApp";
-import dbConnection from "./services/Database";
+import connectDB from "./config/dbConfig";
 import { PORT } from "./config";
 
 const StartServer = async () => {
   const app = express();
 
-  await dbConnection();
+  await connectDB();
 
   await App(app);
 

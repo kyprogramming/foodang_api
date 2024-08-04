@@ -1,15 +1,17 @@
-import mongoose from "mongoose";
-import { MONGO_URI } from "../config";
+// import mongoose from "mongoose";
+// import { envConfig } from "../config";
 
-export default async () => {
-  try {
-    await mongoose.connect(MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-    });
-  } catch (err) {
-    console.log(err);
-    process.exit(1);
-  }
-};
+// const MONGODB_CON = envConfig.MONGODB_CON; 
+
+// export default async () => {
+//   try {
+//     await mongoose.connect(MONGODB_CON, {
+//         useNewUrlParser: true,
+//         useUnifiedTopology: true,
+//         useCreateIndex: true,
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     process.exit(1);
+//   }
+// };
