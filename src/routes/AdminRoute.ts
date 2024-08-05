@@ -4,6 +4,10 @@ import { Authenticate } from "../middleware";
 
 const router = express.Router();
 
+router.get("/", (req: Request, res: Response, next: NextFunction) => {
+    res.json({ message: "Hello from  Admin" });
+});
+
 router.post("/", CreateAdmin);
 router.post("/login", AdminLogin);
 
@@ -19,9 +23,5 @@ router.get("/transaction/:id", GetTransactionById);
 
 router.put("/delivery/verify", VerifyDeliveryUser);
 router.get("/delivery/users", GetDeliveryUsers);
-
-router.get("/", (req: Request, res: Response, next: NextFunction) => {
-    res.json({ message: "Hello from  Admin" });
-});
 
 export { router as AdminRoute };

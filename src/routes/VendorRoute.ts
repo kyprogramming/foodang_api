@@ -1,19 +1,19 @@
 import express, { Request, Response, NextFunction } from "express";
 import {
-  AddFood,
-  AddOffer,
-  DeleteOffer,
-  EditOffer,
-  GetFoods,
-  GetOffers,
-  GetOrderDetails,
-  GetOrders,
-  GetVendorProfile,
-  ProcessOrder,
-  UpdateVendorCoverImage,
-  UpdateVendorProfile,
-  UpdateVendorService,
-  VendorLogin,
+    AddFood,
+    AddOffer,
+    DeleteOffer,
+    EditOffer,
+    GetFoods,
+    GetOffers,
+    GetOrderDetails,
+    GetOrders,
+    GetVendorProfile,
+    ProcessOrder,
+    UpdateVendorCoverImage,
+    UpdateVendorProfile,
+    UpdateVendorService,
+    VendorLogin,
 } from "../controllers";
 import { Authenticate } from "../middleware";
 // import multer from "multer";
@@ -45,7 +45,7 @@ router.patch("/profile", UpdateVendorProfile);
 router.patch("/service", UpdateVendorService);
 router.patch("/coverimage", uploadImage.array("coverImage"), UpdateVendorCoverImage);
 
-router.post("/food", uploadImage.array('foodImages'), AddFood);
+router.post("/food", uploadImage.array("foodImages"), AddFood);
 router.get("/foods", GetFoods);
 
 router.get("/orders", GetOrders);
@@ -58,6 +58,4 @@ router.get("/offers", GetOffers);
 router.put("/offer/:id", EditOffer);
 router.delete("/offer/:id", DeleteOffer);
 
-
-
-export { router as VandorRoute };
+export { router as VendorRoute };

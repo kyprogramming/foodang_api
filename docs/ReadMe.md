@@ -6,6 +6,8 @@ https://github.com/kyprogramming/foodang_api
 
 https://metamug.com/util/postman-to-swagger/
 
+http://localhost:8000/swagger/docs/
+
 <!-- find list of all package installed globally -->
 
 npm list -g --depth=0
