@@ -1,0 +1,687 @@
+openapi: 3.0.0
+info:
+  title: Food Order  API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+  - url: http://{{base_url}}
+components:
+  securitySchemes:
+    noauthAuth:
+      type: http
+      scheme: noauth
+    bearerAuth:
+      type: http
+      scheme: bearer
+security:
+  - bearerAuth: []
+tags:
+  - name: Admin
+  - name: Vendor
+  - name: Shopping
+  - name: Customer
+  - name: Delivery
+paths:
+  /admin:
+    get:
+      tags:
+        - Admin
+      summary: Admin - Hello
+      security:
+        - noauthAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Admin
+      summary: Admin - Create - Send Mail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Admin 1
+                address: 53 Carrick Know Hill EH127BU
+                email: admin1@gmail.com
+                password: '123456'
+                phone: '7442555583'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/login:
+    post:
+      tags:
+        - Admin
+      summary: Admin - Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: admin1@gmail.com
+                password: '123456'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/vendor:
+    post:
+      tags:
+        - Admin
+      summary: Admin- Create Vendor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Vendor 2
+                address: 53 Carrick Know Hill EH127BU
+                pincode: EH127BU
+                foodType:
+                  - non-veg
+                email: vendor2@gmail.com
+                password: '123456'
+                phone: '7442555575'
+                ownerName: Mr Vendor 2
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/vendors:
+    get:
+      tags:
+        - Admin
+      summary: Admin - Get Vendors
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/vendor/66af84dcaca5c44c44944287:
+    get:
+      tags:
+        - Admin
+      summary: Admin - Get Vendor By ID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/transactions:
+    get:
+      tags:
+        - Admin
+      summary: Admin - Get Transcations
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/transaction/66adfe1dd2a3621500a1f23b:
+    get:
+      tags:
+        - Admin
+      summary: Admin - Get Transcation by ID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /vendor:
+    get:
+      tags:
+        - Vendor
+      summary: Vendor - Hello
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /vendor/login:
+    get:
+      tags:
+        - Vendor
+      summary: Vendor - Login
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /vendor/profile:
+    get:
+      tags:
+        - Vendor
+      summary: Vendor - Get profile
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    patch:
+      tags:
+        - Vendor
+      summary: Vendor - Update profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Vendor 1 Updated
+                address: 49 Carrick Know Hill EH127BU
+                phone: '7442555581'
+                foodType:
+                  - veg
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /vendor/service:
+    patch:
+      tags:
+        - Vendor
+      summary: Vendor - Update service status
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: ''
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /vendor/coverimage:
+    patch:
+      tags:
+        - Vendor
+      summary: Vendor - Update cover image
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                coverImage:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /vendor/food:
+    post:
+      tags:
+        - Vendor
+      summary: Vendor - Add food item
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Non Veg Burger
+                description:
+                  type: string
+                  example: Non Veg Burger
+                category:
+                  type: string
+                  example: break-fast
+                price:
+                  type: integer
+                  example: '10'
+                readyTime:
+                  type: integer
+                  example: '15'
+                foodType:
+                  type: string
+                  example: non veg
+                foodImages:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /vendor/foods:
+    get:
+      tags:
+        - Vendor
+      summary: Vendor - Get foods
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /vendor/offer:
+    post:
+      tags:
+        - Vendor
+      summary: Vendor - Add offer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: 100 Off on Week Days
+                description: >-
+                  Get 100 OFF on week days for every order. Applicable for week
+                  days. Minimum order INR 250 or above
+                offerType: VENDOR
+                offerAmount: 100
+                pincode: EH127BU
+                promocode: OFFER100
+                promoType: ALL
+                startValidity: ''
+                endValidity: ''
+                bank: ''
+                isActive: true
+                minValue: 250
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /vendor/offers:
+    get:
+      tags:
+        - Vendor
+      summary: Vendor - Get offer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /vendor/offer/66afbb2f2f262c31c00ad0a3:
+    put:
+      tags:
+        - Vendor
+      summary: Vendor - Edit offer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: 200 Off on Week Days
+                description: >-
+                  Get 200 OFF on week days for every order. Applicable for week
+                  days. Minimum order INR 250 or above
+                offerType: VENDOR
+                offerAmount: 200
+                pincode: EH127BU
+                promocode: OFFER200
+                promoType: ALL
+                startValidity: ''
+                endValidity: ''
+                bank: ''
+                isActive: true
+                minValue: 500
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Vendor
+      summary: Vendor - Delete offer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /682024:
+    get:
+      tags:
+        - Shopping
+      summary: Foods - Availability
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /top-restaurant/682024:
+    get:
+      tags:
+        - Shopping
+      summary: Foods - Top restaurants
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /foods-in-30-min/682024:
+    get:
+      tags:
+        - Shopping
+      summary: Foods - In 30 mins
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /search/682024:
+    get:
+      tags:
+        - Shopping
+      summary: Foods - Search
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /offers/EH127BU:
+    get:
+      tags:
+        - Shopping
+      summary: Foods - Get offers by pincode
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /restaurant/66ad10cfa0e49d19d0b26243:
+    get:
+      tags:
+        - Shopping
+      summary: Foods - Restaurants by ID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /customer/signup:
+    post:
+      tags:
+        - Customer
+      summary: Customer - Signup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: kaushal.yadav@gmail.com
+                phone: '7442555583'
+                password: '123456'
+      security:
+        - noauthAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /customer/login:
+    post:
+      tags:
+        - Delivery
+      summary: Delivery- Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: kaushal.yadav@gmail.com
+                password: '123456'
+      security:
+        - noauthAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /customer/verify:
+    patch:
+      tags:
+        - Customer
+      summary: Customer - Verify
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                otp: '667567'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /customer/otp:
+    get:
+      tags:
+        - Customer
+      summary: Customer - Send OTP
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /customer/profile/:
+    get:
+      tags:
+        - Customer
+      summary: Customer - Profile
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /customer/profile:
+    patch:
+      tags:
+        - Customer
+      summary: Customer - Edit Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                address: Edinburgh
+                firstName: Kaushal
+                lastName: Yadav
+                lat: '55.953251'
+                lng: '-3.188267'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /customer/cart:
+    post:
+      tags:
+        - Customer
+      summary: Customer  - Add To Cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                _id: 66ad1308a0e49d19d0b26244
+                unit: 3
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Customer
+      summary: Customer - View Cart
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Customer
+      summary: Customer - Remove Cart
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /customer/cart/5ec0c80043434c07314cdf66/0:
+    put:
+      tags:
+        - Customer
+      summary: Customer - Edit Cart - pending
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties: {}
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /customer/create-order:
+    post:
+      tags:
+        - Customer
+      summary: Customer  - Create Order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                txnId: 66adfe1dd2a3621500a1f23b
+                amount: 500
+                items:
+                  - _id: 66ad1308a0e49d19d0b26244
+                    unit: 3
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /customer/order/:
+    get:
+      tags:
+        - Customer
+      summary: Customer - View Orders
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /customer/order/6065a2f62aad9fb177392993:
+    get:
+      tags:
+        - Customer
+      summary: Customer - Verify offer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /customer/create-payment:
+    post:
+      tags:
+        - Customer
+      summary: Customer  - Create Payment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                offerId: 66adeab451a05551e03522e4
+                amount: 600
+                paymentMode: COD
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /customer/offer/verify/66adeab451a05551e03522e4:
+    get:
+      tags:
+        - Customer
+      summary: Customer - View Order Details
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /delivery/signup:
+    post:
+      tags:
+        - Delivery
+      summary: Delivery- Signup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: angel.yadav@gmail.com
+                password: '123456'
+                phone: '7442555583'
+                firstName: Kaushal
+                lastName: Yadav
+                address: Edinburgh
+                pincode: EH127BU
+      security:
+        - noauthAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /delivery/profile:
+    get:
+      tags:
+        - Delivery
+      summary: Delivery - Profile
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /delivery/change-status:
+    put:
+      tags:
+        - Delivery
+      summary: Delivery - Update Status
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                lat: '5.3'
+                lng: '6.5'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

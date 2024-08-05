@@ -1,31 +1,36 @@
 import express, { Application } from "express";
 import path from "path";
 import fs from "fs";
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs";
 
 import { AdminRoute, DeliveryRoute, VandorRoute } from "../routes";
 import { CustomerRoute } from "../routes/CustomerRoute";
 import { ShoppingRoute } from "../routes/ShoppingRoutes";
 
 export default async (app: Application) => {
- app.use(express.json());
- app.use(express.urlencoded({ extended: true }));
+    const swaggerDocument = YAML.load(`${process.cwd()}/swagger/swagger.yaml`);
+    app.use("/swagger/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
- app.use(express.json());
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
 
- const imagePath = path.join(__dirname, "../images");
+    app.use(express.json());
 
- if (!fs.existsSync(imagePath)) {
-  fs.mkdirSync(imagePath, { recursive: true });
-  console.log(`${imagePath} directory created.`);
- }
+    const imagePath = path.join(__dirname, "../images");
 
- app.use("/images", express.static(imagePath));
+    if (!fs.existsSync(imagePath)) {
+        fs.mkdirSync(imagePath, { recursive: true });
+        console.log(`${imagePath} directory created.`);
+    }
 
- app.use("/admin", AdminRoute);
- app.use("/vendor", VandorRoute);
- app.use("/customer", CustomerRoute);
- app.use("/delivery", DeliveryRoute);
- app.use(ShoppingRoute);
+    app.use("/images", express.static("public"));
 
- return app;
+    app.use("/admin", AdminRoute);
+    app.use("/vendor", VandorRoute);
+    app.use("/customer", CustomerRoute);
+    app.use("/delivery", DeliveryRoute);
+    app.use(ShoppingRoute);
+
+    return app;
 };
