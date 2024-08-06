@@ -49,6 +49,10 @@ export const connectDB = async () => {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
                 useCreateIndex: true,
+                useFindAndModify: false,
+                autoReconnect: true,
+                reconnectTries: Number.MAX_VALUE, // Number of retries
+                reconnectInterval: 1000, // Reconnect every 1 second
             } as ConnectOptions);
         }, 3000);
     });

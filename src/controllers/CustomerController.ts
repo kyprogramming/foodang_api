@@ -7,6 +7,7 @@ import { Offer } from "../models/Offer";
 import { Order } from "../models/Order";
 import { Transaction } from "../models/Transaction";
 import { GenerateOtp, GeneratePassword, GenerateSalt, GenerateSignature, SendOTP, ValidatePassword } from "../utility";
+import { findObjectById } from "../utility/ObjectUtility";
 
 // Customer signup
 export const CustomerSignUp = async (req: Request, res: Response, next: NextFunction) => {
@@ -227,7 +228,7 @@ const assignOrderForDelivery = async (orderId: string, vendorId: string) => {
     // Update Delivery ID
 };
 
-//  Cart Section ************************** Add to cart
+//  Add to cart
 export const AddToCart = async (req: Request, res: Response, next: NextFunction) => {
     const customer = req.user;
 
@@ -307,7 +308,7 @@ export const DeleteCart = async (req: Request, res: Response, next: NextFunction
     return res.status(400).json({ message: "cart is Already Empty!" });
 };
 
-// Verify offer
+// Verify offer validity
 export const VerifyOffer = async (req: Request, res: Response, next: NextFunction) => {
     const offerId = req.params.id;
     const customer = req.user;
@@ -340,8 +341,9 @@ export const CreatePayment = async (req: Request, res: Response, next: NextFunct
             payableAmount = payableAmount - appliedOffer.offerAmount;
         }
     }
-    // TODO: here perform payment gateway charge api
+    // TODO: here perform payment gateway charge api right after payment gateway successful/failure status
 
+    //  create record on transaction
     const transaction = await Transaction.create({
         customer: customer._id,
         vendorId: "",
@@ -357,7 +359,7 @@ export const CreatePayment = async (req: Request, res: Response, next: NextFunct
     return res.status(200).json(transaction);
 };
 
-// Order Section ************************
+// validate transaction
 const validateTransaction = async (txnId: string) => {
     const currentTransaction = await Transaction.findById(txnId);
 
@@ -369,10 +371,11 @@ const validateTransaction = async (txnId: string) => {
     return { status: false, currentTransaction };
 };
 
+// Create customer order
 export const CreateOrder = async (req: Request, res: Response, next: NextFunction) => {
     const customer = req.user;
 
-    const { txnId, amount, items } = <OrderInputs>req.body;
+    const { txnId, amount } = <OrderInputs>req.body;
 
     if (customer) {
         const { status, currentTransaction } = await validateTransaction(txnId);
@@ -382,37 +385,35 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
         }
 
         const profile = await Customer.findById(customer._id);
+        const items = profile.cart;
 
         const orderId = `${Math.floor(Math.random() * 89999) + 1000}`;
 
-        const { items } = req.body;
-
-        let cartItems = Array();
-
         let netAmount = 0.0;
-
         let vendorId;
 
         const foods = await Food.find()
             .where("_id")
-            .in(items.map((item) => item._id))
+            .in(items.map((item) => item.food))
             .exec();
 
-        foods.map((food) => {
-            items.map(({ _id, unit }) => {
-                if (food._id == _id) {
+        const foodItems = foods.map((food) => {
+            items.map((item) => {
+                console.log(typeof food._id);
+                console.log(typeof item.food);
+
+                if (food._id.toString() === item.food.toString()) {
                     vendorId = food.vendorId;
-                    netAmount += food.price * unit;
-                    cartItems.push({ food, unit });
+                    netAmount += food.price * item.unit;
                 }
             });
         });
 
-        if (cartItems) {
+        if (items) {
             const currentOrder = await Order.create({
                 orderId: orderId,
                 vendorId: vendorId,
-                items: cartItems,
+                items: items,
                 totalAmount: netAmount,
                 paidAmount: amount,
                 orderDate: new Date(),
@@ -422,26 +423,28 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
                 readyTime: 45,
             });
 
-            profile.cart = [] as any;
-            profile.orders.push(currentOrder);
+            if (currentOrder) {
+                profile.cart = [] as any;
+                profile.orders.push(currentOrder);
 
-            currentTransaction.vendorId = vendorId;
-            currentTransaction.orderId = orderId;
-            currentTransaction.status = "CONFIRMED";
+                currentTransaction.vendorId = vendorId;
+                currentTransaction.orderId = orderId;
+                currentTransaction.status = "CONFIRMED";
 
-            await currentTransaction.save();
+                await currentTransaction.save();
 
-            await assignOrderForDelivery(currentOrder._id, vendorId);
+                await assignOrderForDelivery(currentOrder._id, vendorId);
 
-            const profileResponse = await profile.save();
+                const profileResponse = await profile.save();
 
-            return res.status(200).json(profileResponse);
+                return res.status(200).json(profileResponse);
+            }
         }
     }
-
     return res.status(400).json({ msg: "Error while Creating Order" });
 };
 
+// Get customer orders
 export const GetOrders = async (req: Request, res: Response, next: NextFunction) => {
     const customer = req.user;
 
@@ -451,20 +454,20 @@ export const GetOrders = async (req: Request, res: Response, next: NextFunction)
             return res.status(200).json(profile.orders);
         }
     }
-
     return res.status(400).json({ msg: "Orders not found" });
 };
 
+// Get order by id
 export const GetOrderById = async (req: Request, res: Response, next: NextFunction) => {
     const orderId = req.params.id;
+    const customer = req.user;
 
     if (orderId) {
-        const order = await Customer.findById(orderId).populate("items.food");
-
+        const profile = await Customer.findById(customer._id).populate("orders");
+        const order = profile.orders.find((order) => order._id.equals(orderId));
         if (order) {
             return res.status(200).json(order);
         }
     }
-
     return res.status(400).json({ msg: "Order not found" });
 };

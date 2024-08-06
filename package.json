@@ -4,8 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "nodemon src/server.ts",
-        "start": "node dist/server.js",
+        // "dev": "nodemon src/server.ts",
+        "dev": "nodemon",
+        "start": "node --inspect dist/server.js",
         "build": "tsc -p .",
         "postinstall": "npm run build"
     },
@@ -16,6 +17,7 @@
     "author": "Kaumar Yadav",
     "license": "ISC",
     "dependencies": {
+        "@types/express": "^4.17.21",
         "bcrypt": "^5.0.0",
         "class-transformer": "^0.4.0",
         "class-validator": "^0.13.1",
@@ -23,7 +25,7 @@
         "cors": "^2.8.5",
         "dotenv": "^16.4.5",
         "dotenv-safe": "^9.1.0",
-        "express": "^4.17.1",
+        "express": "^4.19.2",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.10.13",
         "multer": "^1.4.2",
@@ -37,7 +39,6 @@
     "devDependencies": {
         "@types/bcrypt": "^3.0.0",
         "@types/cors": "^2.8.8",
-        "@types/express": "^4.17.21",
         "@types/jsonwebtoken": "^8.5.4",
         "@types/multer": "^1.4.11",
         "nodemon": "^2.0.6",

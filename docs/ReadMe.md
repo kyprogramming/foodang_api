@@ -13,3 +13,9 @@ http://localhost:8000/swagger/docs/
 npm list -g --depth=0
 
 npm uninstall -g package_name
+
+<!-- Kill PORT -->
+
+netstat -ano | findstr :8000
+
+taskkill /PID 10276 /F
