@@ -2,6 +2,7 @@ import mongoose, { ConnectOptions, Error } from "mongoose";
 // mongoose.set("strictQuery", true);
 
 import { envConfig } from "./envConfig";
+import logger from "../logger";
 
 const MONGODB_CON = envConfig.MONGODB_CON;
 const NODE_ENV = envConfig.NODE_ENV;
@@ -23,8 +24,10 @@ export const connectDB = async () => {
     // @event error: Emitted when an error occurs on this connection.
     mongoose.connection.on("error", (error: Error) => {
         if (NODE_ENV && NODE_ENV === "development") {
-            console.log("MongoDB connection error. Please make sure MongoDB is running: ");
-            console.log(`Mongo Connection ERROR: ${error}`);
+            // console.log("MongoDB connection error. Please make sure MongoDB is running: "); console.log(`Mongo Connection ERROR: ${error}`);
+            logger.error({
+                message: `MongoDB connection error.: ${error?.message}`,
+            });
         }
     });
 
@@ -74,5 +77,3 @@ export const connectDB = async () => {
         useCreateIndex: true,
     });
 };
-
-export default connectDB;

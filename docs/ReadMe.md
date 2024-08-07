@@ -19,3 +19,11 @@ npm uninstall -g package_name
 netstat -ano | findstr :8000
 
 taskkill /PID 10276 /F
+
+<!-- API Best practice -->
+
+https://chatgpt.com/c/c4ba4183-92bb-4c17-be9d-e1252b2838f0
+
+<!-- Class Validators validation decorators -->
+
+https://github.com/typestack/class-validator#validation-decorators

@@ -1,10 +1,3 @@
-export interface CreateAdminInput {
-    name: string;
-    address: string;
-    email: string;
-    password: string;
-    phone: string;
-}
 
 
 export interface CreateVendorInput {

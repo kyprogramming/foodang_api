@@ -7,7 +7,6 @@ import { Offer } from "../models/Offer";
 import { Order } from "../models/Order";
 import { Transaction } from "../models/Transaction";
 import { GenerateOtp, GeneratePassword, GenerateSalt, GenerateSignature, SendOTP, ValidatePassword } from "../utility";
-import { findObjectById } from "../utility/ObjectUtility";
 
 // Customer signup
 export const CustomerSignUp = async (req: Request, res: Response, next: NextFunction) => {

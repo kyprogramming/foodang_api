@@ -4,6 +4,10 @@ import process from "process";
 dotenv.config();
 
 export const envConfig = {
+    API_URL: process?.env?.API_URL,
+    API_VERSION: process?.env?.API_VERSION,
+    SWAGGER_DOCS: process?.env?.SWAGGER_DOCS,
+
     PORT: process?.env?.PORT || 8000,
     NODE_ENV: process?.env?.NODE_ENV || "development",
     APP_SECRET: process?.env?.APP_SECRET,

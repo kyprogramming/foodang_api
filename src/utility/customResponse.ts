@@ -1,13 +1,13 @@
-// import { ResponseT } from '@src/interfaces';
+import { ResponseT } from "../interfaces";
 
-// export const customResponse = <T>({ data, success, error, message, status }: ResponseT<T>) => {
-//   return {
-//     success,
-//     error,
-//     message,
-//     status,
-//     data,
-//   };
-// };
+export const customResponse = <T>({ status, data, errors, message, statusCode }: ResponseT<T>) => {
+    return {
+        status,
+        data,
+        errors,
+        message,
+        statusCode,
+    };
+};
 
-// export default customResponse;
+export default customResponse;
