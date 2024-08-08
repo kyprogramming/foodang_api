@@ -12,7 +12,7 @@ import {
     ProcessOrder,
     UpdateVendorCoverImage,
     UpdateVendorProfile,
-    UpdateVendorService,
+    UpdateVendorStatus,
     VendorLogin,
 } from "../controllers";
 import { Authenticate } from "../middleware";
@@ -32,7 +32,7 @@ router.use(Authenticate);
 // Profile
 router.get("/profile", GetVendorProfile);
 router.patch("/profile", UpdateVendorProfile);
-router.patch("/service", UpdateVendorService);
+router.patch("/service", UpdateVendorStatus);
 router.patch("/coverimage", uploadImage.array("coverImage"), UpdateVendorCoverImage);
 
 // Food

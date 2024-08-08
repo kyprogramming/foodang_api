@@ -1,7 +1,6 @@
-// export * from "./AdminController"; export * from "./CustomerController";
-export * from "./VendorController";
-export * from "./ShoppingController";
-export * from "./DeliveryController";
-
 export * from "./admin.controller";
+export * from "./vendor.controller";
 export * from "./customer.controller";
+export * from "./shopping.controller";
+export * from "./delivery.controller";
+
