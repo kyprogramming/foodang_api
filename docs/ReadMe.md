@@ -27,3 +27,5 @@ https://chatgpt.com/c/c4ba4183-92bb-4c17-be9d-e1252b2838f0
 <!-- Class Validators validation decorators -->
 
 https://github.com/typestack/class-validator#validation-decorators
+
+// "exec": "node --inspect=0.0.0.0:9229 -r ts-node/register src/server.ts"

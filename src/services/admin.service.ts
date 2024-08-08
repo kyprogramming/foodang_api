@@ -9,6 +9,7 @@ import { envConfig, sendEmail } from "../config";
 import { validateInput } from "../utility";
 import createHttpError, { InternalServerError } from "http-errors";
 import { errorMsg, successMsg } from "../constants/admin.constant";
+import isValidMongooseObjectId from "../utility/isValidMongooseObjectId";
 
 /** Admin Signup Service
  * @param req @param res @param next @returns
@@ -87,15 +88,8 @@ export const AdminLoginService = async (req: Request, res: Response, next: NextF
                 });
 
                 // const data = GenerateResponseData(signature, "POST", "Admin login", "admin/login");
-                const data = GenerateResponseData(signature);
-                return res.status(200).json(
-                    customResponse<typeof data>({
-                        success: true,
-                        data,
-                        message: successMsg.admin_auth_success,
-                        statusCode: 200,
-                    })
-                );
+                const response = GenerateResponseData(signature, successMsg.admin_auth_success, 200);
+                return res.status(200).json(response);
             }
         }
         return next(createHttpError(401, errorMsg.admin_auth_error));
@@ -104,7 +98,7 @@ export const AdminLoginService = async (req: Request, res: Response, next: NextF
     }
 };
 
-//  Create a new vendor
+//  Create new vendor
 export const CreateVendorService = async (req: Request, res: Response, next: NextFunction) => {
     const inputs = <CreateVendorInput>req.body;
     const errors = await validateInput(CreateVendorInput, inputs);
@@ -120,9 +114,9 @@ export const CreateVendorService = async (req: Request, res: Response, next: Nex
 
         //generate a salt
         const salt = await GenerateSalt();
+        // encrypt the password using the salt
         const userPassword = await GeneratePassword(password, salt);
 
-        // encrypt the password using the salt
         const newVendor = await Vendor.create({
             name: name,
             address: address,
@@ -140,53 +134,46 @@ export const CreateVendorService = async (req: Request, res: Response, next: Nex
             lng: 0,
         });
 
-        const data = GenerateResponseData(newVendor);
-        return res.status(200).json(
-            customResponse<typeof data>({
-                success: true,
-                data,
-                message: successMsg.vendor_create_success,
-                statusCode: 200,
-            })
-        );
+        const response = GenerateResponseData(newVendor, successMsg.vendor_create_success, 200);
+        return res.status(200).json(response);
     } catch (error) {
         return next(InternalServerError);
     }
 };
 
-// Find Vendor by email address and id
-export const FindVendor = async (id: String | undefined, email?: string) => {
-    if (email) {
-        return await Vendor.findOne({ email: email });
-    } else {
-        return await Vendor.findById(id);
-    }
-};
-
-// Get a list of all the available vendors
+// Get vendors list
 export const GetVendorsService = async (req: Request, res: Response, next: NextFunction) => {
-    const vendors = await Vendor.find();
-
-    if (vendors !== null) {
-        return res.json(vendors);
+    try {
+        const vendors = await Vendor.find();
+        if (vendors) {
+            const response = GenerateResponseData(vendors, successMsg.vendor_create_success, 200);
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(404, errorMsg.vendor_not_found));
+    } catch (error) {
+        return next(InternalServerError);
     }
-
-    return res.json({ message: "Vendors data not available" });
 };
 
 // Get vendor by id
 export const GetVendorByIDService = async (req: Request, res: Response, next: NextFunction) => {
     const vendorId = req.params.id;
-    const vendors = await FindVendor(vendorId);
-
-    if (vendors !== null) {
-        return res.json(vendors);
+    if (!isValidMongooseObjectId(vendorId)) {
+        return next(createHttpError(422, `Invalid request parameter`));
     }
-
-    return res.json({ message: "Vendors data not available" });
+    try {
+        const vendor = await FindVendor(vendorId);
+        if (vendor) {
+            const response = GenerateResponseData(vendor, successMsg.vendor_found_success, 200);
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(404, errorMsg.vendor_not_found));
+    } catch (error) {
+        return next(InternalServerError);
+    }
 };
 
-// Get transactions
+// Get transactions list
 export const GetTransactionsService = async (req: Request, res: Response, next: NextFunction) => {
     const transactions = await Transaction.find();
     if (transactions) {
@@ -246,5 +233,14 @@ export const FindAdmin = async (id: String | undefined, email?: string) => {
         return await Admin.findOne({ email: email }).exec();
     } else {
         return await Admin.findById(id);
+    }
+};
+
+// Find Vendor by email address and id
+export const FindVendor = async (id: String | undefined, email?: string) => {
+    if (email) {
+        return await Vendor.findOne({ email: email });
+    } else {
+        return await Vendor.findById(id);
     }
 };
