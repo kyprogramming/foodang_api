@@ -158,9 +158,8 @@ export const GetVendorsService = async (req: Request, res: Response, next: NextF
 // Get vendor by id
 export const GetVendorByIDService = async (req: Request, res: Response, next: NextFunction) => {
     const vendorId = req.params.id;
-    if (!isValidMongooseObjectId(vendorId)) {
-        return next(createHttpError(422, `Invalid request parameter`));
-    }
+    if (!isValidMongooseObjectId(vendorId)) return next(createHttpError(422, `Invalid request parameter`));
+
     try {
         const vendor = await FindVendor(vendorId);
         if (vendor) {
@@ -175,25 +174,33 @@ export const GetVendorByIDService = async (req: Request, res: Response, next: Ne
 
 // Get transactions list
 export const GetTransactionsService = async (req: Request, res: Response, next: NextFunction) => {
-    const transactions = await Transaction.find();
-    if (transactions) {
-        return res.status(200).json(transactions);
+    try {
+        const transactions = await Transaction.find();
+        if (transactions) {
+            const response = GenerateResponseData(transactions, "Transactions data  found", 200);
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(404, "Transactions data not available"));
+    } catch (error) {
+        return next(InternalServerError);
     }
-
-    return res.json({ message: "Transactions data not available" });
 };
 
 // Get transactions by id
 export const GetTransactionByIdService = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
+    const transId = req.params.id;
+    if (!isValidMongooseObjectId(transId)) return next(createHttpError(422, `Invalid request parameter`));
 
-    const transaction = await Transaction.findById(id);
-
-    if (transaction) {
-        return res.status(200).json(transaction);
+    try {
+        const transaction = await Transaction.findById(transId);
+        if (transaction) {
+            const response = GenerateResponseData(transaction, "Transaction data  found", 200);
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(404, "Transactions data not available"));
+    } catch (error) {
+        return next(InternalServerError);
     }
-
-    return res.json({ message: "Transaction data not available" });
 };
 
 // Verify delivery user
@@ -224,9 +231,7 @@ export const GetDeliveryUsersService = async (req: Request, res: Response, next:
     return res.json({ message: "Unable to get Delivery Users" });
 };
 
-/** Find Admin profile Find Admin by email address and id
- * @param id @param email @returns
- */
+// Find Admin profile Find Admin by email address and id
 export const FindAdmin = async (id: String | undefined, email?: string) => {
     if (email) {
         // return await Admin.findOne({ email: email }, "_id").exec();
