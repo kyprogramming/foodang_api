@@ -3,9 +3,9 @@ import { validate } from "class-validator";
 import express, { Request, Response, NextFunction } from "express";
 import { CartItem, CreateCustomerInput, CreateDeliveryUserInput, EditCustomerProfileInput, OrderInputs, UserLoginInput } from "../dto";
 import { Customer, DeliveryUser, Food, Vendor } from "../models";
-import { Offer } from "../models/Offer";
-import { Order } from "../models/Order";
-import { Transaction } from "../models/Transaction";
+import { Offer } from "../models";
+import { Order } from "../models";
+import { Transaction } from "../models";
 import { GenerateOtp, GeneratePassword, GenerateSalt, GenerateSignature, SendOTP, ValidatePassword } from "../utility";
 
 export const DeliverySignUpService = async (req: Request, res: Response, next: NextFunction) => {

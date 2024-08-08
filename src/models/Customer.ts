@@ -1,22 +1,5 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { IOrder } from "./Order";
-
-export interface ICustomer extends Document {
-    email: string;
-    password: string;
-    salt: string;
-    firstName: string;
-    lastName: string;
-    address: string;
-    phone: string;
-    verified: boolean;
-    otp: number;
-    otp_expiry: Date;
-    lat: number;
-    lng: number;
-    cart: [any];
-    orders: [IOrder];
-}
+import { ICustomer } from "../interfaces";
 
 const CustomerSchema = new Schema(
     {

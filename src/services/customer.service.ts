@@ -5,7 +5,7 @@ import { CartItem, CreateCustomerInput, EditCustomerProfileInput, OrderInputs, U
 import { Customer, DeliveryUser, Food, Vendor } from "../models";
 import { Offer } from "../models/Offer";
 import { Order } from "../models/Order";
-import { Transaction } from "../models/Transaction";
+import { Transaction } from "../models";
 import { GenerateOtp, GeneratePassword, GenerateSalt, GenerateSignature, SendOTP, ValidatePassword } from "../utility";
 
 // Customer signup

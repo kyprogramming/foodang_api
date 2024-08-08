@@ -1,23 +1,5 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
-import { IFood } from "./Food";
-
-export interface IVendor extends Document {
-    name: string;
-    ownerName: string;
-    foodType: [string];
-    pincode: string;
-    address: string;
-    phone: string;
-    email: string;
-    password: string;
-    salt: string;
-    serviceAvailable: boolean;
-    coverImages: any[];
-    rating: number;
-    foods: [IFood];
-    lat: number;
-    lng: number;
-}
+import mongoose, { Schema } from "mongoose";
+import { IFood, IVendor } from "../interfaces";
 
 const VendorSchema = new Schema(
     {

@@ -43,21 +43,15 @@ export const connectDB = async () => {
         if (NODE_ENV && NODE_ENV === "development") {
             console.log("MongoDB database connection is disconnected...");
             console.log("Trying to reconnect to Mongo ...");
-        }
 
-        setTimeout(() => {
             mongoose.connect(MONGODB_CON, {
-                socketTimeoutMS: 3000,
-                connectTimeoutMS: 3000,
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
-                useCreateIndex: true,
-                useFindAndModify: false,
-                autoReconnect: true,
-                reconnectTries: Number.MAX_VALUE, // Number of retries
-                reconnectInterval: 1000, // Reconnect every 1 second
-            } as ConnectOptions);
-        }, 3000);
+            });
+        }
+
+        // setTimeout(() => { mongoose.connect(MONGODB_CON, { socketTimeoutMS: 3000, connectTimeoutMS: 3000, useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify:
+        //     false, autoReconnect: true, reconnectTries: Number.MAX_VALUE, // Number of retries reconnectInterval: 1000, // Reconnect every 1 second } as ConnectOptions); }, 3000);
     });
 
     // @event close: Emitted after we disconnected and onClose executed on all of this connections models.
@@ -74,6 +68,5 @@ export const connectDB = async () => {
     return await mongoose.connect(MONGODB_CON, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useCreateIndex: true,
     });
 };

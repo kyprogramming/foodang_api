@@ -1,10 +1,10 @@
-import { ResponseT } from "../interfaces";
+import { IResponseT } from "../interfaces";
 
-export const customResponse = <T>({ status, data, errors, message, statusCode }: ResponseT<T>) => {
+export const customResponse = <T>({ success, data, error, message, statusCode }: IResponseT<T>) => {
     return {
-        status,
+        success,
         data,
-        errors,
+        error,
         message,
         statusCode,
     };

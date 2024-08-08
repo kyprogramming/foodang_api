@@ -5,3 +5,5 @@ export * from "./inputValidator";
 export * from "./isUKMobile";
 export * from "./customResponse";
 export * from "./getRandomIntNumberInBetween";
+export * from "./ResponseUtility";
+

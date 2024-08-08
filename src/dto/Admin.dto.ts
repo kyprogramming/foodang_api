@@ -1,5 +1,5 @@
 import { Transform } from "class-transformer";
-import { IsString, IsEmail, IsPhoneNumber, Length, MinLength, MaxLength, IsOptional } from "class-validator";
+import { IsString, IsEmail, IsPhoneNumber, Length, MinLength, MaxLength, IsArray, IsNotEmpty, IsPostalCode } from "class-validator";
 
 export class SignupAdminInput {
     // name
@@ -14,7 +14,7 @@ export class SignupAdminInput {
     address: string;
 
     // email
-    @IsEmail({}, { message: "Invalid email format" })
+    @IsEmail()
     email: string;
 
     // password
@@ -24,8 +24,7 @@ export class SignupAdminInput {
     @Transform(({ value }) => value.trim())
     password: string;
 
-    // phone
-    // @IsOptional()
+    // phone @IsOptional()
     @IsString()
     @IsPhoneNumber("GB", { message: "Invalid phone number" })
     @Transform(({ value }) => value.trim())
@@ -42,6 +41,53 @@ export class AdminLoginInput {
     @IsString()
     @MinLength(6, { message: "Password must be at least 6 characters long" })
     @MaxLength(50, { message: "Password cannot exceed 50 characters" })
+    @Transform(({ value }) => value.trim())
+    password: string;
+}
+
+// export class CreateVendorInput { name: string; ownerName: string; foodType: [string]; pincode: string; address: string; phone: string; email: string; password: string; }
+
+export class CreateVendorInput {
+    // name
+    @IsString()
+    @IsNotEmpty()
+    name: string;
+
+    // ownerName
+    @IsString()
+    @IsNotEmpty()
+    ownerName: string;
+
+    // foodType
+    @IsArray()
+    @IsNotEmpty({ each: true })
+    @Transform(({ value }) => value.map((item: string) => item.trim()))
+    foodType: string[];
+
+    // pincode
+    @IsString()
+    @IsPostalCode("GB")
+    pincode: string;
+
+    // address
+    @IsString()
+    @IsNotEmpty()
+    address: string;
+
+    // phone
+    @IsString()
+    @IsPhoneNumber("GB", { message: "Invalid phone number" })
+    @Transform(({ value }) => value.trim())
+    phone?: string;
+
+    // email
+    @IsEmail()
+    email: string;
+
+    // password
+    @IsString()
+    @Length(6, 20)
+    @IsNotEmpty()
     @Transform(({ value }) => value.trim())
     password: string;
 }

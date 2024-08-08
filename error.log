@@ -1,8 +1,1 @@
-{"level":"error","message":"MongoDB connection error.: Invalid port (larger than 65535) with hostname","service":"user-service","timestamp":"2024-08-07 07:01:51"}
-{"level":"error","message":"MongoDB connection error.: Invalid port (larger than 65535) with hostname","service":"user-service","timestamp":"2024-08-07 07:02:14"}
-{"level":"error","message":"MongoDB connection error.: Invalid port (larger than 65535) with hostname","service":"user-service","timestamp":"2024-08-07 07:04:39"}
-{"level":"error","message":"MongoDB connection error.: Invalid port (larger than 65535) with hostname","service":"user-service","timestamp":"2024-08-07 07:04:39"}
-{"level":"error","message":"MongoDB connection error.: Invalid port (larger than 65535) with hostname","service":"user-service","timestamp":"2024-08-07 07:04:42"}
-{"level":"error","message":"MongoDB connection error.: Invalid port (larger than 65535) with hostname","service":"user-service","timestamp":"2024-08-07 07:05:21"}
-{"level":"error","message":"MongoDB connection error.: Invalid port (larger than 65535) with hostname","service":"user-service","timestamp":"2024-08-07 07:05:21"}
-{"level":"error","message":"MongoDB connection error.: Invalid port (larger than 65535) with hostname","service":"user-service","timestamp":"2024-08-07 07:05:24"}
+{"level":"error","message":"Error: Vendor email - vendor3@gmail.com is already exists.","service":"user-service","timestamp":"2024-08-08 17:18:26"}

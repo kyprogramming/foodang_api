@@ -1,22 +1,5 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { IVendor } from "./Vendor";
-
-export interface IOffer extends Document {
- offerType: string; 
- vendors: [IVendor];
- title: string;
- description: string;
- minValue: number;
- offerAmount: number;
- startValidity: Date;
- endValidity: Date;
- promocode: string;
- promoType: string;
- bank: [any];
- bins: [any];
- pincode: string;
- isActive: boolean;
-}
+import { IOffer } from "../interfaces";
 
 const OfferSchema = new Schema(
  {

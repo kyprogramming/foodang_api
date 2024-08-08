@@ -1,15 +1,5 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-
-export interface ITransaction extends Document {
- customer: string;
- vendorId: string;
- orderId: string;
- orderValue: number;
- offerUsed: string;
- status: string;
- paymentMode: string;
- paymentResponse: string;
-}
+import { ITransaction } from "../interfaces";
 
 const TransactionSchema = new Schema(
  {

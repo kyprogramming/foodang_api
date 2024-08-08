@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
-import { IFood, Vendor } from "../models";
+import { Vendor } from "../models";
 import { Offer } from "../models/Offer";
+import { IFood } from "../interfaces";
 
 export const GetFoodAvailabilityService = async (req: Request, res: Response, next: NextFunction) => {
     const pincode = req.params.pincode;

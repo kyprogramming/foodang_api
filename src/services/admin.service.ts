@@ -1,35 +1,31 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
 import { SignupAdminInput, CreateVendorInput } from "../dto";
 import { DeliveryUser, Vendor } from "../models";
-import { Transaction } from "../models/Transaction";
-import { customResponse, GeneratePassword, GenerateSalt, GenerateSignature, ValidatePassword } from "../utility";
+import { Transaction } from "../models";
+import { customResponse, GeneratePassword, GenerateResponseData, GenerateSalt, GenerateSignature, GenerateValidationErrorResponse, ValidatePassword } from "../utility";
 import { Admin } from "../models/Admin";
 import { AdminLoginInput } from "../dto/Admin.dto";
-import { sendEmail } from "../config";
+import { envConfig, sendEmail } from "../config";
 import { validateInput } from "../utility";
 import createHttpError, { InternalServerError } from "http-errors";
+import { errorMsg, successMsg } from "../constants/admin.constant";
 
+/** Admin Signup Service
+ * @param req @param res @param next @returns
+ */
 export const SignupAdminService: RequestHandler = async (req, res, next) => {
-    const signUpInput = req.body;
-    const errors = await validateInput(SignupAdminInput, signUpInput);
+    const inputs = <SignupAdminInput>req.body;
+    const errors = await validateInput(SignupAdminInput, inputs);
     if (errors.length > 0) {
-        return res.status(400).json(
-            customResponse({
-                status: "failure",
-                errors: errors.map((err) => ({ property: err.property, error: err.constraints })),
-                message: `Validation error`,
-                statusCode: 400,
-            })
-        );
+        return res.status(400).json(GenerateValidationErrorResponse(errors));
     }
-
-    const { name, address, email, password, phone } = signUpInput;
+    const { name, address, email, password, phone } = inputs;
 
     try {
         // find existing admin user
         const existingAdmin = await FindAdmin("", email);
         if (existingAdmin) {
-            return res.json({ message: "An admin is exist with this email ID" });
+            return res.json({ message: errorMsg.admin_already_exist });
         }
 
         //generate a salt
@@ -59,8 +55,8 @@ export const SignupAdminService: RequestHandler = async (req, res, next) => {
 
         return res.status(200).json(
             customResponse<typeof data>({
-                status: "success",
-                message: `Successfully admin user has been created.`,
+                success: true,
+                message: successMsg.admin_create_success,
                 statusCode: 200,
             })
         );
@@ -69,66 +65,93 @@ export const SignupAdminService: RequestHandler = async (req, res, next) => {
     }
 };
 
-// Find Vendor by email address and id
-export const FindAdmin = async (id: String | undefined, email?: string) => {
-    if (email) {
-        return await Admin.findOne({ email: email }, "_id").exec();
-    } else {
-        return await Admin.findById(id);
-    }
-};
-
-//  Vendor login
+/** Admin Login Service
+ * @param req @param res @param next @returns
+ */
 export const AdminLoginService = async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = <AdminLoginInput>req.body;
+    const inputs = <AdminLoginInput>req.body;
+    const errors = await validateInput(AdminLoginInput, inputs);
+    if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
-    const existingUser = await FindAdmin("", email);
+    const { email, password } = inputs;
 
-    if (existingUser !== null) {
-        const validation = await ValidatePassword(password, existingUser.password, existingUser.salt);
-        if (validation) {
-            const signature = await GenerateSignature({
-                _id: existingUser._id,
-                email: existingUser.email,
-                name: existingUser.name,
-            });
-            return res.json(signature);
+    try {
+        const existingUser = await FindAdmin("", email);
+        if (existingUser) {
+            const validation = await ValidatePassword(password, existingUser.password, existingUser.salt);
+            if (validation) {
+                const signature = await GenerateSignature({
+                    _id: existingUser._id,
+                    email: existingUser.email,
+                    name: existingUser.name,
+                });
+
+                // const data = GenerateResponseData(signature, "POST", "Admin login", "admin/login");
+                const data = GenerateResponseData(signature);
+                return res.status(200).json(
+                    customResponse<typeof data>({
+                        success: true,
+                        data,
+                        message: successMsg.admin_auth_success,
+                        statusCode: 200,
+                    })
+                );
+            }
         }
+        return next(createHttpError(401, errorMsg.admin_auth_error));
+    } catch (error) {
+        return next(InternalServerError);
     }
-    return res.json({ message: "Login credential is not valid" });
 };
 
 //  Create a new vendor
 export const CreateVendorService = async (req: Request, res: Response, next: NextFunction) => {
+    const inputs = <CreateVendorInput>req.body;
+    const errors = await validateInput(CreateVendorInput, inputs);
+    if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
+
     const { name, address, pincode, foodType, email, password, ownerName, phone } = <CreateVendorInput>req.body;
 
-    const existingVandor = await FindVendor("", email);
-    if (existingVandor !== null) {
-        return res.json({ message: "A vandor is exist with this email ID" });
+    try {
+        const vendor = await FindVendor("", email);
+        if (vendor !== null) {
+            return next(createHttpError(422, `Vendor email - ${email} is already exists.`));
+        }
+
+        //generate a salt
+        const salt = await GenerateSalt();
+        const userPassword = await GeneratePassword(password, salt);
+
+        // encrypt the password using the salt
+        const newVendor = await Vendor.create({
+            name: name,
+            address: address,
+            pincode: pincode,
+            foodType: foodType,
+            email: email,
+            password: userPassword,
+            salt: salt,
+            ownerName: ownerName,
+            phone: phone,
+            rating: 0,
+            serviceAvailable: false,
+            coverImages: [],
+            lat: 0,
+            lng: 0,
+        });
+
+        const data = GenerateResponseData(newVendor);
+        return res.status(200).json(
+            customResponse<typeof data>({
+                success: true,
+                data,
+                message: successMsg.vendor_create_success,
+                statusCode: 200,
+            })
+        );
+    } catch (error) {
+        return next(InternalServerError);
     }
-
-    //generate a salt
-    const salt = await GenerateSalt();
-    const userPassword = await GeneratePassword(password, salt);
-
-    // encrypt the password using the salt
-    const createdVandor = await Vendor.create({
-        name: name,
-        address: address,
-        pincode: pincode,
-        foodType: foodType,
-        email: email,
-        password: userPassword,
-        salt: salt,
-        ownerName: ownerName,
-        phone: phone,
-        rating: 0,
-        serviceAvailable: false,
-        coverImages: [],
-        lat: 0,
-        lng: 0,
-    });
-    return res.json(createdVandor);
 };
 
 // Find Vendor by email address and id
@@ -212,4 +235,16 @@ export const GetDeliveryUsersService = async (req: Request, res: Response, next:
     }
 
     return res.json({ message: "Unable to get Delivery Users" });
+};
+
+/** Find Admin profile Find Admin by email address and id
+ * @param id @param email @returns
+ */
+export const FindAdmin = async (id: String | undefined, email?: string) => {
+    if (email) {
+        // return await Admin.findOne({ email: email }, "_id").exec();
+        return await Admin.findOne({ email: email }).exec();
+    } else {
+        return await Admin.findById(id);
+    }
 };
