@@ -14,7 +14,7 @@ export const errorHandlerMiddleware: ErrorRequestHandler = (error, req: Request,
     res?.status(statusCode).send({
         success: false,
         error: {
-            details: error?.message || "Invalid",
+            details: error?.message,
             timestamp: new Date().toISOString(),
         },
         message: error.message || "Internal Server Error",

@@ -1,15 +1,22 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
-import { SignupAdminInput, CreateVendorInput } from "../dto";
+import { SignupAdminInput, CreateVendorInput, AdminLoginInput, VerifyDeliveryUserInput } from "../dto";
 import { DeliveryUser, Vendor } from "../models";
 import { Transaction } from "../models";
-import { customResponse, GeneratePassword, GenerateResponseData, GenerateSalt, GenerateSignature, GenerateValidationErrorResponse, ValidatePassword } from "../utility";
+import {
+    customResponse,
+    GeneratePassword,
+    GenerateResponseData,
+    GenerateSalt,
+    GenerateSignature,
+    GenerateValidationErrorResponse,
+    isValidMongooseObjectId,
+    ValidatePassword,
+    validateInput,
+} from "../utility";
 import { Admin } from "../models/Admin";
-import { AdminLoginInput } from "../dto/Admin.dto";
 import { envConfig, sendEmail } from "../config";
-import { validateInput } from "../utility";
 import createHttpError, { InternalServerError } from "http-errors";
 import { errorMsg, successMsg } from "../constants/admin.constant";
-import isValidMongooseObjectId from "../utility/isValidMongooseObjectId";
 
 /** Admin Signup Service
  * @param req @param res @param next @returns
@@ -17,14 +24,13 @@ import isValidMongooseObjectId from "../utility/isValidMongooseObjectId";
 export const SignupAdminService: RequestHandler = async (req, res, next) => {
     const inputs = <SignupAdminInput>req.body;
     const errors = await validateInput(SignupAdminInput, inputs);
-    if (errors.length > 0) {
-        return res.status(400).json(GenerateValidationErrorResponse(errors));
-    }
+    if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
+
     const { name, address, email, password, phone } = inputs;
 
     try {
         // find existing admin user
-        const existingAdmin = await FindAdmin("", email);
+        const existingAdmin = await FindAdmin(email);
         if (existingAdmin) {
             return res.json({ message: errorMsg.admin_already_exist });
         }
@@ -77,7 +83,7 @@ export const AdminLoginService = async (req: Request, res: Response, next: NextF
     const { email, password } = inputs;
 
     try {
-        const existingUser = await FindAdmin("", email);
+        const existingUser = await FindAdmin(undefined, email);
         if (existingUser) {
             const validation = await ValidatePassword(password, existingUser.password, existingUser.salt);
             if (validation) {
@@ -94,7 +100,7 @@ export const AdminLoginService = async (req: Request, res: Response, next: NextF
         }
         return next(createHttpError(401, errorMsg.admin_auth_error));
     } catch (error) {
-        return next(InternalServerError);
+        return next(InternalServerError(error.message));
     }
 };
 
@@ -206,33 +212,42 @@ export const GetTransactionByIdService = async (req: Request, res: Response, nex
 // Verify delivery user
 export const VerifyDeliveryUserService = async (req: Request, res: Response, next: NextFunction) => {
     const { _id, status } = req.body;
+    const inputs = <VerifyDeliveryUserInput>req.body;
+    const errors = await validateInput(VerifyDeliveryUserInput, inputs);
+    if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
-    if (_id) {
+    try {
         const profile = await DeliveryUser.findById(_id);
 
         if (profile) {
             profile.verified = status;
             const result = await profile.save();
 
-            return res.status(200).json(result);
+            const response = GenerateResponseData(result, "Transaction data  found", 200);
+            return res.status(200).json(response);
         }
+        return next(createHttpError(404, "Unable to verify Delivery User"));
+    } catch (error) {
+        return next(InternalServerError);
     }
-    return res.json({ message: "Unable to verify Delivery User" });
 };
 
 // Get delivery user profile
 export const GetDeliveryUsersService = async (req: Request, res: Response, next: NextFunction) => {
-    const deliveryUsers = await DeliveryUser.find();
-
-    if (deliveryUsers) {
-        return res.status(200).json(deliveryUsers);
+    try {
+        const deliveryUsers = await DeliveryUser.find();
+        if (deliveryUsers) {
+            const response = GenerateResponseData(deliveryUsers, "Transaction data  found", 200);
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(404, "Unable to get Delivery Users"));
+    } catch (error) {
+        return next(InternalServerError);
     }
-
-    return res.json({ message: "Unable to get Delivery Users" });
 };
 
 // Find Admin profile Find Admin by email address and id
-export const FindAdmin = async (id: String | undefined, email?: string) => {
+export const FindAdmin = async (id: String | undefined = "", email: string = "") => {
     if (email) {
         // return await Admin.findOne({ email: email }, "_id").exec();
         return await Admin.findOne({ email: email }).exec();

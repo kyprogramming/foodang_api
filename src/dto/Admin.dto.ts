@@ -1,5 +1,5 @@
 import { Transform } from "class-transformer";
-import { IsString, IsEmail, IsPhoneNumber, Length, MinLength, MaxLength, IsArray, IsNotEmpty, IsPostalCode } from "class-validator";
+import { IsString, IsEmail, IsPhoneNumber, Length, MinLength, MaxLength, IsArray, IsNotEmpty, IsPostalCode, IsMongoId, IsBoolean } from "class-validator";
 
 export class SignupAdminInput {
     // name
@@ -90,4 +90,16 @@ export class CreateVendorInput {
     @IsNotEmpty()
     @Transform(({ value }) => value.trim())
     password: string;
+}
+
+export class VerifyDeliveryUserInput {
+    // _id
+    @IsMongoId()
+    @IsNotEmpty()
+    _id: string;
+
+    // status
+    @IsBoolean()
+    @IsNotEmpty()
+    status: string;
 }
