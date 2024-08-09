@@ -230,8 +230,8 @@ export const GetDeliveryUsersService = async (req: Request, res: Response, next:
 // Find Admin profile Find Admin by email address and id
 export const FindAdmin = async (id: String | undefined = "", email: string = "") => {
     if (email) {
-        // return await Admin.findOne({ email: email }, "_id").exec();
-        return await Admin.findOne({ email: email }).exec();
+        // return await Admin.findOne({ email: email }, "_id").exec().lean();
+        return await Admin.findOne({ email: email });
     } else {
         return await Admin.findById(id);
     }

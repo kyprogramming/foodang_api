@@ -5,6 +5,7 @@
     "main": "src/server.ts",
     "scripts": {
         "dev": "npx nodemon src/server.ts",
+        "start:dev": "nodemon --exec 'node --inspect=0.0.0.0:9229' src/server.ts",
         "build": "npx tsc",
         "start": "node dist/src/server.js"
     },

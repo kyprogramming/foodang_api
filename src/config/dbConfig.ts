@@ -7,6 +7,8 @@ import logger from "../logger";
 const MONGODB_CON = envConfig.MONGODB_CON;
 const NODE_ENV = envConfig.NODE_ENV;
 
+if (NODE_ENV && NODE_ENV === "development") mongoose.set("debug", true);
+
 // Connecting to MongoDB Database
 export const connectDB = async () => {
     mongoose.connection.on("connected", () => {

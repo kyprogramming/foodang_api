@@ -39,3 +39,6 @@ FROM node:22.6.0-alpine AS build WORKDIR /src COPY package\*.json ./ RUN npm ins
 #Production stage
 
 FROM node:22.6.0-alpine AS production WORKDIR /src COPY package\*.json ./ RUN npm ci COPY --from=build /src/dist /src/dist EXPOSE 5001 CMD [ "node", "dist/src/server.js" ]
+
+
+<!-- User .toObject() method to see data in debug mode  -->
