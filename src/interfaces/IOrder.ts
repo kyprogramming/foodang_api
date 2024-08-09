@@ -1,4 +1,7 @@
+import { Types } from "mongoose";
+
 export interface IOrder extends Document {
+    _id: Types.ObjectId;
     orderId: string;
     vendorId: string;
     items: [any];

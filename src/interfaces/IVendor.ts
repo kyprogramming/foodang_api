@@ -1,6 +1,8 @@
+import { Types } from "mongoose";
 import IFood from "./IFood";
 
 export interface IVendor extends Document {
+    _id: Types.ObjectId;
     name: string;
     ownerName: string;
     foodType: [string];

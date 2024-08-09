@@ -29,8 +29,8 @@ export class EditCustomerProfileInput {
  @Length(6, 16)
  address: string;
 
- lat: string;
- lng: string;
+ lat: number;
+ lng: number;
 }
 
 export interface CustomerPayload {

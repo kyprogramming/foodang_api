@@ -6,7 +6,7 @@ export const successMsg = {
 };
 
 export const errorMsg = {
-    admin_auth_error: `Admin authentication failed, invalid credentials.)`,
+    admin_auth_error: `Admin authentication failed, invalid credentials.`,
     admin_already_exist: `An admin already exist with provided email id.`,
     vendor_not_found: `Vendor not found.`,
 };

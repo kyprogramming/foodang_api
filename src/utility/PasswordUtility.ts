@@ -19,7 +19,7 @@ export const ValidatePassword = async (enteredPassword: string, savedPassword: s
 };
 
 export const GenerateSignature = async (payload: AuthPayload) => {
-    return jwt.sign(payload, envConfig?.APP_SECRET, { expiresIn: "90d" });
+    return jwt.sign(payload, envConfig?.APP_SECRET ?? "", { expiresIn: "90d" });
 };
 
 export const ValidateSignature = async (req: Request) => {
@@ -27,7 +27,7 @@ export const ValidateSignature = async (req: Request) => {
 
     if (signature) {
         try {
-            const payload = (await jwt.verify(signature.split(" ")[1], envConfig?.APP_SECRET)) as AuthPayload;
+            const payload = jwt.verify(signature.split(" ")[1], envConfig?.APP_SECRET ?? "", { algorithms: ["HS256"] }) as AuthPayload;
             req.user = payload;
             return true;
         } catch (err) {

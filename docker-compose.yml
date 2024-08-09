@@ -1,23 +1,27 @@
 services:
   app:
+    container_name: food_app_api
+    restart: always
     build: .
     ports:
-      - '3000:3000'
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - '5001:5001'
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+    env_file: .env
     environment:
       - NODE_ENV=development
-    depends_on:
-      - mongo
+      - MONGODB_CON=mongodb://mongodb:27017
 
-  mongo:
-    image: mongo:6.0
+  mongodb:
+    image: mongo
     container_name: mongodb
+    restart: unless-stopped
     ports:
       - '27017:27017'
     volumes:
-      - mongo-data:/data/db
+      - mongodata:/data/db
 
 volumes:
-  mongo-data:
+  mongodata:

@@ -29,17 +29,13 @@ export const SignupAdminService: RequestHandler = async (req, res, next) => {
     const { name, address, email, password, phone } = inputs;
 
     try {
-        // find existing admin user
-        const existingAdmin = await FindAdmin(email);
+        const existingAdmin = await FindAdmin(undefined, email);
         if (existingAdmin) {
-            return res.json({ message: errorMsg.admin_already_exist });
+            return next(createHttpError(409, errorMsg.admin_already_exist));
         }
 
-        //generate a salt
         const salt = await GenerateSalt();
         const adminPassword = await GeneratePassword(password, salt);
-
-        // encrypt the password using the salt
         const createdAdmin = await Admin.create({
             name: name,
             address: address,
@@ -50,25 +46,10 @@ export const SignupAdminService: RequestHandler = async (req, res, next) => {
         });
 
         // TODO: send mail // await sendEmail();
-
-        const data = {
-            ...createdAdmin.toJSON(),
-            request: {
-                type: "POST",
-                description: "Create a admin user",
-                url: `${process.env.API_URL}/api/${process.env.API_VERSION}/admin/user`,
-            },
-        };
-
-        return res.status(200).json(
-            customResponse<typeof data>({
-                success: true,
-                message: successMsg.admin_create_success,
-                statusCode: 200,
-            })
-        );
+        const response = GenerateResponseData(createdAdmin, successMsg.admin_create_success, 200);
+        return res.status(200).json(response);
     } catch (error) {
-        return next(InternalServerError);
+        return next(InternalServerError(error.message));
     }
 };
 
@@ -143,7 +124,7 @@ export const CreateVendorService = async (req: Request, res: Response, next: Nex
         const response = GenerateResponseData(newVendor, successMsg.vendor_create_success, 200);
         return res.status(200).json(response);
     } catch (error) {
-        return next(InternalServerError);
+        return next(InternalServerError(error.message));
     }
 };
 
@@ -157,7 +138,7 @@ export const GetVendorsService = async (req: Request, res: Response, next: NextF
         }
         return next(createHttpError(404, errorMsg.vendor_not_found));
     } catch (error) {
-        return next(InternalServerError);
+        return next(InternalServerError(error.message));
     }
 };
 
@@ -174,7 +155,7 @@ export const GetVendorByIDService = async (req: Request, res: Response, next: Ne
         }
         return next(createHttpError(404, errorMsg.vendor_not_found));
     } catch (error) {
-        return next(InternalServerError);
+        return next(InternalServerError(error.message));
     }
 };
 
@@ -188,7 +169,7 @@ export const GetTransactionsService = async (req: Request, res: Response, next: 
         }
         return next(createHttpError(404, "Transactions data not available"));
     } catch (error) {
-        return next(InternalServerError);
+        return next(InternalServerError(error.message));
     }
 };
 
@@ -205,7 +186,7 @@ export const GetTransactionByIdService = async (req: Request, res: Response, nex
         }
         return next(createHttpError(404, "Transactions data not available"));
     } catch (error) {
-        return next(InternalServerError);
+        return next(InternalServerError(error.message));
     }
 };
 
@@ -228,7 +209,7 @@ export const VerifyDeliveryUserService = async (req: Request, res: Response, nex
         }
         return next(createHttpError(404, "Unable to verify Delivery User"));
     } catch (error) {
-        return next(InternalServerError);
+        return next(InternalServerError(error.message));
     }
 };
 
@@ -242,7 +223,7 @@ export const GetDeliveryUsersService = async (req: Request, res: Response, next:
         }
         return next(createHttpError(404, "Unable to get Delivery Users"));
     } catch (error) {
-        return next(InternalServerError);
+        return next(InternalServerError(error.message));
     }
 };
 
