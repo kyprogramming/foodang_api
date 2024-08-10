@@ -71,7 +71,7 @@ export const CustomerSignUpService = async (req: Request, res: Response, next: N
         }
 
         return res.status(400).json({ msg: "Error while creating user" });
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -102,7 +102,7 @@ export const CustomerLoginService = async (req: Request, res: Response, next: Ne
             }
         }
         return next(createHttpError(401, errorMsg.customer_auth_error));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -141,7 +141,7 @@ export const CustomerOTPVerifyService = async (req: Request, res: Response, next
             }
         }
         return next(createHttpError(404, errorMsg.customer_verify_error));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -154,9 +154,10 @@ export const RequestOtpService = async (req: Request, res: Response, next: NextF
     try {
         if (customer) {
             const profile = await Customer.findById(customer._id);
-            if (profile.verified) return next(createHttpError(401, errorMsg.customer_already_verified));
 
             if (profile) {
+                if (profile?.verified) return next(createHttpError(401, errorMsg.customer_already_verified));
+
                 const { otp, expiry } = GenerateOtp();
                 profile.otp = otp;
                 profile.otp_expiry = expiry;
@@ -171,7 +172,7 @@ export const RequestOtpService = async (req: Request, res: Response, next: NextF
             }
         }
         return next(createHttpError(401, "Error with Requesting OTP"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -190,7 +191,7 @@ export const GetCustomerProfileService = async (req: Request, res: Response, nex
             }
         }
         return next(createHttpError(401, "Error while fetching profile data."));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -221,7 +222,7 @@ export const EditCustomerProfileService = async (req: Request, res: Response, ne
             }
         }
         return next(createHttpError(401, "Error while Updating profile data."));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -275,7 +276,7 @@ export const AddToCartService = async (req: Request, res: Response, next: NextFu
         }
 
         return next(createHttpError(401, "Unable to add to cart!"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -295,7 +296,7 @@ export const GetCartService = async (req: Request, res: Response, next: NextFunc
             }
         }
         return next(createHttpError(401, "Cart is Empty!"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -319,7 +320,7 @@ export const DeleteCartService = async (req: Request, res: Response, next: NextF
             }
         }
         return next(createHttpError(401, "Cart is already empty"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -345,7 +346,7 @@ export const VerifyOfferService = async (req: Request, res: Response, next: Next
             }
         }
         return next(createHttpError(401, "Offer is not valid"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -366,7 +367,7 @@ export const CreatePaymentService = async (req: Request, res: Response, next: Ne
         if (offerId) {
             const appliedOffer = await Offer.findById(offerId);
 
-            if (appliedOffer.isActive) {
+            if (appliedOffer?.isActive) {
                 payableAmount = payableAmount - appliedOffer.offerAmount;
             }
         }
@@ -374,7 +375,7 @@ export const CreatePaymentService = async (req: Request, res: Response, next: Ne
 
         //  create record on transaction
         const transaction = await Transaction.create({
-            customer: customer._id,
+            customer: customer?._id,
             vendorId: "",
             orderId: "",
             orderValue: payableAmount,
@@ -387,7 +388,7 @@ export const CreatePaymentService = async (req: Request, res: Response, next: Ne
         //return transaction
         const response = GenerateResponseData(transaction, "Payment successful.", 200);
         return res.status(200).json(response);
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -411,21 +412,21 @@ export const CreateOrderService = async (req: Request, res: Response, next: Next
                 return next(createHttpError(401, "Error while Creating Order!"));
             }
 
-            const profile = await Customer.findById(customer._id);
-            const items = profile.cart;
+            const profile:any = await Customer.findById(customer._id);
+            const items: any = profile?.cart;
 
             const orderId = `${Math.floor(Math.random() * 89999) + 1000}`;
 
             let netAmount = 0.0;
-            let vendorId;
+            let vendorId:any;
 
             const foods = await Food.find()
                 .where("_id")
-                .in(items.map((item) => item.food))
+                .in(items.map((item: any) => item.food))
                 .exec();
 
             const foodItems = foods.map((food) => {
-                items.map((item) => {
+                items?.map((item: any) => {
                     console.log(typeof food._id);
                     console.log(typeof item.food);
 
@@ -453,16 +454,17 @@ export const CreateOrderService = async (req: Request, res: Response, next: Next
                 if (currentOrder) {
                     profile.cart = [] as any;
                     profile.orders.push(currentOrder);
+                    if (currentTransaction) {
+                         currentTransaction.vendorId = vendorId;
+                         currentTransaction.orderId = orderId;
+                         currentTransaction.status = "CONFIRMED";
 
-                    currentTransaction.vendorId = vendorId;
-                    currentTransaction.orderId = orderId;
-                    currentTransaction.status = "CONFIRMED";
-
-                    await currentTransaction.save();
+                         await currentTransaction?.save();
+                    }
 
                     await assignOrderForDelivery(currentOrder._id, vendorId);
 
-                    const profileResponse = await profile.save();
+                    const profileResponse = await profile?.save();
 
                     const response = GenerateResponseData(profileResponse, "Order created successfully.", 200);
                     return res.status(200).json(response);
@@ -470,7 +472,7 @@ export const CreateOrderService = async (req: Request, res: Response, next: Next
             }
         }
         return next(createHttpError(401, "Error while Creating Order"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -489,7 +491,7 @@ export const GetOrdersService = async (req: Request, res: Response, next: NextFu
             }
         }
         return next(createHttpError(401, "Orders not found"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -504,15 +506,15 @@ export const GetOrderByIdService = async (req: Request, res: Response, next: Nex
     const customer = req.user;
     try {
         if (orderId) {
-            const profile = await Customer.findById(customer._id).populate("orders");
-            const order = profile.orders.find((order) => order._id.equals(orderId));
+            const profile = await Customer.findById(customer?._id).populate("orders");
+            const order = profile?.orders.find((order) => order._id.equals(orderId));
             if (order) {
                 const response = GenerateResponseData(order, "Order found.", 200);
                 return res.status(200).json(response);
             }
         }
         return next(createHttpError(401, "Order not found"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };

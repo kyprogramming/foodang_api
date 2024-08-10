@@ -13,7 +13,7 @@ export function IsUKMobile(validationOptions?: ValidationOptions) {
                     try {
                         const phoneNumber: any = parsePhoneNumber(value, "GB");
                         return phoneNumber && isValidNumber(phoneNumber) && phoneNumber.country === "GB";
-                    } catch (error) {
+                    } catch (error: any) {
                         return false;
                     }
                 },

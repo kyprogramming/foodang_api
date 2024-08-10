@@ -37,7 +37,7 @@ export const VendorLoginService = async (req: Request, res: Response, next: Next
             }
         }
         return next(createHttpError(401, "Login credential is not valid"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -56,7 +56,7 @@ export const GetVendorProfileService = async (req: Request, res: Response, next:
             return res.status(200).json(response);
         }
         return next(createHttpError(401, "vendor Information Not Found"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -87,7 +87,7 @@ export const UpdateVendorProfileService = async (req: Request, res: Response, ne
             }
         }
         return next(createHttpError(401, "Unable to Update vendor profile"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -130,7 +130,7 @@ export const UpdateVendorCoverImageService = async (req: Request, res: Response,
             }
         }
         return next(createHttpError(401, "Unable to Update vendor profile"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -161,7 +161,7 @@ export const UpdateVendorStatusService = async (req: Request, res: Response, nex
             }
         }
         return next(createHttpError(401, "Unable to Update vendor profile"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -222,7 +222,7 @@ export const AddFoodService = async (req: Request, res: Response, next: NextFunc
             }
         }
         return next(createHttpError(401, "Unable to Update vendor profile"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -243,7 +243,7 @@ export const GetFoodsService = async (req: Request, res: Response, next: NextFun
             }
         }
         return next(createHttpError(404, "Data not found"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -266,7 +266,7 @@ export const GetCurrentOrdersService = async (req: Request, res: Response, next:
             }
         }
         return next(createHttpError(404, "Data not found."));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -287,7 +287,7 @@ export const GetOrderDetailsService = async (req: Request, res: Response, next: 
             }
         }
         return next(createHttpError(404, "Data not found"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -317,7 +317,7 @@ export const ProcessOrderService = async (req: Request, res: Response, next: Nex
             }
         }
         return next(createHttpError(404, "Unable to process order"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -358,7 +358,7 @@ export const AddOfferService = async (req: Request, res: Response, next: NextFun
             }
         }
         return next(createHttpError(404, "Unable to add Offer!"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -394,7 +394,7 @@ export const GetOffersService = async (req: Request, res: Response, next: NextFu
             return res.status(200).json(response);
         }
         return next(createHttpError(404, "Offers Not available"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -441,7 +441,7 @@ export const EditOfferService = async (req: Request, res: Response, next: NextFu
         }
 
         return next(createHttpError(400, "Unable to add Offer!"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -474,7 +474,7 @@ export const DeleteOfferService = async (req: Request, res: Response, next: Next
             }
         }
         return next(createHttpError(404, "Error while offer update"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };

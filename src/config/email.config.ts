@@ -30,7 +30,7 @@ export const sendEmail = async () => {
     try {
         const result = await mailjetClient.post("send", { version: "v3.1" }).request(request);
         console.log(result.body);
-    } catch (error) {
+    } catch (error: any) {
         console.error(error);
     }
 };

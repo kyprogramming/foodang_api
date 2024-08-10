@@ -21,7 +21,7 @@ export const SendOTP = async (otp: number, toPhoneNumber: string) => {
             from: twilioConfig.TWILIO_PHONE_NUMBER,
             to: `+44${toPhoneNumber}`,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         return false;
     }

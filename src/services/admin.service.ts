@@ -80,7 +80,7 @@ export const AdminLoginService = async (req: Request, res: Response, next: NextF
             }
         }
         return next(createHttpError(401, errorMsg.admin_auth_error));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -123,7 +123,7 @@ export const CreateVendorService = async (req: Request, res: Response, next: Nex
 
         const response = GenerateResponseData(newVendor, successMsg.vendor_create_success, 200);
         return res.status(200).json(response);
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -137,7 +137,7 @@ export const GetVendorsService = async (req: Request, res: Response, next: NextF
             return res.status(200).json(response);
         }
         return next(createHttpError(404, errorMsg.vendor_not_found));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -154,7 +154,7 @@ export const GetVendorByIDService = async (req: Request, res: Response, next: Ne
             return res.status(200).json(response);
         }
         return next(createHttpError(404, errorMsg.vendor_not_found));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -168,7 +168,7 @@ export const GetTransactionsService = async (req: Request, res: Response, next: 
             return res.status(200).json(response);
         }
         return next(createHttpError(404, "Transactions data not available"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -185,7 +185,7 @@ export const GetTransactionByIdService = async (req: Request, res: Response, nex
             return res.status(200).json(response);
         }
         return next(createHttpError(404, "Transactions data not available"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -208,7 +208,7 @@ export const VerifyDeliveryUserService = async (req: Request, res: Response, nex
             return res.status(200).json(response);
         }
         return next(createHttpError(404, "Unable to verify Delivery User"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -222,7 +222,7 @@ export const GetDeliveryUsersService = async (req: Request, res: Response, next:
             return res.status(200).json(response);
         }
         return next(createHttpError(404, "Unable to get Delivery Users"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };

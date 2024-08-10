@@ -26,7 +26,7 @@ export const GetFoodAvailabilityService = async (req: Request, res: Response, ne
             return res.status(200).json(response);
         }
         return next(createHttpError(401, "data Not found!"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -49,7 +49,7 @@ export const GetTopRestaurantsService = async (req: Request, res: Response, next
             return res.status(200).json(response);
         }
         return next(createHttpError(401, "data Not found!"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -77,7 +77,7 @@ export const GetFoodsIn30MinService = async (req: Request, res: Response, next: 
             return res.status(200).json(response);
         }
         return next(createHttpError(404, "data Not found!"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -102,7 +102,7 @@ export const SearchFoodsService = async (req: Request, res: Response, next: Next
             return res.status(200).json(response);
         }
         return next(createHttpError(404, "data not found"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -124,7 +124,7 @@ export const RestaurantByIdService = async (req: Request, res: Response, next: N
         }
 
         return next(createHttpError(404, "data Not found!"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -146,7 +146,7 @@ export const GetAvailableOffersService = async (req: Request, res: Response, nex
         }
 
         return next(createHttpError(404, "Offers not Found!"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };

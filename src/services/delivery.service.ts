@@ -49,7 +49,7 @@ export const DeliverySignUpService = async (req: Request, res: Response, next: N
             return res.status(201).json(response);
         }
         return next(createHttpError(401, "Error while creating Delivery user"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -87,7 +87,7 @@ export const DeliveryLoginService = async (req: Request, res: Response, next: Ne
             }
         }
         return res.json({ msg: "Error Login" });
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -108,7 +108,7 @@ export const GetDeliveryProfileService = async (req: Request, res: Response, nex
             }
         }
         return next(createHttpError(404, "data not found"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -141,7 +141,7 @@ export const EditDeliveryProfileService = async (req: Request, res: Response, ne
             }
         }
         return next(createHttpError(400, "Error while Updating Profile"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
@@ -174,7 +174,7 @@ export const UpdateDeliveryUserStatusService = async (req: Request, res: Respons
             }
         }
         return next(createHttpError(401, "Error while Updating Profile"));
-    } catch (error) {
+    } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
