@@ -1,22 +1,22 @@
-export interface EditVendorInput {
+export class EditVendorInput {
     name: string;
     address: string;
     phone: string;
     foodType: [string];
 }
 
-export interface VendorLoginInput {
+export class VendorLoginInput {
     email: string;
     password: string;
 }
 
-export interface VendorPayload {
+export class VendorPayload {
     _id: string;
     email: string;
     name: string;
 }
 
-export interface CreateOfferInputs {
+export class CreateOfferInputs {
     offerType: string;
     vendors: [any];
     title: string;
@@ -33,11 +33,11 @@ export interface CreateOfferInputs {
     isActive: boolean;
 }
 
-export interface InactivateOfferInputs {
+export class InactivateOfferInputs {
     isActive: boolean;
 }
 
-export interface MulterFile {
+export class MulterFile {
     fieldname: string;
     originalname: string;
     encoding: string;

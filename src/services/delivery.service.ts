@@ -6,151 +6,175 @@ import { Customer, DeliveryUser, Food, Vendor } from "../models";
 import { Offer } from "../models";
 import { Order } from "../models";
 import { Transaction } from "../models";
-import { GenerateOtp, GeneratePassword, GenerateSalt, GenerateSignature, SendOTP, ValidatePassword } from "../utility";
+import { GenerateOtp, GeneratePassword, GenerateResponseData, GenerateSalt, GenerateSignature, GenerateValidationErrorResponse, SendOTP, validateInput, ValidatePassword } from "../utility";
+import createHttpError, { InternalServerError } from "http-errors";
 
+/** Delivery user signup
+ * @param req @param res @param next @returns
+ */
 export const DeliverySignUpService = async (req: Request, res: Response, next: NextFunction) => {
-    const deliveryUserInputs = plainToClass(CreateDeliveryUserInput, req.body);
+    const inputs = <CreateDeliveryUserInput>req.body;
+    const errors = await validateInput(CreateDeliveryUserInput, inputs);
+    if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
-    const validationError = await validate(deliveryUserInputs, { validationError: { target: true } });
+    const { email, phone, password, address, firstName, lastName, postcode } = inputs;
 
-    if (validationError.length > 0) {
-        return res.status(400).json(validationError);
-    }
+    try {
+        const deliveryUser = await DeliveryUser.findOne({ email: email });
+        if (deliveryUser) return next(createHttpError(401, "A Delivery User exist with the provided email ID."));
 
-    const { email, phone, password, address, firstName, lastName, postcode } = deliveryUserInputs;
-
-    const salt = await GenerateSalt();
-    const userPassword = await GeneratePassword(password, salt);
-
-    const existingDeliveryUser = await DeliveryUser.findOne({ email: email });
-
-    if (existingDeliveryUser !== null) {
-        return res.status(400).json({ message: "A Delivery User exist with the provided email ID!" });
-    }
-
-    const result = await DeliveryUser.create({
-        email: email,
-        password: userPassword,
-        salt: salt,
-        phone: phone,
-        firstName: firstName,
-        lastName: lastName,
-        address: address,
-        postcode: postcode,
-        verified: false,
-        lat: 0,
-        lng: 0,
-    });
-
-    if (result) {
-        //Generate the Signature
-        const signature = await GenerateSignature({
-            _id: result._id,
-            email: result.email,
-            verified: result.verified,
+        const salt = await GenerateSalt();
+        const userPassword = await GeneratePassword(password, salt);
+        const result = await DeliveryUser.create({
+            email: email,
+            password: userPassword,
+            salt: salt,
+            phone: phone,
+            firstName: firstName,
+            lastName: lastName,
+            address: address,
+            postcode: postcode,
+            verified: false,
+            lat: 0,
+            lng: 0,
         });
-        // Send the result
-        return res.status(201).json({ signature, verified: result.verified, email: result.email });
-    }
 
-    return res.status(400).json({ msg: "Error while creating Delivery user" });
-};
-
-export const DeliveryLoginService = async (req: Request, res: Response, next: NextFunction) => {
-    const loginInputs = plainToClass(UserLoginInput, req.body);
-
-    const validationError = await validate(loginInputs, { validationError: { target: true } });
-
-    if (validationError.length > 0) {
-        return res.status(400).json(validationError);
-    }
-
-    const { email, password } = loginInputs;
-
-    const deliveryUser = await DeliveryUser.findOne({ email: email });
-    if (deliveryUser) {
-        const validation = await ValidatePassword(password, deliveryUser.password, deliveryUser.salt);
-
-        if (validation) {
+        if (result) {
             const signature = await GenerateSignature({
-                _id: deliveryUser._id,
-                email: deliveryUser.email,
-                verified: deliveryUser.verified,
+                _id: result._id,
+                email: result.email,
+                verified: result.verified,
             });
-
-            return res.status(200).json({
-                signature,
-                email: deliveryUser.email,
-                verified: deliveryUser.verified,
-            });
+            const response = GenerateResponseData(signature, "User created", 201);
+            return res.status(201).json(response);
         }
+        return next(createHttpError(401, "Error while creating Delivery user"));
+    } catch (error) {
+        return next(InternalServerError(error.message));
     }
-
-    return res.json({ msg: "Error Login" });
 };
 
+/** Delivery Login Service
+ * @param req @param res @param next @returns
+ */
+export const DeliveryLoginService = async (req: Request, res: Response, next: NextFunction) => {
+    const inputs = <UserLoginInput>req.body;
+    const errors = await validateInput(UserLoginInput, inputs);
+    if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
+
+    const { email, password } = inputs;
+
+    try {
+        const deliveryUser = await DeliveryUser.findOne({ email: email });
+        if (deliveryUser) {
+            const validation = await ValidatePassword(password, deliveryUser.password, deliveryUser.salt);
+
+            if (validation) {
+                const signature = await GenerateSignature({
+                    _id: deliveryUser._id,
+                    email: deliveryUser.email,
+                    verified: deliveryUser.verified,
+                });
+
+                const data = {
+                    signature,
+                    email: deliveryUser.email,
+                    verified: deliveryUser.verified,
+                };
+
+                const response = GenerateResponseData(data, "Login successful.", 200);
+                return res.status(200).json(response);
+            }
+        }
+        return res.json({ msg: "Error Login" });
+    } catch (error) {
+        return next(InternalServerError(error.message));
+    }
+};
+
+/** Get Delivery User Profile Service
+ * @param req @param res @param next @returns
+ */
 export const GetDeliveryProfileService = async (req: Request, res: Response, next: NextFunction) => {
     const deliveryUser = req.user;
 
-    if (deliveryUser) {
-        const profile = await DeliveryUser.findById(deliveryUser._id);
+    try {
+        if (deliveryUser) {
+            const profile = await DeliveryUser.findById(deliveryUser._id);
 
-        if (profile) {
-            return res.status(201).json(profile);
+            if (profile) {
+                const response = GenerateResponseData(profile, "Profile data found.", 200);
+                return res.status(200).json(response);
+            }
         }
+        return next(createHttpError(404, "data not found"));
+    } catch (error) {
+        return next(InternalServerError(error.message));
     }
-    return res.status(400).json({ msg: "Error while Fetching Profile" });
 };
 
+/** EditDeliveryProfileService
+ *
+ * @param req
+ * @param res @param next @returns
+ */
 export const EditDeliveryProfileService = async (req: Request, res: Response, next: NextFunction) => {
+    const inputs = <EditCustomerProfileInput>req.body;
+    const errors = await validateInput(EditCustomerProfileInput, inputs);
+    if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
+
+    const { firstName, lastName, address } = inputs;
     const deliveryUser = req.user;
 
-    const customerInputs = plainToClass(EditCustomerProfileInput, req.body);
+    try {
+        if (deliveryUser) {
+            const profile = await DeliveryUser.findById(deliveryUser._id);
 
-    const validationError = await validate(customerInputs, { validationError: { target: true } });
+            if (profile) {
+                profile.firstName = firstName;
+                profile.lastName = lastName;
+                profile.address = address;
+                const result = await profile.save();
 
-    if (validationError.length > 0) {
-        return res.status(400).json(validationError);
-    }
-
-    const { firstName, lastName, address } = customerInputs;
-
-    if (deliveryUser) {
-        const profile = await DeliveryUser.findById(deliveryUser._id);
-
-        if (profile) {
-            profile.firstName = firstName;
-            profile.lastName = lastName;
-            profile.address = address;
-            const result = await profile.save();
-
-            return res.status(201).json(result);
+                const response = GenerateResponseData(result, "Profile data updated.", 201);
+                return res.status(201).json(response);
+            }
         }
+        return next(createHttpError(400, "Error while Updating Profile"));
+    } catch (error) {
+        return next(InternalServerError(error.message));
     }
-    return res.status(400).json({ msg: "Error while Updating Profile" });
 };
 
 /* ------------------- Delivery Notification --------------------- */
+/** Update Delivery User Status Service
+ * @param req @param res @param next @returns
+ */
 export const UpdateDeliveryUserStatusService = async (req: Request, res: Response, next: NextFunction) => {
     const deliveryUser = req.user;
 
-    if (deliveryUser) {
-        const { lat, lng } = req.body;
+    try {
+        if (deliveryUser) {
+            const { lat, lng } = req.body;
 
-        const profile = await DeliveryUser.findById(deliveryUser._id);
+            const profile = await DeliveryUser.findById(deliveryUser._id);
 
-        if (profile) {
-            if (lat && lng) {
-                profile.lat = lat;
-                profile.lng = lng;
+            if (profile) {
+                if (lat && lng) {
+                    profile.lat = lat;
+                    profile.lng = lng;
+                }
+
+                profile.isAvailable = !profile.isAvailable;
+
+                const result = await profile.save();
+
+                const response = GenerateResponseData(result, "profile status updated", 201);
+                return res.status(201).json(response);
             }
-
-            profile.isAvailable = !profile.isAvailable;
-
-            const result = await profile.save();
-
-            return res.status(201).json(result);
         }
+        return next(createHttpError(401, "Error while Updating Profile"));
+    } catch (error) {
+        return next(InternalServerError(error.message));
     }
-    return res.status(400).json({ msg: "Error while Updating Profile" });
 };

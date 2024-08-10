@@ -1,4 +1,4 @@
-export interface CreateFoodInput {
+export class CreateFoodInput {
     name: string;
     description: string;
     category: string;
