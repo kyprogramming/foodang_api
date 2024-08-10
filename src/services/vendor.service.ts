@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { CreateFoodInput, CreateOfferInputs, EditVendorInput, InactivateOfferInputs, MulterFile, VendorLoginInput } from "../dto";
 import { Food } from "../models";
-import { Offer } from "../models/Offer";
-import { Order } from "../models/Order";
+import { Offer } from "../models/offer.model";
+import { Order } from "../models/order.model";
 import { GenerateSignature, ValidatePassword } from "../utility";
 import { cloudinary } from "../config";
 import { deleteFile } from "../utility/deleteFiles";
@@ -210,7 +210,7 @@ export const GetOrderDetailsService = async (req: Request, res: Response, next: 
     return res.json({ message: "Order Not found" });
 };
 
-export const ProcessOrderService= async (req: Request, res: Response, next: NextFunction) => {
+export const ProcessOrderService = async (req: Request, res: Response, next: NextFunction) => {
     const orderId = req.params.id;
 
     const { status, remarks, time } = req.body;
@@ -238,7 +238,7 @@ export const AddOfferService = async (req: Request, res: Response, next: NextFun
     const user = req.user;
 
     if (user) {
-        const { title, description, offerType, offerAmount, pincode, promocode, promoType, startValidity, endValidity, bank, bins, minValue, isActive } = <CreateOfferInputs>req.body;
+        const { title, description, offerType, offerAmount, postcode, promocode, promoType, startValidity, endValidity, bank, bins, minValue, isActive } = <CreateOfferInputs>req.body;
 
         const vendor = await FindVendor(user._id);
 
@@ -248,7 +248,7 @@ export const AddOfferService = async (req: Request, res: Response, next: NextFun
                 description,
                 offerType,
                 offerAmount,
-                pincode,
+                postcode,
                 promocode,
                 promoType,
                 startValidity,
@@ -298,7 +298,7 @@ export const EditOfferService = async (req: Request, res: Response, next: NextFu
     const offerId = req.params.id;
 
     if (user) {
-        const { title, description, offerType, offerAmount, pincode, promocode, promoType, startValidity, endValidity, bank, bins, minValue, isActive } = <CreateOfferInputs>req.body;
+        const { title, description, offerType, offerAmount, postcode, promocode, promoType, startValidity, endValidity, bank, bins, minValue, isActive } = <CreateOfferInputs>req.body;
 
         const currentOffer = await Offer.findById(offerId);
 
@@ -310,7 +310,7 @@ export const EditOfferService = async (req: Request, res: Response, next: NextFu
                     (currentOffer.description = description),
                     (currentOffer.offerType = offerType),
                     (currentOffer.offerAmount = offerAmount),
-                    (currentOffer.pincode = pincode),
+                    (currentOffer.postcode = postcode),
                     (currentOffer.promoType = promoType),
                     (currentOffer.startValidity = startValidity),
                     (currentOffer.endValidity = endValidity),

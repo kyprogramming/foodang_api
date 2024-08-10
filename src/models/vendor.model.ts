@@ -6,7 +6,7 @@ const VendorSchema = new Schema(
         name: { type: String, required: true },
         ownerName: { type: String, required: true },
         foodType: { type: [String] },
-        pincode: { type: String, required: true },
+        postcode: { type: String, required: true },
         address: { type: String },
         phone: { type: String, required: true },
         email: { type: String, required: true },

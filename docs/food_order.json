@@ -1,1567 +1,1306 @@
 {
-	"info": {
-		"_postman_id": "1b67520d-b8ec-4a12-875b-de5eb079a340",
-		"name": "Food Order  API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "27919862"
-	},
-	"item": [
-		{
-			"name": "Admin",
-			"item": [
-				{
-					"name": "Admin - Hello",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/admin",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"admin"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Admin - Create - Send Mail",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Admin 1\",\n    \"address\": \"53 Carrick Know Hill EH127BU\",\n    \"email\": \"admin1@gmail.com\",\n    \"password\": \"123456\",\n    \"phone\": \"7442555583\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/admin",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"admin"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Admin - Login",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"admin1@gmail.com\",\n    \"password\": \"123456\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/admin/login",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"admin",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Admin- Create Vendor",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Vendor 2\",\n    \"address\": \"53 Carrick Know Hill EH127BU\",\n    \"pincode\": \"EH127BU\",\n    \"foodType\": [\"non-veg\"],\n    \"email\": \"vendor2@gmail.com\",\n    \"password\": \"123456\",\n    \"phone\": \"7442555575\",\n    \"ownerName\": \"Mr Vendor 2\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/admin/vendor",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"admin",
-								"vendor"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Admin - Get Vendors",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Upma with Green Chutny\",\n    \"description\": \"Great quality of Upma with Green Chutny\",\n    \"category\": \"break-fast\",\n    \"price\": \"110\",\n    \"readyTime\": \"30\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/admin/vendors",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"admin",
-								"vendors"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Admin - Get Vendor By ID",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/admin/vendor/66af84dcaca5c44c44944287",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"admin",
-								"vendor",
-								"66af84dcaca5c44c44944287"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Admin - Get Transcations",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/admin/transactions",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"admin",
-								"transactions"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Admin - Get Transcation by ID",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/admin/transaction/66adfe1dd2a3621500a1f23b",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"admin",
-								"transaction",
-								"66adfe1dd2a3621500a1f23b"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmFmODAxMDhiZWQ3OTNiZjQ4N2ZiMjIiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJuYW1lIjoiQWRtaW4gMSIsImlhdCI6MTcyMjc3ODQ0MSwiZXhwIjoxNzMwNTU0NDQxfQ.LfECICE9_ljhLtOhmbmx2YfQg0FhS6-NJ_6ZjKlku2Q",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"type": "text/javascript",
-						"packages": {},
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"packages": {},
-						"exec": [
-							""
-						]
-					}
-				}
-			]
-		},
-		{
-			"name": "Vendor",
-			"item": [
-				{
-					"name": "Vendor - Hello",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/vendor",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"vendor"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vendor - Login",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"vendor1@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/vendor/login",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"vendor",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vendor - Get profile",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/vendor/profile",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"vendor",
-								"profile"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vendor - Update profile",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Vendor 1 Updated\",\r\n    \"address\": \"49 Carrick Know Hill EH127BU\",\r\n    \"phone\": \"7442555581\",\r\n    \"foodType\": [\"veg\"]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/vendor/profile",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"vendor",
-								"profile"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vendor - Update service status",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/vendor/service",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"vendor",
-								"service"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vendor - Update cover image",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "coverImage",
-									"type": "file",
-									"src": [
-										"/C:/Users/kkyad/Desktop/a2zshop-logo.png",
-										"/C:/Users/kkyad/Desktop/Desktop_Pic (1).png",
-										"/C:/Users/kkyad/Desktop/Desktop_Pic.png"
-									]
-								}
-							]
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/vendor/coverimage",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"vendor",
-								"coverimage"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vendor - Add food item",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "name",
-									"value": "Non Veg Burger",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "Non Veg Burger",
-									"type": "text"
-								},
-								{
-									"key": "category",
-									"value": "break-fast",
-									"type": "text"
-								},
-								{
-									"key": "price",
-									"value": "10",
-									"type": "text"
-								},
-								{
-									"key": "readyTime",
-									"value": "15",
-									"type": "text"
-								},
-								{
-									"key": "foodType",
-									"value": "non veg",
-									"type": "text"
-								},
-								{
-									"key": "foodImages",
-									"type": "file",
-									"src": "/C:/Users/kkyad/Desktop/png files/non-veg-burger.png"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/vendor/food",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"vendor",
-								"food"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vendor - Get foods",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/vendor/foods",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"vendor",
-								"foods"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vendor - Add offer",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"100 Off on Week Days\",\r\n    \"description\": \"Get 100 OFF on week days for every order. Applicable for week days. Minimum order INR 250 or above\",\r\n    \"offerType\": \"VENDOR\",\r\n    \"offerAmount\": 100,\r\n    \"pincode\": \"EH127BU\",\r\n    \"promocode\": \"OFFER100\",\r\n    \"promoType\": \"ALL\",\r\n    \"startValidity\": \"\",\r\n    \"endValidity\": \"\",\r\n    \"bank\": \"\",\r\n    \"isActive\": true,\r\n    \"minValue\": 250\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/vendor/offer",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"vendor",
-								"offer"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vendor - Get offer",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/vendor/offers",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"vendor",
-								"offers"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vendor - Edit offer",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"200 Off on Week Days\",\r\n    \"description\": \"Get 200 OFF on week days for every order. Applicable for week days. Minimum order INR 250 or above\",\r\n    \"offerType\": \"VENDOR\",\r\n    \"offerAmount\": 200,\r\n    \"pincode\": \"EH127BU\",\r\n    \"promocode\": \"OFFER200\",\r\n    \"promoType\": \"ALL\",\r\n    \"startValidity\": \"\",\r\n    \"endValidity\": \"\",\r\n    \"bank\": \"\",\r\n    \"isActive\": true,\r\n    \"minValue\": 500\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/vendor/offer/66afbb2f2f262c31c00ad0a3",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"vendor",
-								"offer",
-								"66afbb2f2f262c31c00ad0a3"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vendor - Delete offer",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/vendor/offer/66afbb2f2f262c31c00ad0a3",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"vendor",
-								"offer",
-								"66afbb2f2f262c31c00ad0a3"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmFmODRkY2FjYTVjNDRjNDQ5NDQyODciLCJlbWFpbCI6InZlbmRvcjFAZ21haWwuY29tIiwibmFtZSI6IlZlbmRvciAxIiwiaWF0IjoxNzIyNzc5MzU0LCJleHAiOjE3MzA1NTUzNTR9.wH1bIcb0KYYnfGukS9Rbo3fWxpOg_OPDoTSP17Do_bs",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"type": "text/javascript",
-						"packages": {},
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"packages": {},
-						"exec": [
-							""
-						]
-					}
-				}
-			]
-		},
-		{
-			"name": "Shopping",
-			"item": [
-				{
-					"name": "Foods - Availability",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/682024",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"682024"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Foods - Top restaurants",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/top-restaurant/682024",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"top-restaurant",
-								"682024"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Foods - In 30 mins",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/foods-in-30-min/682024",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"foods-in-30-min",
-								"682024"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Foods - Search",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/search/682024",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"search",
-								"682024"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Foods - Get offers by pincode",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/offers/EH127BU",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"offers",
-								"EH127BU"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Foods - Restaurants by ID",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/restaurant/66ad10cfa0e49d19d0b26243",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"restaurant",
-								"66ad10cfa0e49d19d0b26243"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Customer",
-			"item": [
-				{
-					"name": "Customer - Signup",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"email\": \"kaushal.yadav@gmail.com\",\n    \"phone\": \"7442555583\",\n\t\"password\": \"123456\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/signup",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"signup"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Customer  - Login",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"email\": \"kaushal.yadav@gmail.com\",\n\t\"password\": \"123456\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/login",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Customer - Verify",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmFkNjE2OGU1Y2M2YjA3ODRiMGZkOGIiLCJlbWFpbCI6ImthdXNoYWwueWFkYXZAZ21haWwuY29tIiwidmVyaWZpZWQiOmZhbHNlLCJpYXQiOjE3MjI2Mzg2OTcsImV4cCI6MTczMDQxNDY5N30.87JbvUzZN0Ic7HapHm5Xh77baitIysUBzC8tvy3N_uk",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"otp\": \"667567\"\n\t\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/verify",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"verify"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Customer - Send OTP",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"email\": \"kaushal.yadav@google.com\",\n\t\"password\": \"123456\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/otp",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"otp"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Customer - Profile",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/profile/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"profile",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Customer - Edit Profile",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"address\": \"Edinburgh\",\n\t// \"phone\": \"985679457\",\n    \"firstName\": \"Kaushal\",\n    \"lastName\": \"Yadav\",\n\t\"lat\": \"55.953251\",\n\t\"lng\": \"-3.188267\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/profile",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"profile"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Customer  - Add To Cart",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"_id\": \"66ad1308a0e49d19d0b26244\",\r\n    \"unit\": 3\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/cart",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"cart"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Customer - View Cart",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/cart",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"cart"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Customer - Edit Cart - pending",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZWMzNzRkNTVkM2Q3ODA2YzkzZjk0NWEiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE1ODk4Njc3MzQsImV4cCI6MTU5NzY0MzczNH0.JKQQB4WrngDdYTQIYY-sEYB4T7eHsuOmyT1iFGZtlU4",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": []
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/cart/5ec0c80043434c07314cdf66/0",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"cart",
-								"5ec0c80043434c07314cdf66",
-								"0"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Customer - Remove Cart",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/cart",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"cart"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Customer  - Create Order",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"txnId\": \"66adfe1dd2a3621500a1f23b\",\r\n    \"amount\": 500,\r\n    \"items\": [\r\n        {\r\n            \"_id\": \"66ad1308a0e49d19d0b26244\",\r\n            \"unit\": 3\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/create-order",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"create-order"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Customer - View Orders",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/order/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"order",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Customer - Verify offer",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/order/6065a2f62aad9fb177392993",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"order",
-								"6065a2f62aad9fb177392993"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Customer  - Create Payment",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"offerId\": \"66adeab451a05551e03522e4\",\r\n    \"amount\": 600,\r\n    \"paymentMode\":\"COD\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/create-payment",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"create-payment"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Customer - View Order Details",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/offer/verify/66adeab451a05551e03522e4",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"offer",
-								"verify",
-								"66adeab451a05551e03522e4"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmFmYzg3ZjIwOWJkZjM3Yzg4ZGZlNGIiLCJlbWFpbCI6ImthdXNoYWwueWFkYXZAZ21haWwuY29tIiwidmVyaWZpZWQiOmZhbHNlLCJpYXQiOjE3MjI3OTYxNTksImV4cCI6MTczMDU3MjE1OX0.K7WxqICCGz7MI8btnvRsMviOcsPPMHGupRhYyCbj_-w",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"type": "text/javascript",
-						"packages": {},
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"packages": {},
-						"exec": [
-							""
-						]
-					}
-				}
-			]
-		},
-		{
-			"name": "Delivery",
-			"item": [
-				{
-					"name": "Delivery- Signup",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"email\": \"angel.yadav@gmail.com\",\n\t\"password\": \"123456\",\n    \"phone\": \"7442555583\",\n    \"firstName\": \"Kaushal\",\n    \"lastName\": \"Yadav\",\n    \"address\": \"Edinburgh\",\n    \"pincode\": \"EH127BU\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/delivery/signup",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"delivery",
-								"signup"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delivery- Login",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"email\": \"kaushal.yadav@gmail.com\",\n\t\"password\": \"123456\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/customer/login",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"customer",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delivery - Profile",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/delivery/profile",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"delivery",
-								"profile"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delivery - Edit Profile",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"lat\": \"5.3\",\r\n    \"lng\": \"6.5\"\r\n} ",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/delivery/change-status",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"delivery",
-								"change-status"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delivery - Update Status",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"lat\": \"5.3\",\r\n    \"lng\": \"6.5\"\r\n} ",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/delivery/change-status",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"delivery",
-								"change-status"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmFlMTFkYTlmYWJkZDA2ZDQ0YzMxZDEiLCJlbWFpbCI6ImFuZ2VsLnlhZGF2QGdtYWlsLmNvbSIsInZlcmlmaWVkIjpmYWxzZSwiaWF0IjoxNzIyNjg0MTc3LCJleHAiOjE3MzA0NjAxNzd9.ItNeKkNF-TX1CXm4JWcwxwAfzjMaZtP0QsL36-sgyN4",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"type": "text/javascript",
-						"packages": {},
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"packages": {},
-						"exec": [
-							""
-						]
-					}
-				}
-			]
-		}
-	],
-	"auth": {
-		"type": "bearer",
-		"bearer": [
-			{
-				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmFkMTBjZmEwZTQ5ZDE5ZDBiMjYyNDMiLCJlbWFpbCI6InRlc3QzQHRlc3QuY29tIiwibmFtZSI6IkdyZWVuIENoaWxsaSBIb3RlbCIsImlhdCI6MTcyMjYxODI0NywiZXhwIjoxNzMwMzk0MjQ3fQ.lF9McbJ84kM1aOs_ZCwfw30vD-XSxGex_Q4wSsQHhLk",
-				"type": "string"
-			}
-		]
-	},
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"packages": {},
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"packages": {},
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "BASE_URL",
-			"value": "http://localhost:8000"
-		}
-	]
+    "info": {
+        "_postman_id": "1b67520d-b8ec-4a12-875b-de5eb079a340",
+        "name": "Food Order  API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "27919862"
+    },
+    "item": [
+        {
+            "name": "Admin",
+            "item": [
+                {
+                    "name": "Admin - Hello",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "http://localhost:8000/admin",
+                            "protocol": "http",
+                            "host": ["localhost"],
+                            "port": "8000",
+                            "path": ["admin"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Admin - Create - Send Mail",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Admin 1\",\n    \"address\": \"53 Carrick Know Hill EH127BU\",\n    \"email\": \"admin1@gmail.com\",\n    \"password\": \"123456\",\n    \"phone\": \"7442555583\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "http://localhost:8000/admin",
+                            "protocol": "http",
+                            "host": ["localhost"],
+                            "port": "8000",
+                            "path": ["admin"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Admin - Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"admin1@gmail.com\",\n    \"password\": \"123456\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "http://localhost:8000/admin/login",
+                            "protocol": "http",
+                            "host": ["localhost"],
+                            "port": "8000",
+                            "path": ["admin", "login"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Admin- Create Vendor",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Vendor 2\",\n    \"address\": \"53 Carrick Know Hill EH127BU\",\n    \"postcode\": \"EH127BU\",\n    \"foodType\": [\"non-veg\"],\n    \"email\": \"vendor2@gmail.com\",\n    \"password\": \"123456\",\n    \"phone\": \"7442555575\",\n    \"ownerName\": \"Mr Vendor 2\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/admin/vendor",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["admin", "vendor"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Admin - Get Vendors",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Upma with Green Chutny\",\n    \"description\": \"Great quality of Upma with Green Chutny\",\n    \"category\": \"break-fast\",\n    \"price\": \"110\",\n    \"readyTime\": \"30\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/admin/vendors",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["admin", "vendors"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Admin - Get Vendor By ID",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/admin/vendor/66af84dcaca5c44c44944287",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["admin", "vendor", "66af84dcaca5c44c44944287"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Admin - Get Transcations",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/admin/transactions",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["admin", "transactions"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Admin - Get Transcation by ID",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/admin/transaction/66adfe1dd2a3621500a1f23b",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["admin", "transaction", "66adfe1dd2a3621500a1f23b"]
+                        }
+                    },
+                    "response": []
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": [
+                    {
+                        "key": "token",
+                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmFmODAxMDhiZWQ3OTNiZjQ4N2ZiMjIiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJuYW1lIjoiQWRtaW4gMSIsImlhdCI6MTcyMjc3ODQ0MSwiZXhwIjoxNzMwNTU0NDQxfQ.LfECICE9_ljhLtOhmbmx2YfQg0FhS6-NJ_6ZjKlku2Q",
+                        "type": "string"
+                    }
+                ]
+            },
+            "event": [
+                {
+                    "listen": "prerequest",
+                    "script": {
+                        "type": "text/javascript",
+                        "packages": {},
+                        "exec": [""]
+                    }
+                },
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "packages": {},
+                        "exec": [""]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Vendor",
+            "item": [
+                {
+                    "name": "Vendor - Hello",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{BASE_URL}}/vendor",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["vendor"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Vendor - Login",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"email\": \"vendor1@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/vendor/login",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["vendor", "login"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Vendor - Get profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{BASE_URL}}/vendor/profile",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["vendor", "profile"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Vendor - Update profile",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\": \"Vendor 1 Updated\",\r\n    \"address\": \"49 Carrick Know Hill EH127BU\",\r\n    \"phone\": \"7442555581\",\r\n    \"foodType\": [\"veg\"]\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/vendor/profile",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["vendor", "profile"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Vendor - Update service status",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/vendor/service",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["vendor", "service"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Vendor - Update cover image",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "coverImage",
+                                    "type": "file",
+                                    "src": ["/C:/Users/kkyad/Desktop/a2zshop-logo.png", "/C:/Users/kkyad/Desktop/Desktop_Pic (1).png", "/C:/Users/kkyad/Desktop/Desktop_Pic.png"]
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/vendor/coverimage",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["vendor", "coverimage"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Vendor - Add food item",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "name",
+                                    "value": "Non Veg Burger",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "description",
+                                    "value": "Non Veg Burger",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "category",
+                                    "value": "break-fast",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "price",
+                                    "value": "10",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "readyTime",
+                                    "value": "15",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "foodType",
+                                    "value": "non veg",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "foodImages",
+                                    "type": "file",
+                                    "src": "/C:/Users/kkyad/Desktop/png files/non-veg-burger.png"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/vendor/food",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["vendor", "food"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Vendor - Get foods",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/vendor/foods",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["vendor", "foods"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Vendor - Add offer",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"title\": \"100 Off on Week Days\",\r\n    \"description\": \"Get 100 OFF on week days for every order. Applicable for week days. Minimum order INR 250 or above\",\r\n    \"offerType\": \"VENDOR\",\r\n    \"offerAmount\": 100,\r\n    \"postcode\": \"EH127BU\",\r\n    \"promocode\": \"OFFER100\",\r\n    \"promoType\": \"ALL\",\r\n    \"startValidity\": \"\",\r\n    \"endValidity\": \"\",\r\n    \"bank\": \"\",\r\n    \"isActive\": true,\r\n    \"minValue\": 250\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/vendor/offer",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["vendor", "offer"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Vendor - Get offer",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/vendor/offers",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["vendor", "offers"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Vendor - Edit offer",
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"title\": \"200 Off on Week Days\",\r\n    \"description\": \"Get 200 OFF on week days for every order. Applicable for week days. Minimum order INR 250 or above\",\r\n    \"offerType\": \"VENDOR\",\r\n    \"offerAmount\": 200,\r\n    \"postcode\": \"EH127BU\",\r\n    \"promocode\": \"OFFER200\",\r\n    \"promoType\": \"ALL\",\r\n    \"startValidity\": \"\",\r\n    \"endValidity\": \"\",\r\n    \"bank\": \"\",\r\n    \"isActive\": true,\r\n    \"minValue\": 500\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/vendor/offer/66afbb2f2f262c31c00ad0a3",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["vendor", "offer", "66afbb2f2f262c31c00ad0a3"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Vendor - Delete offer",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/vendor/offer/66afbb2f2f262c31c00ad0a3",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["vendor", "offer", "66afbb2f2f262c31c00ad0a3"]
+                        }
+                    },
+                    "response": []
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": [
+                    {
+                        "key": "token",
+                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmFmODRkY2FjYTVjNDRjNDQ5NDQyODciLCJlbWFpbCI6InZlbmRvcjFAZ21haWwuY29tIiwibmFtZSI6IlZlbmRvciAxIiwiaWF0IjoxNzIyNzc5MzU0LCJleHAiOjE3MzA1NTUzNTR9.wH1bIcb0KYYnfGukS9Rbo3fWxpOg_OPDoTSP17Do_bs",
+                        "type": "string"
+                    }
+                ]
+            },
+            "event": [
+                {
+                    "listen": "prerequest",
+                    "script": {
+                        "type": "text/javascript",
+                        "packages": {},
+                        "exec": [""]
+                    }
+                },
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "packages": {},
+                        "exec": [""]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Shopping",
+            "item": [
+                {
+                    "name": "Foods - Availability",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/682024",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["682024"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Foods - Top restaurants",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/top-restaurant/682024",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["top-restaurant", "682024"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Foods - In 30 mins",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/foods-in-30-min/682024",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["foods-in-30-min", "682024"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Foods - Search",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/search/682024",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["search", "682024"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Foods - Get offers by postcode",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/offers/EH127BU",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["offers", "EH127BU"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Foods - Restaurants by ID",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/restaurant/66ad10cfa0e49d19d0b26243",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["restaurant", "66ad10cfa0e49d19d0b26243"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Customer",
+            "item": [
+                {
+                    "name": "Customer - Signup",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"email\": \"kaushal.yadav@gmail.com\",\n    \"phone\": \"7442555583\",\n\t\"password\": \"123456\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/signup",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "signup"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Customer  - Login",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"email\": \"kaushal.yadav@gmail.com\",\n\t\"password\": \"123456\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/login",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "login"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Customer - Verify",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmFkNjE2OGU1Y2M2YjA3ODRiMGZkOGIiLCJlbWFpbCI6ImthdXNoYWwueWFkYXZAZ21haWwuY29tIiwidmVyaWZpZWQiOmZhbHNlLCJpYXQiOjE3MjI2Mzg2OTcsImV4cCI6MTczMDQxNDY5N30.87JbvUzZN0Ic7HapHm5Xh77baitIysUBzC8tvy3N_uk",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PATCH",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"otp\": \"667567\"\n\t\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/verify",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "verify"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Customer - Send OTP",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"email\": \"kaushal.yadav@google.com\",\n\t\"password\": \"123456\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/otp",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "otp"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Customer - Profile",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/profile/",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "profile", ""]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Customer - Edit Profile",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"address\": \"Edinburgh\",\n\t// \"phone\": \"985679457\",\n    \"firstName\": \"Kaushal\",\n    \"lastName\": \"Yadav\",\n\t\"lat\": \"55.953251\",\n\t\"lng\": \"-3.188267\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/profile",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "profile"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Customer  - Add To Cart",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"_id\": \"66ad1308a0e49d19d0b26244\",\r\n    \"unit\": 3\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/cart",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "cart"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Customer - View Cart",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/cart",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "cart"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Customer - Edit Cart - pending",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZWMzNzRkNTVkM2Q3ODA2YzkzZjk0NWEiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE1ODk4Njc3MzQsImV4cCI6MTU5NzY0MzczNH0.JKQQB4WrngDdYTQIYY-sEYB4T7eHsuOmyT1iFGZtlU4",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": []
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/cart/5ec0c80043434c07314cdf66/0",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "cart", "5ec0c80043434c07314cdf66", "0"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Customer - Remove Cart",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/cart",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "cart"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Customer  - Create Order",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"txnId\": \"66adfe1dd2a3621500a1f23b\",\r\n    \"amount\": 500,\r\n    \"items\": [\r\n        {\r\n            \"_id\": \"66ad1308a0e49d19d0b26244\",\r\n            \"unit\": 3\r\n        }\r\n    ]\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/create-order",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "create-order"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Customer - View Orders",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/order/",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "order", ""]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Customer - Verify offer",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/order/6065a2f62aad9fb177392993",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "order", "6065a2f62aad9fb177392993"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Customer  - Create Payment",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"offerId\": \"66adeab451a05551e03522e4\",\r\n    \"amount\": 600,\r\n    \"paymentMode\":\"COD\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/create-payment",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "create-payment"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Customer - View Order Details",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/offer/verify/66adeab451a05551e03522e4",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "offer", "verify", "66adeab451a05551e03522e4"]
+                        }
+                    },
+                    "response": []
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": [
+                    {
+                        "key": "token",
+                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmFmYzg3ZjIwOWJkZjM3Yzg4ZGZlNGIiLCJlbWFpbCI6ImthdXNoYWwueWFkYXZAZ21haWwuY29tIiwidmVyaWZpZWQiOmZhbHNlLCJpYXQiOjE3MjI3OTYxNTksImV4cCI6MTczMDU3MjE1OX0.K7WxqICCGz7MI8btnvRsMviOcsPPMHGupRhYyCbj_-w",
+                        "type": "string"
+                    }
+                ]
+            },
+            "event": [
+                {
+                    "listen": "prerequest",
+                    "script": {
+                        "type": "text/javascript",
+                        "packages": {},
+                        "exec": [""]
+                    }
+                },
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "packages": {},
+                        "exec": [""]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Delivery",
+            "item": [
+                {
+                    "name": "Delivery- Signup",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"email\": \"angel.yadav@gmail.com\",\n\t\"password\": \"123456\",\n    \"phone\": \"7442555583\",\n    \"firstName\": \"Kaushal\",\n    \"lastName\": \"Yadav\",\n    \"address\": \"Edinburgh\",\n    \"postcode\": \"EH127BU\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/delivery/signup",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["delivery", "signup"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delivery- Login",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"email\": \"kaushal.yadav@gmail.com\",\n\t\"password\": \"123456\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/customer/login",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["customer", "login"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delivery - Profile",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/delivery/profile",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["delivery", "profile"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delivery - Edit Profile",
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"lat\": \"5.3\",\r\n    \"lng\": \"6.5\"\r\n} ",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/delivery/change-status",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["delivery", "change-status"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delivery - Update Status",
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"lat\": \"5.3\",\r\n    \"lng\": \"6.5\"\r\n} ",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/delivery/change-status",
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["delivery", "change-status"]
+                        }
+                    },
+                    "response": []
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": [
+                    {
+                        "key": "token",
+                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmFlMTFkYTlmYWJkZDA2ZDQ0YzMxZDEiLCJlbWFpbCI6ImFuZ2VsLnlhZGF2QGdtYWlsLmNvbSIsInZlcmlmaWVkIjpmYWxzZSwiaWF0IjoxNzIyNjg0MTc3LCJleHAiOjE3MzA0NjAxNzd9.ItNeKkNF-TX1CXm4JWcwxwAfzjMaZtP0QsL36-sgyN4",
+                        "type": "string"
+                    }
+                ]
+            },
+            "event": [
+                {
+                    "listen": "prerequest",
+                    "script": {
+                        "type": "text/javascript",
+                        "packages": {},
+                        "exec": [""]
+                    }
+                },
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "packages": {},
+                        "exec": [""]
+                    }
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmFkMTBjZmEwZTQ5ZDE5ZDBiMjYyNDMiLCJlbWFpbCI6InRlc3QzQHRlc3QuY29tIiwibmFtZSI6IkdyZWVuIENoaWxsaSBIb3RlbCIsImlhdCI6MTcyMjYxODI0NywiZXhwIjoxNzMwMzk0MjQ3fQ.lF9McbJ84kM1aOs_ZCwfw30vD-XSxGex_Q4wSsQHhLk",
+                "type": "string"
+            }
+        ]
+    },
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [""]
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [""]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "BASE_URL",
+            "value": "http://localhost:8000"
+        }
+    ]
 }

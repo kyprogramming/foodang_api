@@ -6,7 +6,7 @@ export interface IDeliveryUser extends Document {
     lastName: string;
     address: string;
     phone: string;
-    pincode: string;
+    postcode: string;
     verified: boolean;
     otp: number;
     otp_expiry: Date;

@@ -1,7 +1,7 @@
 import dotenv from "dotenv-safe";
 
-import { buildDevLogger } from "./devLogger";
-import { buildProdLogger } from "./prodLogger";
+import { buildDevLogger } from "./dev.logger";
+import { buildProdLogger } from "./prod.logger";
 
 dotenv.config();
 let logger: any = null;

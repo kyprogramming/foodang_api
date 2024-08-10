@@ -13,7 +13,7 @@ import {
     ValidatePassword,
     validateInput,
 } from "../utility";
-import { Admin } from "../models/Admin";
+import { Admin } from "../models/admin.model";
 import { envConfig, sendEmail } from "../config";
 import createHttpError, { InternalServerError } from "http-errors";
 import { errorMsg, successMsg } from "../constants/admin.constant";
@@ -91,7 +91,7 @@ export const CreateVendorService = async (req: Request, res: Response, next: Nex
     const errors = await validateInput(CreateVendorInput, inputs);
     if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
-    const { name, address, pincode, foodType, email, password, ownerName, phone } = <CreateVendorInput>req.body;
+    const { name, address, postcode, foodType, email, password, ownerName, phone } = <CreateVendorInput>req.body;
 
     try {
         const vendor = await FindVendor("", email);
@@ -107,7 +107,7 @@ export const CreateVendorService = async (req: Request, res: Response, next: Nex
         const newVendor = await Vendor.create({
             name: name,
             address: address,
-            pincode: pincode,
+            postcode: postcode,
             foodType: foodType,
             email: email,
             password: userPassword,

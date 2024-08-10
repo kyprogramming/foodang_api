@@ -13,7 +13,7 @@ export interface IOffer extends Document {
     promoType: string;
     bank: [any];
     bins: [any];
-    pincode: string;
+    postcode: string;
     isActive: boolean;
 }
 

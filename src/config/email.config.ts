@@ -1,5 +1,5 @@
 import * as Mailjet from "node-mailjet";
-import envConfig from "./envConfig";
+import envConfig from "./env.config";
 
 const mailjetClient = new Mailjet.Client({
     apiKey: envConfig.MAILJET_API_KEY,

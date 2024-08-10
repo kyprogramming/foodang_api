@@ -1,7 +1,3 @@
-
-
-
-
 export interface EditVendorInput {
     name: string;
     address: string;
@@ -33,14 +29,13 @@ export interface CreateOfferInputs {
     promoType: string;
     bank: [any];
     bins: [any];
-    pincode: string;
+    postcode: string;
     isActive: boolean;
 }
 
 export interface InactivateOfferInputs {
     isActive: boolean;
 }
-
 
 export interface MulterFile {
     fieldname: string;

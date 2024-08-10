@@ -1,7 +1,7 @@
 import mongoose, { ConnectOptions, Error } from "mongoose";
 // mongoose.set("strictQuery", true);
 
-import { envConfig } from "./envConfig";
+import { envConfig } from "./env.config";
 import logger from "../logger";
 
 const MONGODB_CON = envConfig.MONGODB_CON;

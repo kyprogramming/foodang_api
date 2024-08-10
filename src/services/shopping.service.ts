@@ -1,26 +1,37 @@
 import express, { Request, Response, NextFunction } from "express";
 import { Vendor } from "../models";
-import { Offer } from "../models/Offer";
+import { Offer } from "../models/offer.model";
 import { IFood } from "../interfaces";
+import { PostcodeInput } from "../dto";
+import { GenerateResponseData, GenerateValidationErrorResponse, validateInput } from "../utility";
+import createHttpError, { InternalServerError } from "http-errors";
 
 export const GetFoodAvailabilityService = async (req: Request, res: Response, next: NextFunction) => {
-    const pincode = req.params.pincode;
+    const inputs = <PostcodeInput>(<unknown>req.params);
+    const errors = await validateInput(PostcodeInput, inputs);
+    if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
-    const result = await Vendor.find({ pincode: pincode, serviceAvailable: true })
-        .sort([["rating", "descending"]])
-        .populate("foods");
+    const { postcode } = inputs;
 
-    if (result.length > 0) {
-        return res.status(200).json(result);
+    try {
+        const result = await Vendor.find({ postcode: postcode, serviceAvailable: true })
+            .sort([["rating", "descending"]])
+            .populate("foods");
+
+        if (result.length > 0) {
+            const response = GenerateResponseData(result, "data found.", 200);
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(401, "data Not found!"));
+    } catch (error) {
+        return next(InternalServerError(error.message));
     }
-
-    return res.status(404).json({ msg: "data Not found!" });
 };
 
 export const GetTopRestaurantsService = async (req: Request, res: Response, next: NextFunction) => {
-    const pincode = req.params.pincode;
+    const postcode = req.params.postcode;
 
-    const result = await Vendor.find({ pincode: pincode, serviceAvailable: true })
+    const result = await Vendor.find({ postcode: postcode, serviceAvailable: true })
         .sort([["rating", "descending"]])
         .limit(10);
 
@@ -32,9 +43,9 @@ export const GetTopRestaurantsService = async (req: Request, res: Response, next
 };
 
 export const GetFoodsIn30MinService = async (req: Request, res: Response, next: NextFunction) => {
-    const pincode = req.params.pincode;
+    const postcode = req.params.postcode;
 
-    const result = await Vendor.find({ pincode: pincode, serviceAvailable: true })
+    const result = await Vendor.find({ postcode: postcode, serviceAvailable: true })
         .sort([["rating", "descending"]])
         .populate("foods");
 
@@ -51,9 +62,9 @@ export const GetFoodsIn30MinService = async (req: Request, res: Response, next: 
 };
 
 export const SearchFoodsService = async (req: Request, res: Response, next: NextFunction) => {
-    const pincode = req.params.pincode;
+    const postcode = req.params.postcode;
     const result = await Vendor.find({
-        pincode: pincode,
+        postcode: postcode,
         serviceAvailable: true,
     }).populate("foods");
 
@@ -78,9 +89,9 @@ export const RestaurantByIdService = async (req: Request, res: Response, next: N
 };
 
 export const GetAvailableOffersService = async (req: Request, res: Response, next: NextFunction) => {
-    const pincode = req.params.pincode;
+    const postcode = req.params.postcode;
 
-    const offers = await Offer.find({ pincode: pincode, isActive: true });
+    const offers = await Offer.find({ postcode: postcode, isActive: true });
 
     if (offers) {
         return res.status(200).json(offers);

@@ -1,0 +1,4 @@
+{"level":"error","message":"Error: Customer already verified with OTP.","service":"user-service","timestamp":"2024-08-10 07:32:58"}
+{"level":"error","message":"Error: Customer already verified with OTP.","service":"user-service","timestamp":"2024-08-10 08:03:39"}
+{"level":"error","message":"Error: data Not found!","service":"user-service","timestamp":"2024-08-10 09:01:33"}
+{"level":"error","message":"Error: data Not found!","service":"user-service","timestamp":"2024-08-10 09:02:32"}

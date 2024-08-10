@@ -6,7 +6,7 @@ export interface IVendor extends Document {
     name: string;
     ownerName: string;
     foodType: [string];
-    pincode: string;
+    postcode: string;
     address: string;
     phone: string;
     email: string;

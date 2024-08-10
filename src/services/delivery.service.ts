@@ -17,7 +17,7 @@ export const DeliverySignUpService = async (req: Request, res: Response, next: N
         return res.status(400).json(validationError);
     }
 
-    const { email, phone, password, address, firstName, lastName, pincode } = deliveryUserInputs;
+    const { email, phone, password, address, firstName, lastName, postcode } = deliveryUserInputs;
 
     const salt = await GenerateSalt();
     const userPassword = await GeneratePassword(password, salt);
@@ -36,7 +36,7 @@ export const DeliverySignUpService = async (req: Request, res: Response, next: N
         firstName: firstName,
         lastName: lastName,
         address: address,
-        pincode: pincode,
+        postcode: postcode,
         verified: false,
         lat: 0,
         lng: 0,

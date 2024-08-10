@@ -5,7 +5,7 @@ import {
     CreatePaymentService,
     CustomerLoginService,
     CustomerSignUpService,
-    CustomerVerifyService,
+    CustomerOTPVerifyService,
     DeleteCartService,
     EditCustomerProfileService,
     GetCartService,
@@ -20,7 +20,7 @@ export const CustomerSignUp = (req: Request, res: Response, next: NextFunction) 
 
 export const CustomerLogin = (req: Request, res: Response, next: NextFunction) => CustomerLoginService(req, res, next);
 
-export const CustomerVerify = (req: Request, res: Response, next: NextFunction) => CustomerVerifyService(req, res, next);
+export const CustomerOTPVerify = (req: Request, res: Response, next: NextFunction) => CustomerOTPVerifyService(req, res, next);
 
 export const RequestOtp = (req: Request, res: Response, next: NextFunction) => RequestOtpService(req, res, next);
 

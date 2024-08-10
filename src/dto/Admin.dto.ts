@@ -45,7 +45,7 @@ export class AdminLoginInput {
     password: string;
 }
 
-// export class CreateVendorInput { name: string; ownerName: string; foodType: [string]; pincode: string; address: string; phone: string; email: string; password: string; }
+// export class CreateVendorInput { name: string; ownerName: string; foodType: [string]; postcode: string; address: string; phone: string; email: string; password: string; }
 
 export class CreateVendorInput {
     // name
@@ -64,10 +64,10 @@ export class CreateVendorInput {
     @Transform(({ value }) => value.map((item: string) => item.trim()))
     foodType: string[];
 
-    // pincode
+    // postcode
     @IsString()
     @IsPostalCode("GB")
-    pincode: string;
+    postcode: string;
 
     // address
     @IsString()
