@@ -3,7 +3,7 @@ import { IFood } from "../interfaces";
 
 const FoodSchema = new Schema(
     {
-        vendorId: { type: String, required: true },
+        restaurantId: { type: String, required: true },
         name: { type: String, required: true },
         description: { type: String, required: true },
         category: { type: String },

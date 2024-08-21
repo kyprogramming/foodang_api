@@ -5,9 +5,8 @@ export * from "./IAdmin";
 export * from "./ICustomer";
 export * from "./IDeliveryUser";
 export * from "./IFood";
-export * from "./IVendor";
+export * from "./IRestaurant";
 export * from "./IOffer";
 export * from "./IOrder";
 export * from "./ITransaction";
 export * from "./IRider";
-

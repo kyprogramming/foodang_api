@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import { IFood, IVendor } from "../interfaces";
+import { IFood, IRestaurant } from "../interfaces";
 
-const VendorSchema = new Schema(
+const RestaurantSchema = new Schema(
     {
         name: { type: String, required: true },
         ownerName: { type: String, required: true },
@@ -38,6 +38,6 @@ const VendorSchema = new Schema(
     }
 );
 
-const Vendor = mongoose.model<IVendor>("vendor", VendorSchema);
+const Restaurant = mongoose.model<IRestaurant>("restaurant", RestaurantSchema);
 
-export { Vendor };
+export { Restaurant };

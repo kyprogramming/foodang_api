@@ -11,9 +11,13 @@ type FileNameCallback = (error: Error | null, filename: string) => void;
 export const fileStorage = multer.diskStorage({
     destination: (request: Request, file: Express.Multer.File, callback: DestinationCallback): void => {
         // eslint-disable-next-line no-nested-ternary
-    const fileName = request.originalUrl.includes("food") ? "foods"
-      : request.originalUrl.includes("vendor") ? "vendors"
-      : request.originalUrl.includes("delivery") ? "delivery_users" : 'admin';
+        const fileName = request.originalUrl.includes("food")
+            ? "foods"
+            : request.originalUrl.includes("restaurant")
+            ? "restaurants"
+            : request.originalUrl.includes("delivery")
+            ? "delivery_users"
+            : "admin";
         callback(null, `public/uploads/${fileName}`);
     },
 

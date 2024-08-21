@@ -1,6 +1,6 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
-import { SignupAdminInput, CreateVendorInput, AdminLoginInput, VerifyDeliveryUserInput } from "../dto";
-import { DeliveryUser, Vendor } from "../models";
+import { SignupAdminInput, CreateRestaurantInput, AdminLoginInput, VerifyDeliveryUserInput } from "../dto";
+import { DeliveryUser, Restaurant } from "../models";
 import { Transaction } from "../models";
 import {
     customResponse,
@@ -114,18 +114,18 @@ export const AdminLogoutService = async (req: Request, res: Response, next: Next
     }
 };
 
-//  Create new vendor
-export const CreateVendorService = async (req: Request, res: Response, next: NextFunction) => {
-    const inputs = <CreateVendorInput>req.body;
-    const errors = await validateInput(CreateVendorInput, inputs);
+//  Create new restaurant
+export const CreateRestaurantService = async (req: Request, res: Response, next: NextFunction) => {
+    const inputs = <CreateRestaurantInput>req.body;
+    const errors = await validateInput(CreateRestaurantInput, inputs);
     if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
-    const { name, address, postcode, foodType, email, password, ownerName, phone } = <CreateVendorInput>req.body;
+    const { name, address, postcode, foodType, email, password, ownerName, phone } = <CreateRestaurantInput>req.body;
 
     try {
-        const vendor = await FindVendor("", email);
-        if (vendor !== null) {
-            return next(createHttpError(422, `Vendor email - ${email} is already exists.`));
+        const restaurant = await FindRestaurant("", email);
+        if (restaurant !== null) {
+            return next(createHttpError(422, `Restaurant email - ${email} is already exists.`));
         }
 
         //generate a salt
@@ -133,7 +133,7 @@ export const CreateVendorService = async (req: Request, res: Response, next: Nex
         // encrypt the password using the salt
         const userPassword = await GeneratePassword(password, salt);
 
-        const newVendor = await Vendor.create({
+        const newRestaurant = await Restaurant.create({
             name: name,
             address: address,
             postcode: postcode,
@@ -150,39 +150,39 @@ export const CreateVendorService = async (req: Request, res: Response, next: Nex
             lng: 0,
         });
 
-        const response = GenerateResponseData(newVendor, successMsg.vendor_create_success, 200);
+        const response = GenerateResponseData(newRestaurant, successMsg.restaurant_create_success, 200);
         return res.status(200).json(response);
     } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
 
-// Get vendors list
-export const GetVendorsService = async (req: Request, res: Response, next: NextFunction) => {
+// Get restaurants list
+export const GetRestaurantsService = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const vendors = await Vendor.find();
-        if (vendors) {
-            const response = GenerateResponseData(vendors, successMsg.vendor_create_success, 200);
+        const restaurants = await Restaurant.find();
+        if (restaurants) {
+            const response = GenerateResponseData(restaurants, successMsg.restaurant_create_success, 200);
             return res.status(200).json(response);
         }
-        return next(createHttpError(404, errorMsg.vendor_not_found));
+        return next(createHttpError(404, errorMsg.restaurant_not_found));
     } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
 
-// Get vendor by id
-export const GetVendorByIDService = async (req: Request, res: Response, next: NextFunction) => {
-    const vendorId = req.params.id;
-    if (!isValidMongooseObjectId(vendorId)) return next(createHttpError(422, `Invalid request parameter`));
+// Get restaurant by id
+export const GetRestaurantByIDService = async (req: Request, res: Response, next: NextFunction) => {
+    const restaurantId = req.params.id;
+    if (!isValidMongooseObjectId(restaurantId)) return next(createHttpError(422, `Invalid request parameter`));
 
     try {
-        const vendor = await FindVendor(vendorId);
-        if (vendor) {
-            const response = GenerateResponseData(vendor, successMsg.vendor_found_success, 200);
+        const restaurant = await FindRestaurant(restaurantId);
+        if (restaurant) {
+            const response = GenerateResponseData(restaurant, successMsg.restaurant_found_success, 200);
             return res.status(200).json(response);
         }
-        return next(createHttpError(404, errorMsg.vendor_not_found));
+        return next(createHttpError(404, errorMsg.restaurant_not_found));
     } catch (error: any) {
         return next(InternalServerError(error.message));
     }
@@ -266,11 +266,11 @@ export const FindAdmin = async (id: String | undefined = "", email: string = "")
     }
 };
 
-// Find Vendor by email address and id
-export const FindVendor = async (id: String | undefined, email?: string) => {
+// Find Restaurant by email address and id
+export const FindRestaurant = async (id: String | undefined, email?: string) => {
     if (email) {
-        return await Vendor.findOne({ email: email });
+        return await Restaurant.findOne({ email: email });
     } else {
-        return await Vendor.findById(id);
+        return await Restaurant.findById(id);
     }
 };

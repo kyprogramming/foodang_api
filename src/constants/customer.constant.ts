@@ -10,5 +10,5 @@ export const errorMsg = {
     customer_already_verified: `Already verified.`,
     customer_verify_error: `Unable to verify Customer.`,
 
-    vendor_not_found: `Vendor not found.`,
+    restaurant_not_found: `Restaurant not found.`,
 };

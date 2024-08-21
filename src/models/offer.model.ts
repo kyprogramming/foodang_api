@@ -4,7 +4,7 @@ import { IOffer } from "../interfaces";
 const OfferSchema = new Schema(
     {
         offerType: { type: String, require: true },
-        vendors: [{ type: Schema.Types.ObjectId, ref: "vendor" }],
+        restaurants: [{ type: Schema.Types.ObjectId, ref: "restaurant" }],
         title: { type: String, require: true },
         description: { type: String },
         minValue: { type: Number, require: true },

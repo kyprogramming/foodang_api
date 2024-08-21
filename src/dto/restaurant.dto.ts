@@ -1,16 +1,16 @@
-export class EditVendorInput {
+export class EditRestaurantInput {
     name: string;
     address: string;
     phone: string;
     foodType: [string];
 }
 
-export class VendorLoginInput {
+export class RestaurantLoginInput {
     email: string;
     password: string;
 }
 
-export class VendorPayload {
+export class RestaurantPayload {
     _id: string;
     email: string;
     name: string;
@@ -18,7 +18,7 @@ export class VendorPayload {
 
 export class CreateOfferInputs {
     offerType: string;
-    vendors: [any];
+    restaurants: [any];
     title: string;
     description: string;
     minValue: number;

@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import { Authenticate } from "../middleware";
-import { AdminSignup, AdminLogin, CreateVendor, GetDeliveryUsers, GetTransactionById, GetTransactions, GetVendorByID, GetVendors, VerifyDeliveryUser, AdminLogout } from "../controllers";
+import { AdminSignup, AdminLogin, CreateRestaurant, GetDeliveryUsers, GetTransactionById, GetTransactions, GetRestaurantByID, GetRestaurants, VerifyDeliveryUser, AdminLogout } from "../controllers";
 import passport from "passport";
 
 const router = express.Router();
@@ -16,10 +16,10 @@ router.post("/login", AdminLogin);
 // Authentication
 router.use(Authenticate);
 
-// Create and find vendors
-router.post("/vendor", CreateVendor);
-router.get("/vendors", GetVendors);
-router.get("/vendor/:id", GetVendorByID);
+// Create and find restaurants
+router.post("/restaurant", CreateRestaurant);
+router.get("/restaurants", GetRestaurants);
+router.get("/restaurant/:id", GetRestaurantByID);
 
 // Get transactions details
 router.get("/transactions", GetTransactions);
@@ -33,15 +33,15 @@ router.get("/delivery/users", GetDeliveryUsers);
 router.post("/logout", AdminLogout);
 
 // Google OAuth routes
-router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
-  res.redirect('/profile');
+router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+router.get("/auth/google/callback", passport.authenticate("google", { failureRedirect: "/" }), (req, res) => {
+    res.redirect("/profile");
 });
 
 // Facebook OAuth routes
-router.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
-router.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), (req, res) => {
-  res.redirect('/profile');
+router.get("/auth/facebook", passport.authenticate("facebook", { scope: ["email"] }));
+router.get("/auth/facebook/callback", passport.authenticate("facebook", { failureRedirect: "/" }), (req, res) => {
+    res.redirect("/profile");
 });
 
 export { router as AdminRoute };

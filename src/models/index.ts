@@ -1,5 +1,5 @@
 export * from "./admin.model";
-export * from "./vendor.model";
+export * from "./restaurant.model";
 export * from "./food.model";
 export * from "./customer.model";
 export * from "./deliveryUser.model";

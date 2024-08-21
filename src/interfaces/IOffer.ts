@@ -1,8 +1,8 @@
-import IVendor from "./IVendor";
+import IRestaurant from "./IRestaurant";
 
 export interface IOffer extends Document {
     offerType: string;
-    vendors: [IVendor];
+    restaurants: [IRestaurant];
     title: string;
     description: string;
     minValue: number;

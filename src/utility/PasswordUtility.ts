@@ -3,7 +3,7 @@ import { Request } from "express";
 import jwt from "jsonwebtoken";
 import { envConfig } from "../config";
 
-import { VendorPayload } from "../dto";
+import { RestaurantPayload } from "../dto";
 import { AuthPayload } from "../dto/auth.dto";
 
 export const GenerateSalt = async () => {

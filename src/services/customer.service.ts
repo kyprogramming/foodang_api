@@ -2,7 +2,7 @@ import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import express, { Request, Response, NextFunction } from "express";
 import { CartItem, CreateCustomerInput, CreatePaymentInput, EditCustomerProfileInput, OrderInputs, OtpRequestInput, RequestUserInput, UserLoginInput } from "../dto";
-import { Customer, DeliveryUser, Food, Vendor } from "../models";
+import { Customer, DeliveryUser, Food, Restaurant } from "../models";
 import { Offer } from "../models/offer.model";
 import { Order } from "../models/order.model";
 import { Transaction } from "../models";
@@ -376,7 +376,7 @@ export const CreatePaymentService = async (req: Request, res: Response, next: Ne
         //  create record on transaction
         const transaction = await Transaction.create({
             customer: customer?._id,
-            vendorId: "",
+            restaurantId: "",
             orderId: "",
             orderValue: payableAmount,
             offerUsed: offerId || "NA",
@@ -418,7 +418,7 @@ export const CreateOrderService = async (req: Request, res: Response, next: Next
             const orderId = `${Math.floor(Math.random() * 89999) + 1000}`;
 
             let netAmount = 0.0;
-            let vendorId: any;
+            let restaurantId: any;
 
             const foods = await Food.find()
                 .where("_id")
@@ -431,7 +431,7 @@ export const CreateOrderService = async (req: Request, res: Response, next: Next
                     console.log(typeof item.food);
 
                     if (food._id.toString() === item.food.toString()) {
-                        vendorId = food.vendorId;
+                        restaurantId = food.restaurantId;
                         netAmount += food.price * item.unit;
                     }
                 });
@@ -440,7 +440,7 @@ export const CreateOrderService = async (req: Request, res: Response, next: Next
             if (items) {
                 const currentOrder = await Order.create({
                     orderId: orderId,
-                    vendorId: vendorId,
+                    restaurantId: restaurantId,
                     items: items,
                     totalAmount: netAmount,
                     paidAmount: amount,
@@ -455,14 +455,14 @@ export const CreateOrderService = async (req: Request, res: Response, next: Next
                     profile.cart = [] as any;
                     profile.orders.push(currentOrder);
                     if (currentTransaction) {
-                        currentTransaction.vendorId = vendorId;
+                        currentTransaction.restaurantId = restaurantId;
                         currentTransaction.orderId = orderId;
                         currentTransaction.status = "CONFIRMED";
 
                         await currentTransaction?.save();
                     }
 
-                    await assignOrderForDelivery(currentOrder._id, vendorId);
+                    await assignOrderForDelivery(currentOrder._id, restaurantId);
 
                     const profileResponse = await profile?.save();
 
@@ -535,13 +535,13 @@ const validateTransaction = async (txnId: string) => {
 //  Delivery Notification
 
 // TODO: pending error handling
-const assignOrderForDelivery = async (orderId: string, vendorId: string) => {
-    // find the vendor
-    const vendor = await Vendor.findById(vendorId);
-    if (vendor) {
-        const areaCode = vendor.postcode;
-        const vendorLat = vendor.lat;
-        const vendorLng = vendor.lng;
+const assignOrderForDelivery = async (orderId: string, restaurantId: string) => {
+    // find the restaurant
+    const restaurant = await Restaurant.findById(restaurantId);
+    if (restaurant) {
+        const areaCode = restaurant.postcode;
+        const restaurantLat = restaurant.lat;
+        const restaurantLng = restaurant.lng;
 
         //find the available Delivery person
         const deliveryPerson = await DeliveryUser.find({ postcode: areaCode, verified: true, isAvailable: true });
@@ -554,7 +554,7 @@ const assignOrderForDelivery = async (orderId: string, vendorId: string) => {
                 currentOrder.deliveryId = deliveryPerson[0]._id;
                 await currentOrder.save();
 
-                //Notify to vendor for received new order firebase push notification
+                //Notify to restaurant for received new order firebase push notification
             }
         }
     }

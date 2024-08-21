@@ -8,12 +8,12 @@ import {
     GetOffers,
     GetOrderDetails,
     GetOrders,
-    GetVendorProfile,
+    GetRestaurantProfile,
     ProcessOrder,
-    UpdateVendorCoverImage,
-    UpdateVendorProfile,
-    UpdateVendorStatus,
-    VendorLogin,
+    UpdateRestaurantCoverImage,
+    UpdateRestaurantProfile,
+    UpdateRestaurantStatus,
+    RestaurantLogin,
 } from "../controllers";
 import { Authenticate } from "../middleware";
 // import multer from "multer";
@@ -22,18 +22,18 @@ import { uploadImage } from "../middleware/file-upload";
 const router = express.Router();
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
-    res.json({ message: "Hello from Vendor" });
+    res.json({ message: "Hello from Restaurant" });
 });
 
-router.get("/login", VendorLogin);
+router.get("/login", RestaurantLogin);
 
 router.use(Authenticate);
 
 // Profile
-router.get("/profile", GetVendorProfile);
-router.patch("/profile", UpdateVendorProfile);
-router.patch("/service", UpdateVendorStatus);
-router.patch("/coverimage", uploadImage.array("coverImage"), UpdateVendorCoverImage);
+router.get("/profile", GetRestaurantProfile);
+router.patch("/profile", UpdateRestaurantProfile);
+router.patch("/service", UpdateRestaurantStatus);
+router.patch("/coverimage", uploadImage.array("coverImage"), UpdateRestaurantCoverImage);
 
 // Food
 router.post("/food", uploadImage.array("foodImages"), AddFood);
@@ -50,4 +50,4 @@ router.get("/offers", GetOffers);
 router.put("/offer/:id", EditOffer);
 router.delete("/offer/:id", DeleteOffer);
 
-export { router as VendorRoute };
+export { router as RestaurantRoute };

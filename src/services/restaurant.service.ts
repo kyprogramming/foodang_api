@@ -1,28 +1,28 @@
 import { Request, Response, NextFunction } from "express";
-import { CreateFoodInput, CreateOfferInputs, EditVendorInput, InactivateOfferInputs, MulterFile, VendorLoginInput } from "../dto";
+import { CreateFoodInput, CreateOfferInputs, EditRestaurantInput, InactivateOfferInputs, MulterFile, RestaurantLoginInput } from "../dto";
 import { Food } from "../models";
 import { Offer } from "../models/offer.model";
 import { Order } from "../models/order.model";
 import { GenerateResponseData, GenerateToken, GenerateValidationErrorResponse, validateInput, ValidatePassword } from "../utility";
 import { cloudinary } from "../config";
 import { deleteFile } from "../utility/deleteFiles";
-import { FindVendor } from "../services";
+import { FindRestaurant } from ".";
 import createHttpError, { InternalServerError } from "http-errors";
 
-/** VendorLoginService
+/** RestaurantLoginService
  *
  * @param req
  * @param res @param next @returns
  */
-export const VendorLoginService = async (req: Request, res: Response, next: NextFunction) => {
-    const inputs = <VendorLoginInput>req.body;
-    const errors = await validateInput(VendorLoginInput, inputs);
+export const RestaurantLoginService = async (req: Request, res: Response, next: NextFunction) => {
+    const inputs = <RestaurantLoginInput>req.body;
+    const errors = await validateInput(RestaurantLoginInput, inputs);
     if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
     const { email, password } = inputs;
 
     try {
-        const existingUser = await FindVendor("", email);
+        const existingUser = await FindRestaurant("", email);
 
         if (existingUser !== null) {
             const validation = await ValidatePassword(password, existingUser.password, existingUser.salt);
@@ -42,31 +42,31 @@ export const VendorLoginService = async (req: Request, res: Response, next: Next
     }
 };
 
-/** GetVendorProfileService
+/** GetRestaurantProfileService
  *
  * @param req
  * @param res @param next @returns
  */
-export const GetVendorProfileService = async (req: Request, res: Response, next: NextFunction) => {
+export const GetRestaurantProfileService = async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
     try {
         if (user) {
-            const existingVendor = await FindVendor(user._id);
-            const response = GenerateResponseData(existingVendor, "Profile data found.", 200);
+            const existingRestaurant = await FindRestaurant(user._id);
+            const response = GenerateResponseData(existingRestaurant, "Profile data found.", 200);
             return res.status(200).json(response);
         }
-        return next(createHttpError(401, "vendor Information Not Found"));
+        return next(createHttpError(401, "restaurant Information Not Found"));
     } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
 
-/** UpdateVendorProfileService
+/** UpdateRestaurantProfileService
  * @param req @param res @param next @returns
  */
-export const UpdateVendorProfileService = async (req: Request, res: Response, next: NextFunction) => {
-    const inputs = <EditVendorInput>req.body;
-    const errors = await validateInput(EditVendorInput, inputs);
+export const UpdateRestaurantProfileService = async (req: Request, res: Response, next: NextFunction) => {
+    const inputs = <EditRestaurantInput>req.body;
+    const errors = await validateInput(EditRestaurantInput, inputs);
     if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
     const { foodType, name, address, phone } = inputs;
@@ -74,37 +74,37 @@ export const UpdateVendorProfileService = async (req: Request, res: Response, ne
 
     try {
         if (user) {
-            const existingVendor = await FindVendor(user._id);
+            const existingRestaurant = await FindRestaurant(user._id);
 
-            if (existingVendor !== null) {
-                existingVendor.name = name;
-                existingVendor.address = address;
-                existingVendor.phone = phone;
-                existingVendor.foodType = foodType;
-                const saveResult = await existingVendor.save();
+            if (existingRestaurant !== null) {
+                existingRestaurant.name = name;
+                existingRestaurant.address = address;
+                existingRestaurant.phone = phone;
+                existingRestaurant.foodType = foodType;
+                const saveResult = await existingRestaurant.save();
 
                 return res.json(saveResult);
             }
         }
-        return next(createHttpError(401, "Unable to Update vendor profile"));
+        return next(createHttpError(401, "Unable to Update restaurant profile"));
     } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
 
-/** UpdateVendorCoverImageService
+/** UpdateRestaurantCoverImageService
  *
  * @param req
  * @param res @param next @returns
  */
-export const UpdateVendorCoverImageService = async (req: Request, res: Response, next: NextFunction) => {
+export const UpdateRestaurantCoverImageService = async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
     try {
         if (user) {
-            const vendor = await FindVendor(user._id);
+            const restaurant = await FindRestaurant(user._id);
             const imageUrlList: any[] = [];
 
-            if (vendor !== null) {
+            if (restaurant !== null) {
                 if (req.files) {
                     const files = req?.files as MulterFile[];
 
@@ -114,53 +114,53 @@ export const UpdateVendorCoverImageService = async (req: Request, res: Response,
 
                     for (let i = 0; i < files.length; i += 1) {
                         const element = req.files && req.files[i].filename;
-                        const localFilePath = `${process.env.PWD}/public/uploads/vendors/${element}`;
+                        const localFilePath = `${process.env.PWD}/public/uploads/restaurants/${element}`;
                         const result = await cloudinary.uploader.upload(localFilePath, {
-                            folder: "vendors",
+                            folder: "restaurants",
                         });
                         imageUrlList.push({ url: result?.secure_url, cloudinary_id: result?.public_id });
                         // remove files from local filesystem
                         await deleteFile(localFilePath);
                     }
                 }
-                vendor.coverImages.push(imageUrlList);
-                const saveResult = await vendor.save();
+                restaurant.coverImages.push(imageUrlList);
+                const saveResult = await restaurant.save();
                 const response = GenerateResponseData(saveResult, "Profile updated successfully.", 201);
                 return res.status(200).json(response);
             }
         }
-        return next(createHttpError(401, "Unable to Update vendor profile"));
+        return next(createHttpError(401, "Unable to Update restaurant profile"));
     } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
 
-/**  UpdateVendorStatusService TODO: input validation
+/**  UpdateRestaurantStatusService TODO: input validation
  *
  * @param res @param next @returns
  */
-export const UpdateVendorStatusService = async (req: Request, res: Response, next: NextFunction) => {
+export const UpdateRestaurantStatusService = async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
 
     const { lat, lng } = req.body;
 
     try {
         if (user) {
-            const existingVendor = await FindVendor(user._id);
+            const existingRestaurant = await FindRestaurant(user._id);
 
-            if (existingVendor !== null) {
-                existingVendor.serviceAvailable = !existingVendor.serviceAvailable;
+            if (existingRestaurant !== null) {
+                existingRestaurant.serviceAvailable = !existingRestaurant.serviceAvailable;
                 if (lat && lng) {
-                    existingVendor.lat = lat;
-                    existingVendor.lng = lng;
+                    existingRestaurant.lat = lat;
+                    existingRestaurant.lng = lng;
                 }
-                const saveResult = await existingVendor.save();
+                const saveResult = await existingRestaurant.save();
 
                 const response = GenerateResponseData(saveResult, "Profile data saved.", 200);
                 return res.status(200).json(response);
             }
         }
-        return next(createHttpError(401, "Unable to Update vendor profile"));
+        return next(createHttpError(401, "Unable to Update restaurant profile"));
     } catch (error: any) {
         return next(InternalServerError(error.message));
     }
@@ -181,8 +181,8 @@ export const AddFoodService = async (req: Request, res: Response, next: NextFunc
 
     try {
         if (user) {
-            const vendor = await FindVendor(user._id);
-            if (vendor !== null) {
+            const restaurant = await FindRestaurant(user._id);
+            if (restaurant !== null) {
                 const imageUrlList: any[] = [];
                 if (req.files) {
                     const files = req.files as MulterFile[];
@@ -202,7 +202,7 @@ export const AddFoodService = async (req: Request, res: Response, next: NextFunc
                     }
 
                     const food = await Food.create({
-                        vendorId: vendor._id,
+                        restaurantId: restaurant._id,
                         name: name,
                         description: description,
                         category: category,
@@ -213,15 +213,15 @@ export const AddFoodService = async (req: Request, res: Response, next: NextFunc
                         images: imageUrlList,
                     });
 
-                    vendor.foods.push(food);
-                    const result = await vendor.save();
+                    restaurant.foods.push(food);
+                    const result = await restaurant.save();
 
                     const response = GenerateResponseData(result, "Profile data found.", 200);
                     return res.status(200).json(response);
                 }
             }
         }
-        return next(createHttpError(401, "Unable to Update vendor profile"));
+        return next(createHttpError(401, "Unable to Update restaurant profile"));
     } catch (error: any) {
         return next(InternalServerError(error.message));
     }
@@ -235,7 +235,7 @@ export const GetFoodsService = async (req: Request, res: Response, next: NextFun
 
     try {
         if (user) {
-            const foods = await Food.find({ vendorId: user._id });
+            const foods = await Food.find({ restaurantId: user._id });
 
             if (foods !== null) {
                 const response = GenerateResponseData(foods, "data found.", 200);
@@ -258,7 +258,7 @@ export const GetCurrentOrdersService = async (req: Request, res: Response, next:
 
     try {
         if (user) {
-            const orders = await Order.find({ vendorId: user._id }).populate("items.food");
+            const orders = await Order.find({ restaurantId: user._id }).populate("items.food");
 
             if (orders) {
                 const response = GenerateResponseData(orders, "data found.", 200);
@@ -335,9 +335,9 @@ export const AddOfferService = async (req: Request, res: Response, next: NextFun
 
     try {
         if (user) {
-            const vendor = await FindVendor(user._id);
+            const restaurant = await FindRestaurant(user._id);
 
-            if (vendor) {
+            if (restaurant) {
                 const offer = await Offer.create({
                     title,
                     description,
@@ -351,7 +351,7 @@ export const AddOfferService = async (req: Request, res: Response, next: NextFun
                     bank,
                     isActive,
                     minValue,
-                    vendors: [vendor],
+                    restaurants: [restaurant],
                 });
                 const response = GenerateResponseData(offer, "Offer added.", 201);
                 return res.status(200).json(response);
@@ -373,13 +373,13 @@ export const GetOffersService = async (req: Request, res: Response, next: NextFu
         if (user) {
             let currentOffer = Array();
 
-            const offers = await Offer.find().populate("vendors");
+            const offers = await Offer.find().populate("restaurants");
 
             if (offers) {
                 offers.map((item) => {
-                    if (item.vendors) {
-                        item.vendors.map((vendor) => {
-                            if (vendor._id.toString() === user._id) {
+                    if (item.restaurants) {
+                        item.restaurants.map((restaurant) => {
+                            if (restaurant._id.toString() === user._id) {
                                 currentOffer.push(item);
                             }
                         });
@@ -416,9 +416,9 @@ export const EditOfferService = async (req: Request, res: Response, next: NextFu
             const currentOffer = await Offer.findById(offerId);
 
             if (currentOffer) {
-                const vendor = await FindVendor(user._id);
+                const restaurant = await FindRestaurant(user._id);
 
-                if (vendor) {
+                if (restaurant) {
                     (currentOffer.title = title),
                         (currentOffer.description = description),
                         (currentOffer.offerType = offerType),
@@ -462,9 +462,9 @@ export const DeleteOfferService = async (req: Request, res: Response, next: Next
             const currentOffer = await Offer.findById(offerId);
 
             if (currentOffer) {
-                const vendor = await FindVendor(user._id);
+                const restaurant = await FindRestaurant(user._id);
 
-                if (vendor) {
+                if (restaurant) {
                     currentOffer.isActive = !currentOffer.isActive;
                     const result = await currentOffer.save();
 

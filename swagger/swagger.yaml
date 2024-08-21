@@ -17,7 +17,7 @@ security:
     - bearerAuth: []
 tags:
     - name: Admin
-    - name: Vendor
+    - name: Restaurant
     - name: Shopping
     - name: Customer
     - name: Delivery
@@ -72,46 +72,46 @@ paths:
                     description: Successful response
                     content:
                         application/json: {}
-    /admin/vendor:
+    /admin/restaurant:
         post:
             tags:
                 - Admin
-            summary: Admin- Create Vendor
+            summary: Admin- Create Restaurant
             requestBody:
                 content:
                     application/json:
                         schema:
                             type: object
                             example:
-                                name: Vendor 2
+                                name: Restaurant 2
                                 address: 53 Carrick Know Hill EH127BU
                                 postcode: EH127BU
                                 foodType:
                                     - non-veg
-                                email: vendor2@gmail.com
+                                email: restaurant2@gmail.com
                                 password: "123456"
                                 phone: "7442555575"
-                                ownerName: Mr Vendor 2
+                                ownerName: Mr Restaurant 2
             responses:
                 "200":
                     description: Successful response
                     content:
                         application/json: {}
-    /admin/vendors:
+    /admin/restaurants:
         get:
             tags:
                 - Admin
-            summary: Admin - Get Vendors
+            summary: Admin - Get Restaurants
             responses:
                 "200":
                     description: Successful response
                     content:
                         application/json: {}
-    /admin/vendor/66af84dcaca5c44c44944287:
+    /admin/restaurant/66af84dcaca5c44c44944287:
         get:
             tags:
                 - Admin
-            summary: Admin - Get Vendor By ID
+            summary: Admin - Get Restaurant By ID
             responses:
                 "200":
                     description: Successful response
@@ -137,31 +137,31 @@ paths:
                     description: Successful response
                     content:
                         application/json: {}
-    /vendor:
+    /restaurant:
         get:
             tags:
-                - Vendor
-            summary: Vendor - Hello
+                - Restaurant
+            summary: Restaurant - Hello
             responses:
                 "200":
                     description: Successful response
                     content:
                         application/json: {}
-    /vendor/login:
+    /restaurant/login:
         get:
             tags:
-                - Vendor
-            summary: Vendor - Login
+                - Restaurant
+            summary: Restaurant - Login
             responses:
                 "200":
                     description: Successful response
                     content:
                         application/json: {}
-    /vendor/profile:
+    /restaurant/profile:
         get:
             tags:
-                - Vendor
-            summary: Vendor - Get profile
+                - Restaurant
+            summary: Restaurant - Get profile
             responses:
                 "200":
                     description: Successful response
@@ -169,15 +169,15 @@ paths:
                         application/json: {}
         patch:
             tags:
-                - Vendor
-            summary: Vendor - Update profile
+                - Restaurant
+            summary: Restaurant - Update profile
             requestBody:
                 content:
                     application/json:
                         schema:
                             type: object
                             example:
-                                name: Vendor 1 Updated
+                                name: Restaurant 1 Updated
                                 address: 49 Carrick Know Hill EH127BU
                                 phone: "7442555581"
                                 foodType:
@@ -187,11 +187,11 @@ paths:
                     description: Successful response
                     content:
                         application/json: {}
-    /vendor/service:
+    /restaurant/service:
         patch:
             tags:
-                - Vendor
-            summary: Vendor - Update service status
+                - Restaurant
+            summary: Restaurant - Update service status
             requestBody:
                 content:
                     application/json:
@@ -203,11 +203,11 @@ paths:
                     description: Successful response
                     content:
                         application/json: {}
-    /vendor/coverimage:
+    /restaurant/coverimage:
         patch:
             tags:
-                - Vendor
-            summary: Vendor - Update cover image
+                - Restaurant
+            summary: Restaurant - Update cover image
             requestBody:
                 content:
                     multipart/form-data:
@@ -222,11 +222,11 @@ paths:
                     description: Successful response
                     content:
                         application/json: {}
-    /vendor/food:
+    /restaurant/food:
         post:
             tags:
-                - Vendor
-            summary: Vendor - Add food item
+                - Restaurant
+            summary: Restaurant - Add food item
             requestBody:
                 content:
                     multipart/form-data:
@@ -259,21 +259,21 @@ paths:
                     description: Successful response
                     content:
                         application/json: {}
-    /vendor/foods:
+    /restaurant/foods:
         get:
             tags:
-                - Vendor
-            summary: Vendor - Get foods
+                - Restaurant
+            summary: Restaurant - Get foods
             responses:
                 "200":
                     description: Successful response
                     content:
                         application/json: {}
-    /vendor/offer:
+    /restaurant/offer:
         post:
             tags:
-                - Vendor
-            summary: Vendor - Add offer
+                - Restaurant
+            summary: Restaurant - Add offer
             requestBody:
                 content:
                     application/json:
@@ -299,21 +299,21 @@ paths:
                     description: Successful response
                     content:
                         application/json: {}
-    /vendor/offers:
+    /restaurant/offers:
         get:
             tags:
-                - Vendor
-            summary: Vendor - Get offer
+                - Restaurant
+            summary: Restaurant - Get offer
             responses:
                 "200":
                     description: Successful response
                     content:
                         application/json: {}
-    /vendor/offer/66afbb2f2f262c31c00ad0a3:
+    /restaurant/offer/66afbb2f2f262c31c00ad0a3:
         put:
             tags:
-                - Vendor
-            summary: Vendor - Edit offer
+                - Restaurant
+            summary: Restaurant - Edit offer
             requestBody:
                 content:
                     application/json:
@@ -341,8 +341,8 @@ paths:
                         application/json: {}
         delete:
             tags:
-                - Vendor
-            summary: Vendor - Delete offer
+                - Restaurant
+            summary: Restaurant - Delete offer
             responses:
                 "200":
                     description: Successful response

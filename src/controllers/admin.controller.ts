@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import {
     SignupAdminService,
     AdminLoginService,
-    CreateVendorService,
-    GetVendorsService,
-    GetVendorByIDService,
+    CreateRestaurantService,
+    GetRestaurantsService,
+    GetRestaurantByIDService,
     GetTransactionsService,
     GetTransactionByIdService,
     VerifyDeliveryUserService,
@@ -18,11 +18,11 @@ export const AdminLogin = (req: Request, res: Response, next: NextFunction) => A
 
 export const AdminLogout = (req: Request, res: Response, next: NextFunction) => AdminLogoutService(req, res, next);
 
-export const CreateVendor = (req: Request, res: Response, next: NextFunction) => CreateVendorService(req, res, next);
+export const CreateRestaurant = (req: Request, res: Response, next: NextFunction) => CreateRestaurantService(req, res, next);
 
-export const GetVendors = (req: Request, res: Response, next: NextFunction) => GetVendorsService(req, res, next);
+export const GetRestaurants = (req: Request, res: Response, next: NextFunction) => GetRestaurantsService(req, res, next);
 
-export const GetVendorByID = (req: Request, res: Response, next: NextFunction) => GetVendorByIDService(req, res, next);
+export const GetRestaurantByID = (req: Request, res: Response, next: NextFunction) => GetRestaurantByIDService(req, res, next);
 
 export const GetTransactions = (req: Request, res: Response, next: NextFunction) => GetTransactionsService(req, res, next);
 

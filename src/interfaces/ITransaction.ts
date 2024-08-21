@@ -1,6 +1,6 @@
 export interface ITransaction extends Document {
     customer: string;
-    vendorId: string;
+    restaurantId: string;
     orderId: string;
     orderValue: number;
     offerUsed: string;

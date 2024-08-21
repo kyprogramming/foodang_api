@@ -2,7 +2,7 @@ import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import express, { Request, Response, NextFunction } from "express";
 import { CartItem, CreateCustomerInput, CreateDeliveryUserInput, EditCustomerProfileInput, OrderInputs, UserLoginInput } from "../dto";
-import { Customer, DeliveryUser, Food, Vendor } from "../models";
+import { Customer, DeliveryUser, Food, Restaurant } from "../models";
 import { Offer } from "../models";
 import { Order } from "../models";
 import { Transaction } from "../models";

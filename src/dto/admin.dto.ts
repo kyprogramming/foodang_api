@@ -48,9 +48,9 @@ export class AdminLoginInput {
     password: string;
 }
 
-// export class CreateVendorInput { name: string; ownerName: string; foodType: [string]; postcode: string; address: string; phone: string; email: string; password: string; }
+// export class CreateRestaurantInput { name: string; ownerName: string; foodType: [string]; postcode: string; address: string; phone: string; email: string; password: string; }
 
-export class CreateVendorInput {
+export class CreateRestaurantInput {
     // name
     @IsString()
     @IsNotEmpty()

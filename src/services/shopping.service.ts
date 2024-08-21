@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import { Vendor } from "../models";
+import { Restaurant } from "../models";
 import { Offer } from "../models/offer.model";
 import { IFood } from "../interfaces";
 import { PostcodeInput } from "../dto";
@@ -17,7 +17,7 @@ export const GetFoodAvailabilityService = async (req: Request, res: Response, ne
     const { postcode } = inputs;
 
     try {
-        const result = await Vendor.find({ postcode: postcode, serviceAvailable: true })
+        const result = await Restaurant.find({ postcode: postcode, serviceAvailable: true })
             .sort([["rating", "descending"]])
             .populate("foods");
 
@@ -40,7 +40,7 @@ export const GetTopRestaurantsService = async (req: Request, res: Response, next
     const postcode = req.params.postcode;
 
     try {
-        const result = await Vendor.find({ postcode: postcode, serviceAvailable: true })
+        const result = await Restaurant.find({ postcode: postcode, serviceAvailable: true })
             .sort([["rating", "descending"]])
             .limit(10);
 
@@ -63,14 +63,14 @@ export const GetFoodsIn30MinService = async (req: Request, res: Response, next: 
     const postcode = req.params.postcode;
 
     try {
-        const result = await Vendor.find({ postcode: postcode, serviceAvailable: true })
+        const result = await Restaurant.find({ postcode: postcode, serviceAvailable: true })
             .sort([["rating", "descending"]])
             .populate("foods");
 
         if (result.length > 0) {
             let foodResult: any = [];
-            result.map((vendor) => {
-                const foods = vendor.foods as [IFood];
+            result.map((restaurant) => {
+                const foods = restaurant.foods as [IFood];
                 foodResult.push(...foods.filter((food) => food.readyTime <= 30));
             });
             const response = GenerateResponseData(foodResult, "Food data found.", 200);
@@ -90,7 +90,7 @@ export const SearchFoodsService = async (req: Request, res: Response, next: Next
     const postcode = req.params.postcode;
 
     try {
-        const result = await Vendor.find({
+        const result = await Restaurant.find({
             postcode: postcode,
             serviceAvailable: true,
         }).populate("foods");
@@ -116,7 +116,7 @@ export const RestaurantByIdService = async (req: Request, res: Response, next: N
     const id = req.params.id;
 
     try {
-        const result = await Vendor.findById(id).populate("foods");
+        const result = await Restaurant.findById(id).populate("foods");
 
         if (result) {
             const response = GenerateResponseData(result, "Restaurant data found.", 200);

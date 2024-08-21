@@ -5,22 +5,22 @@ import {
     GetCurrentOrdersService,
     GetFoodsService,
     GetOrderDetailsService,
-    GetVendorProfileService,
+    GetRestaurantProfileService,
     ProcessOrderService,
-    UpdateVendorCoverImageService,
-    UpdateVendorProfileService,
-    UpdateVendorStatusService,
+    UpdateRestaurantCoverImageService,
+    UpdateRestaurantProfileService,
+    UpdateRestaurantStatusService,
 } from "../services";
 
-export const VendorLogin = (req: Request, res: Response, next: NextFunction) => VendorLogin(req, res, next);
+export const RestaurantLogin = (req: Request, res: Response, next: NextFunction) => RestaurantLogin(req, res, next);
 
-export const GetVendorProfile = (req: Request, res: Response, next: NextFunction) => GetVendorProfileService(req, res, next);
+export const GetRestaurantProfile = (req: Request, res: Response, next: NextFunction) => GetRestaurantProfileService(req, res, next);
 
-export const UpdateVendorProfile = (req: Request, res: Response, next: NextFunction) => UpdateVendorProfileService(req, res, next);
+export const UpdateRestaurantProfile = (req: Request, res: Response, next: NextFunction) => UpdateRestaurantProfileService(req, res, next);
 
-export const UpdateVendorCoverImage = (req: Request, res: Response, next: NextFunction) => UpdateVendorCoverImageService(req, res, next);
+export const UpdateRestaurantCoverImage = (req: Request, res: Response, next: NextFunction) => UpdateRestaurantCoverImageService(req, res, next);
 
-export const UpdateVendorStatus = (req: Request, res: Response, next: NextFunction) => UpdateVendorStatusService(req, res, next);
+export const UpdateRestaurantStatus = (req: Request, res: Response, next: NextFunction) => UpdateRestaurantStatusService(req, res, next);
 
 export const AddFood = (req: Request, res: Response, next: NextFunction) => AddFoodService(req, res, next);
 

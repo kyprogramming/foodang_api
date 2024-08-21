@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import IFood from "./IFood";
 
-export interface IVendor extends Document {
+export interface IRestaurant extends Document {
     _id: Types.ObjectId;
     name: string;
     ownerName: string;
@@ -20,4 +20,4 @@ export interface IVendor extends Document {
     lng: number;
 }
 
-export default IVendor;
+export default IRestaurant;

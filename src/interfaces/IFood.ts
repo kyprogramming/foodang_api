@@ -1,5 +1,5 @@
 export interface IFood extends Document {
-    vendorId: string;
+    restaurantId: string;
     name: string;
     description: string;
     category: string;

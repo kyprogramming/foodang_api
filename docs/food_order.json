@@ -88,13 +88,13 @@
                     "response": []
                 },
                 {
-                    "name": "Admin- Create Vendor",
+                    "name": "Admin- Create Restaurant",
                     "request": {
                         "method": "POST",
                         "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Vendor 2\",\n    \"address\": \"53 Carrick Know Hill EH127BU\",\n    \"postcode\": \"EH127BU\",\n    \"foodType\": [\"non-veg\"],\n    \"email\": \"vendor2@gmail.com\",\n    \"password\": \"123456\",\n    \"phone\": \"7442555575\",\n    \"ownerName\": \"Mr Vendor 2\"\n}",
+                            "raw": "{\n    \"name\": \"Restaurant 2\",\n    \"address\": \"53 Carrick Know Hill EH127BU\",\n    \"postcode\": \"EH127BU\",\n    \"foodType\": [\"non-veg\"],\n    \"email\": \"restaurant2@gmail.com\",\n    \"password\": \"123456\",\n    \"phone\": \"7442555575\",\n    \"ownerName\": \"Mr Restaurant 2\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -102,15 +102,15 @@
                             }
                         },
                         "url": {
-                            "raw": "{{BASE_URL}}/admin/vendor",
+                            "raw": "{{BASE_URL}}/admin/restaurant",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["admin", "vendor"]
+                            "path": ["admin", "restaurant"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "Admin - Get Vendors",
+                    "name": "Admin - Get Restaurants",
                     "protocolProfileBehavior": {
                         "disableBodyPruning": true
                     },
@@ -127,15 +127,15 @@
                             }
                         },
                         "url": {
-                            "raw": "{{BASE_URL}}/admin/vendors",
+                            "raw": "{{BASE_URL}}/admin/restaurants",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["admin", "vendors"]
+                            "path": ["admin", "restaurants"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "Admin - Get Vendor By ID",
+                    "name": "Admin - Get Restaurant By ID",
                     "protocolProfileBehavior": {
                         "disableBodyPruning": true
                     },
@@ -152,9 +152,9 @@
                             }
                         },
                         "url": {
-                            "raw": "{{BASE_URL}}/admin/vendor/66af84dcaca5c44c44944287",
+                            "raw": "{{BASE_URL}}/admin/restaurant/66af84dcaca5c44c44944287",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["admin", "vendor", "66af84dcaca5c44c44944287"]
+                            "path": ["admin", "restaurant", "66af84dcaca5c44c44944287"]
                         }
                     },
                     "response": []
@@ -240,23 +240,23 @@
             ]
         },
         {
-            "name": "Vendor",
+            "name": "Restaurant",
             "item": [
                 {
-                    "name": "Vendor - Hello",
+                    "name": "Restaurant - Hello",
                     "request": {
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{BASE_URL}}/vendor",
+                            "raw": "{{BASE_URL}}/restaurant",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["vendor"]
+                            "path": ["restaurant"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "Vendor - Login",
+                    "name": "Restaurant - Login",
                     "protocolProfileBehavior": {
                         "disableBodyPruning": true
                     },
@@ -265,7 +265,7 @@
                         "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\r\n    \"email\": \"vendor1@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+                            "raw": "{\r\n    \"email\": \"restaurant1@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -273,34 +273,34 @@
                             }
                         },
                         "url": {
-                            "raw": "{{BASE_URL}}/vendor/login",
+                            "raw": "{{BASE_URL}}/restaurant/login",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["vendor", "login"]
+                            "path": ["restaurant", "login"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "Vendor - Get profile",
+                    "name": "Restaurant - Get profile",
                     "request": {
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{BASE_URL}}/vendor/profile",
+                            "raw": "{{BASE_URL}}/restaurant/profile",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["vendor", "profile"]
+                            "path": ["restaurant", "profile"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "Vendor - Update profile",
+                    "name": "Restaurant - Update profile",
                     "request": {
                         "method": "PATCH",
                         "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\r\n    \"name\": \"Vendor 1 Updated\",\r\n    \"address\": \"49 Carrick Know Hill EH127BU\",\r\n    \"phone\": \"7442555581\",\r\n    \"foodType\": [\"veg\"]\r\n}",
+                            "raw": "{\r\n    \"name\": \"Restaurant 1 Updated\",\r\n    \"address\": \"49 Carrick Know Hill EH127BU\",\r\n    \"phone\": \"7442555581\",\r\n    \"foodType\": [\"veg\"]\r\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -308,15 +308,15 @@
                             }
                         },
                         "url": {
-                            "raw": "{{BASE_URL}}/vendor/profile",
+                            "raw": "{{BASE_URL}}/restaurant/profile",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["vendor", "profile"]
+                            "path": ["restaurant", "profile"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "Vendor - Update service status",
+                    "name": "Restaurant - Update service status",
                     "request": {
                         "method": "PATCH",
                         "header": [],
@@ -330,15 +330,15 @@
                             }
                         },
                         "url": {
-                            "raw": "{{BASE_URL}}/vendor/service",
+                            "raw": "{{BASE_URL}}/restaurant/service",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["vendor", "service"]
+                            "path": ["restaurant", "service"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "Vendor - Update cover image",
+                    "name": "Restaurant - Update cover image",
                     "request": {
                         "method": "PATCH",
                         "header": [],
@@ -353,15 +353,15 @@
                             ]
                         },
                         "url": {
-                            "raw": "{{BASE_URL}}/vendor/coverimage",
+                            "raw": "{{BASE_URL}}/restaurant/coverimage",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["vendor", "coverimage"]
+                            "path": ["restaurant", "coverimage"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "Vendor - Add food item",
+                    "name": "Restaurant - Add food item",
                     "request": {
                         "method": "POST",
                         "header": [],
@@ -406,15 +406,15 @@
                             ]
                         },
                         "url": {
-                            "raw": "{{BASE_URL}}/vendor/food",
+                            "raw": "{{BASE_URL}}/restaurant/food",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["vendor", "food"]
+                            "path": ["restaurant", "food"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "Vendor - Get foods",
+                    "name": "Restaurant - Get foods",
                     "protocolProfileBehavior": {
                         "disableBodyPruning": true
                     },
@@ -431,15 +431,15 @@
                             }
                         },
                         "url": {
-                            "raw": "{{BASE_URL}}/vendor/foods",
+                            "raw": "{{BASE_URL}}/restaurant/foods",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["vendor", "foods"]
+                            "path": ["restaurant", "foods"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "Vendor - Add offer",
+                    "name": "Restaurant - Add offer",
                     "request": {
                         "method": "POST",
                         "header": [],
@@ -453,15 +453,15 @@
                             }
                         },
                         "url": {
-                            "raw": "{{BASE_URL}}/vendor/offer",
+                            "raw": "{{BASE_URL}}/restaurant/offer",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["vendor", "offer"]
+                            "path": ["restaurant", "offer"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "Vendor - Get offer",
+                    "name": "Restaurant - Get offer",
                     "protocolProfileBehavior": {
                         "disableBodyPruning": true
                     },
@@ -478,15 +478,15 @@
                             }
                         },
                         "url": {
-                            "raw": "{{BASE_URL}}/vendor/offers",
+                            "raw": "{{BASE_URL}}/restaurant/offers",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["vendor", "offers"]
+                            "path": ["restaurant", "offers"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "Vendor - Edit offer",
+                    "name": "Restaurant - Edit offer",
                     "request": {
                         "method": "PUT",
                         "header": [],
@@ -500,15 +500,15 @@
                             }
                         },
                         "url": {
-                            "raw": "{{BASE_URL}}/vendor/offer/66afbb2f2f262c31c00ad0a3",
+                            "raw": "{{BASE_URL}}/restaurant/offer/66afbb2f2f262c31c00ad0a3",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["vendor", "offer", "66afbb2f2f262c31c00ad0a3"]
+                            "path": ["restaurant", "offer", "66afbb2f2f262c31c00ad0a3"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "Vendor - Delete offer",
+                    "name": "Restaurant - Delete offer",
                     "request": {
                         "method": "DELETE",
                         "header": [],
@@ -522,9 +522,9 @@
                             }
                         },
                         "url": {
-                            "raw": "{{BASE_URL}}/vendor/offer/66afbb2f2f262c31c00ad0a3",
+                            "raw": "{{BASE_URL}}/restaurant/offer/66afbb2f2f262c31c00ad0a3",
                             "host": ["{{BASE_URL}}"],
-                            "path": ["vendor", "offer", "66afbb2f2f262c31c00ad0a3"]
+                            "path": ["restaurant", "offer", "66afbb2f2f262c31c00ad0a3"]
                         }
                     },
                     "response": []
