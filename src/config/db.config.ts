@@ -66,6 +66,15 @@ export const connectDB = async () => {
         });
     });
 
+    process.on("SIGTERM", () => {
+        mongoose.connection.close(() => {
+            if (NODE_ENV && NODE_ENV === "development") {
+                console.log("MongoDB database connection is disconnected due to app termination...");
+            }
+            process.exit(0); // close database connection gracefully
+        });
+    });
+
     // mongoose.connect return promise
     return await mongoose.connect(MONGODB_CON, {
         useNewUrlParser: true,
