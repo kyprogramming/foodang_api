@@ -3,7 +3,7 @@ import { CreateFoodInput, CreateOfferInputs, EditVendorInput, InactivateOfferInp
 import { Food } from "../models";
 import { Offer } from "../models/offer.model";
 import { Order } from "../models/order.model";
-import { GenerateResponseData, GenerateSignature, GenerateValidationErrorResponse, validateInput, ValidatePassword } from "../utility";
+import { GenerateResponseData, GenerateToken, GenerateValidationErrorResponse, validateInput, ValidatePassword } from "../utility";
 import { cloudinary } from "../config";
 import { deleteFile } from "../utility/deleteFiles";
 import { FindVendor } from "../services";
@@ -27,7 +27,7 @@ export const VendorLoginService = async (req: Request, res: Response, next: Next
         if (existingUser !== null) {
             const validation = await ValidatePassword(password, existingUser.password, existingUser.salt);
             if (validation) {
-                const signature = await GenerateSignature({
+                const signature = await GenerateToken({
                     _id: existingUser._id,
                     email: existingUser.email,
                     name: existingUser.name,

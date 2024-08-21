@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import {
 
-} from "../services";
 import { DeliverySignUpService, DeliveryLoginService, GetDeliveryProfileService, EditDeliveryProfileService, UpdateDeliveryUserStatusService } from "../services/delivery.service";
 
 export const DeliverySignUp = (req: Request, res: Response, next: NextFunction) => DeliverySignUpService(req, res, next);

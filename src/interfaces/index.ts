@@ -9,4 +9,5 @@ export * from "./IVendor";
 export * from "./IOffer";
 export * from "./IOrder";
 export * from "./ITransaction";
+export * from "./IRider";
 

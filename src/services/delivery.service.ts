@@ -6,7 +6,7 @@ import { Customer, DeliveryUser, Food, Vendor } from "../models";
 import { Offer } from "../models";
 import { Order } from "../models";
 import { Transaction } from "../models";
-import { GenerateOtp, GeneratePassword, GenerateResponseData, GenerateSalt, GenerateSignature, GenerateValidationErrorResponse, SendOTP, validateInput, ValidatePassword } from "../utility";
+import { GenerateOtp, GeneratePassword, GenerateResponseData, GenerateSalt, GenerateToken, GenerateValidationErrorResponse, SendOTP, validateInput, ValidatePassword } from "../utility";
 import createHttpError, { InternalServerError } from "http-errors";
 
 /** Delivery user signup
@@ -40,7 +40,7 @@ export const DeliverySignUpService = async (req: Request, res: Response, next: N
         });
 
         if (result) {
-            const signature = await GenerateSignature({
+            const signature = await GenerateToken({
                 _id: result._id,
                 email: result.email,
                 verified: result.verified,
@@ -70,7 +70,7 @@ export const DeliveryLoginService = async (req: Request, res: Response, next: Ne
             const validation = await ValidatePassword(password, deliveryUser.password, deliveryUser.salt);
 
             if (validation) {
-                const signature = await GenerateSignature({
+                const signature = await GenerateToken({
                     _id: deliveryUser._id,
                     email: deliveryUser.email,
                     verified: deliveryUser.verified,

@@ -3,11 +3,13 @@ import { IAdmin } from "../interfaces";
 
 const AdminSchema = new Schema(
     {
-        name: { type: String, required: true },
+        name: { type: String },
         address: { type: String },
-        phone: { type: String, required: true },
+        phone: { type: String },
         email: { type: String, required: true },
         password: { type: String, required: true },
+        googleId: { type: String },
+        facebookId: { type: String },
         salt: { type: String, required: true },
     },
     {

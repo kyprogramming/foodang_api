@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { Authenticate } from "../middleware";
-import { AdminSignup, AdminLogin, CreateVendor, GetDeliveryUsers, GetTransactionById, GetTransactions, GetVendorByID, GetVendors, VerifyDeliveryUser } from "../controllers";
+import { AdminSignup, AdminLogin, CreateVendor, GetDeliveryUsers, GetTransactionById, GetTransactions, GetVendorByID, GetVendors, VerifyDeliveryUser, AdminLogout } from "../controllers";
+import passport from "passport";
 
 const router = express.Router();
 
@@ -27,5 +28,20 @@ router.get("/transaction/:id", GetTransactionById);
 // Verify and find delivery users
 router.put("/delivery/verify", VerifyDeliveryUser);
 router.get("/delivery/users", GetDeliveryUsers);
+
+// User SignOut
+router.post("/logout", AdminLogout);
+
+// Google OAuth routes
+router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
+  res.redirect('/profile');
+});
+
+// Facebook OAuth routes
+router.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
+router.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), (req, res) => {
+  res.redirect('/profile');
+});
 
 export { router as AdminRoute };

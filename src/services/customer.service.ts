@@ -11,7 +11,7 @@ import {
     GeneratePassword,
     GenerateResponseData,
     GenerateSalt,
-    GenerateSignature,
+    GenerateToken,
     GenerateValidationErrorResponse,
     isValidMongooseObjectId,
     SendOTP,
@@ -61,7 +61,7 @@ export const CustomerSignUpService = async (req: Request, res: Response, next: N
         if (result) {
             await SendOTP(otp, phone);
 
-            const signature = await GenerateSignature({
+            const signature = await GenerateToken({
                 _id: result._id,
                 email: result.email,
                 verified: result.verified,
@@ -91,7 +91,7 @@ export const CustomerLoginService = async (req: Request, res: Response, next: Ne
             const validation = await ValidatePassword(password, customer.password, customer.salt);
 
             if (validation) {
-                const signature = await GenerateSignature({
+                const signature = await GenerateToken({
                     _id: customer._id,
                     email: customer.email,
                     verified: customer.verified,
@@ -129,7 +129,7 @@ export const CustomerOTPVerifyService = async (req: Request, res: Response, next
 
                     const verifiedCustomer = await profile.save();
 
-                    const signature = await GenerateSignature({
+                    const signature = await GenerateToken({
                         _id: verifiedCustomer._id,
                         email: verifiedCustomer.email,
                         verified: verifiedCustomer.verified,
@@ -412,13 +412,13 @@ export const CreateOrderService = async (req: Request, res: Response, next: Next
                 return next(createHttpError(401, "Error while Creating Order!"));
             }
 
-            const profile:any = await Customer.findById(customer._id);
+            const profile: any = await Customer.findById(customer._id);
             const items: any = profile?.cart;
 
             const orderId = `${Math.floor(Math.random() * 89999) + 1000}`;
 
             let netAmount = 0.0;
-            let vendorId:any;
+            let vendorId: any;
 
             const foods = await Food.find()
                 .where("_id")
@@ -455,11 +455,11 @@ export const CreateOrderService = async (req: Request, res: Response, next: Next
                     profile.cart = [] as any;
                     profile.orders.push(currentOrder);
                     if (currentTransaction) {
-                         currentTransaction.vendorId = vendorId;
-                         currentTransaction.orderId = orderId;
-                         currentTransaction.status = "CONFIRMED";
+                        currentTransaction.vendorId = vendorId;
+                        currentTransaction.orderId = orderId;
+                        currentTransaction.status = "CONFIRMED";
 
-                         await currentTransaction?.save();
+                        await currentTransaction?.save();
                     }
 
                     await assignOrderForDelivery(currentOrder._id, vendorId);

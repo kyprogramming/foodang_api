@@ -9,11 +9,14 @@ import {
     GetTransactionByIdService,
     VerifyDeliveryUserService,
     GetDeliveryUsersService,
+    AdminLogoutService,
 } from "../services";
 
 export const AdminSignup = (req: Request, res: Response, next: NextFunction) => SignupAdminService(req, res, next);
 
 export const AdminLogin = (req: Request, res: Response, next: NextFunction) => AdminLoginService(req, res, next);
+
+export const AdminLogout = (req: Request, res: Response, next: NextFunction) => AdminLogoutService(req, res, next);
 
 export const CreateVendor = (req: Request, res: Response, next: NextFunction) => CreateVendorService(req, res, next);
 

@@ -29,6 +29,9 @@ export class SignupAdminInput {
     @IsPhoneNumber("GB", { message: "Invalid phone number" })
     @Transform(({ value }) => value.trim())
     phone?: string;
+
+    googleId?: string;
+    facebookId?: string;
 }
 
 export class AdminLoginInput {

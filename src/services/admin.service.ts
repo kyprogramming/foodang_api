@@ -7,7 +7,7 @@ import {
     GeneratePassword,
     GenerateResponseData,
     GenerateSalt,
-    GenerateSignature,
+    GenerateToken,
     GenerateValidationErrorResponse,
     isValidMongooseObjectId,
     ValidatePassword,
@@ -68,7 +68,36 @@ export const AdminLoginService = async (req: Request, res: Response, next: NextF
         if (existingUser) {
             const validation = await ValidatePassword(password, existingUser.password, existingUser.salt);
             if (validation) {
-                const signature = await GenerateSignature({
+                const signature = await GenerateToken({
+                    _id: existingUser._id,
+                    email: existingUser.email,
+                    name: existingUser.name,
+                });
+
+                // const data = GenerateResponseData(signature, "POST", "Admin login", "admin/login");
+                const response = GenerateResponseData(signature, successMsg.admin_auth_success, 200);
+                return res.status(200).json(response);
+            }
+        }
+        return next(createHttpError(401, errorMsg.admin_auth_error));
+    } catch (error: any) {
+        return next(InternalServerError(error.message));
+    }
+};
+
+export const AdminLogoutService = async (req: Request, res: Response, next: NextFunction) => {
+    const inputs = <AdminLoginInput>req.body;
+    const errors = await validateInput(AdminLoginInput, inputs);
+    if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
+
+    const { email, password } = inputs;
+
+    try {
+        const existingUser = await FindAdmin(undefined, email);
+        if (existingUser) {
+            const validation = await ValidatePassword(password, existingUser.password, existingUser.salt);
+            if (validation) {
+                const signature = await GenerateToken({
                     _id: existingUser._id,
                     email: existingUser.email,
                     name: existingUser.name,
