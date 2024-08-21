@@ -4,4 +4,5 @@ export * from "./customer.controller";
 export * from "./shopping.controller";
 export * from "./delivery.controller";
 export * from "./rider.controller";
+export * from "./vendor.controller";
 

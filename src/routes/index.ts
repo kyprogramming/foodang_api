@@ -5,3 +5,4 @@ export * from "./shopping.route";
 export * from "./customer.route";
 export * from "./delivery.route";
 export * from "./rider.route";
+export * from "./vendor.route";

@@ -19,6 +19,6 @@ const RiderSchema = new Schema(
     }
 );
 
-const Rider = mongoose.model < IRider > ("riders", RiderSchema);
+const Rider = mongoose.model < IRider > ("rider", RiderSchema);
 
 export { Rider };
