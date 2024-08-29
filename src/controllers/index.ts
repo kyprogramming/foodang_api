@@ -5,4 +5,5 @@ export * from "./shopping.controller";
 export * from "./delivery.controller";
 export * from "./rider.controller";
 export * from "./vendor.controller";
+export * from "./user.controller";
 

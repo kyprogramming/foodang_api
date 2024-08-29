@@ -50,7 +50,7 @@ export class EditCustomerProfileInput {
 }
 
 export interface CustomerPayload {
-    _id: string;
+    _id: any;
     email: string;
     verified: boolean;
 }

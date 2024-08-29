@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export class EditRestaurantInput {
     name: string;
     address: string;
@@ -11,7 +13,7 @@ export class RestaurantLoginInput {
 }
 
 export class RestaurantPayload {
-    _id: string;
+    _id: any;
     email: string;
     name: string;
 }

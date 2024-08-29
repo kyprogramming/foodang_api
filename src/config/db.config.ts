@@ -47,8 +47,7 @@ export const connectDB = async () => {
             console.log("Trying to reconnect to Mongo ...");
 
             mongoose.connect(MONGODB_CON, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
+                // useNewUrlParser: true, useUnifiedTopology: true,
             });
         }
 
@@ -58,26 +57,29 @@ export const connectDB = async () => {
 
     // @event close: Emitted after we disconnected and onClose executed on all of this connections models.
     process.on("SIGINT", () => {
-        mongoose.connection.close(() => {
-            if (NODE_ENV && NODE_ENV === "development") {
-                console.log("MongoDB database connection is disconnected due to app termination...");
-            }
-            process.exit(0); // close database connection gracefully
-        });
+        // mongoose.connection.close(() => {
+        //     if (process.env.NODE_ENV === "development") {
+        //         console.log("MongoDB database connection is disconnected due to app termination...");
+        //     }
+        //     process.exit(0); // close database connection gracefully
+        // });
+
+       mongoose.connection.close(true);
     });
 
     process.on("SIGTERM", () => {
-        mongoose.connection.close(() => {
-            if (NODE_ENV && NODE_ENV === "development") {
-                console.log("MongoDB database connection is disconnected due to app termination...");
-            }
-            process.exit(0); // close database connection gracefully
-        });
+        // mongoose.connection.close(() => {
+        //     if (NODE_ENV && NODE_ENV === "development") {
+        //         console.log("MongoDB database connection is disconnected due to app termination...");
+        //     }
+        //     process.exit(0); // close database connection gracefully
+        // });
+
+        mongoose.connection.close(true);
     });
 
     // mongoose.connect return promise
     return await mongoose.connect(MONGODB_CON, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
+        // useNewUrlParser: true, useUnifiedTopology: true,
     });
 };

@@ -10,7 +10,7 @@ export interface IOrder extends Document {
     orderDate: Date;
     orderStatus: string;
     remarks: string;
-    deliveryId: string;
+    deliveryId: any;
     readyTime: number;
 }
 

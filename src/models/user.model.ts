@@ -1,13 +1,22 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { ICustomer } from "../interfaces";
+import { IUser } from "../interfaces";
 
 // Social Authentication Schema
 const SocialAuthSchema = new Schema({
-    provider: { type: String, enum: ["google", "facebook"], required: true },
+    provider: { type: String, enum: ["email", "google", "facebook"], required: true },
     providerId: { type: String, required: true },
     accessToken: { type: String, required: true },
     refreshToken: String,
-    profile: { locale: String, timezone: String, gender: String },
+});
+
+const addressSchema = new mongoose.Schema({
+    formattedAddress: { type: String, required: true },
+    lat: { type: Number, required: true },
+    lng: { type: Number, required: true },
+    placeId: { type: String, unique: true },
+    placeName: { type: String },
+    types: { type: [String] },
+    isDefault: { type: Boolean, default: false }, // Indicates if this is the default address
 });
 
 const CartSchema = new Schema({
@@ -18,34 +27,22 @@ const CartSchema = new Schema({
 const PreferenceSchema = new Schema({
     notifications: { type: Boolean, default: true },
     theme: { type: String, enum: ["light", "dark"], default: "light" },
+    locale: String,
+    timezone: String,
 });
 
-const addressSchema = new mongoose.Schema({
-    line1: { type: String, required: true },
-    line2: { type: String },
-    city: { type: String, required: true },
-    state: { type: String, required: true },
-    postalCode: { type: String, required: true },
-    country: { type: String, required: true },
-    lat: { type: Number },
-    lng: { type: Number },
-    isDefault: { type: Boolean, default: false }, // Indicates if this is the default address
-});
-
-const CustomerSchema = new Schema(
+const UserSchema = new Schema(
     {
         email: { type: String, required: true, unique: true, lowercase: true },
+        emailOtp: String,
+        emailOtpExpiry: { type: Date },
         emailVerified: { type: Boolean, default: false },
-        email_otp: String,
-
         passwordHash: { type: String, required: true },
-
         salt: { type: String, required: true },
         passwordResetToken: String,
         passwordResetExpires: Date,
         name: { type: String },
         profilePicture: { type: String },
-        address: { type: String },
         mobile: { type: String, required: true },
         mobileOtp: { type: Number },
         mobileOtpExpiry: { type: Date },
@@ -53,11 +50,11 @@ const CustomerSchema = new Schema(
         lastLogin: Date,
         isActive: { type: Boolean, default: true },
         preferences: PreferenceSchema,
-        addresses: [addressSchema], // Array of addresses
+        addresses: [addressSchema],
 
         // Social authentication fields
         socialAuth: [SocialAuthSchema],
-        role: { type: String, enum: ["admin", "vendor", "customer", "rider"], default: "customer" },
+        role: { type: String, enum: ["admin", "vendor", "user", "rider"], default: "user" },
         cart: [CartSchema],
         orders: [{ type: Schema.Types.ObjectId, ref: "order" }],
     },
@@ -75,6 +72,6 @@ const CustomerSchema = new Schema(
     }
 );
 
-const Customer = mongoose.model<ICustomer>("customer", CustomerSchema);
+const User = mongoose.model<IUser>("user", UserSchema);
 
-export { Customer };
+export { User };

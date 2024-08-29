@@ -535,7 +535,7 @@ const validateTransaction = async (txnId: string) => {
 //  Delivery Notification
 
 // TODO: pending error handling
-const assignOrderForDelivery = async (orderId: string, restaurantId: string) => {
+const assignOrderForDelivery = async (orderId: any, restaurantId: string) => {
     // find the restaurant
     const restaurant = await Restaurant.findById(restaurantId);
     if (restaurant) {
