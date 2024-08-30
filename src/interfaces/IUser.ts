@@ -43,9 +43,10 @@ export interface IUser extends Document {
     salt: string;
     passwordResetToken?: string; // Optional
     passwordResetExpires?: Date; // Optional
-    name?: string; // Optional
+    name: string;
     profilePicture?: string; // Optional
     mobile: string;
+    callingCode: string;
     mobileOtp?: number; // Optional
     mobileOtpExpiry?: Date; // Optional
     mobileVerified?: boolean; // Optional, default: false

@@ -1,0 +1,2 @@
+{"level":"error","message":"Error: E11000 duplicate key error collection: food_order_dev.users index: addresses.placeId_1 dup key: { addresses.placeId: null }","service":"user-service","timestamp":"2024-08-30 17:44:33"}
+{"level":"error","message":"Error: E11000 duplicate key error collection: food_order_dev.users index: addresses.placeId_1 dup key: { addresses.placeId: null }","service":"user-service","timestamp":"2024-08-30 17:47:22"}

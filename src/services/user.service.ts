@@ -1,10 +1,11 @@
-import { Request, Response, NextFunction } from "express";
-import { CheckEmailExistsInput, CreateFoodInput } from "../dto";
-import { GenerateResponseData, GenerateValidationErrorResponse, validateInput } from "../utility";
+import { Request, Response, NextFunction, RequestHandler } from "express";
+import { CheckEmailExistsInput, CreateFoodInput, UserRegisterInput } from "../dto";
+import { GeneratePassword, GenerateResponseData, GenerateSalt, GenerateValidationErrorResponse, validateInput } from "../utility";
 
 import createHttpError, { InternalServerError } from "http-errors";
 import IUser from "../interfaces/IUser";
 import { User } from "../models/user.model";
+import { successMsg } from "../constants/user.constant";
 
 export const AddUserService = async (req: Request, res: Response, next: NextFunction) => {
     // const inputs = <CreateFoodInput>req.body; const errors = await validateInput(CreateFoodInput, inputs); if (errors.length > 0) return
@@ -44,6 +45,34 @@ export const CheckEmailExistService = async (req: Request, res: Response, next: 
         }
         return next(createHttpError(401, "Error while checking if email exist"));
     } catch (error: any) {
+        return next(InternalServerError(error.message));
+    }
+};
+
+
+export const UserRegisterService: RequestHandler = async (req, res, next) => {
+    const inputs = <UserRegisterInput>req.body;
+    const errors = await validateInput(UserRegisterInput, inputs);
+    if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
+
+    const { name, email, password, mobile, callingCode  } = inputs;
+
+    try {
+        const salt = await GenerateSalt();
+        const passwordHash = await GeneratePassword(password, salt);
+        const newUser = await User.create({
+            name: name,
+            email: email,
+            passwordHash: passwordHash,
+            salt: salt,
+            mobile: mobile,
+            callingCode: callingCode,
+        });
+
+        // TODO: send mail // await sendEmail();
+        const response = GenerateResponseData(newUser, successMsg.user_create_success, 200);
+        return res.status(200).json(response);
+    } catch (error) {
         return next(InternalServerError(error.message));
     }
 };

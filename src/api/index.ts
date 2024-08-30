@@ -1,5 +1,5 @@
 import express from "express";
-import { HealthCheckRoute, AdminRoute, RestaurantRoute, CustomerRoute,UserRoute, DeliveryRoute, ShoppingRoute, RiderRoute, VendorRoute } from "../routes";
+import { HealthCheckRoute, AdminRoute, RestaurantRoute, CustomerRoute, UserRoute, DeliveryRoute, ShoppingRoute, RiderRoute, VendorRoute } from "../routes";
 const router = express.Router();
 
 router.use("/", HealthCheckRoute);
