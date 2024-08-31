@@ -13,7 +13,7 @@ const addressSchema = new mongoose.Schema({
     formattedAddress: { type: String, required: true },
     lat: { type: Number, required: true },
     lng: { type: Number, required: true },
-    placeId: { type: String, unique: true },
+    placeId: { type: String, required: true },
     placeName: { type: String },
     types: { type: [String] },
     isDefault: { type: Boolean, default: false }, // Indicates if this is the default address
@@ -72,6 +72,12 @@ const UserSchema = new Schema(
         timestamps: true,
     }
 );
+
+
+// UserSchema.pre("save", function (next) {
+//     this.updatedAt = Date.now();
+//     next();
+// });
 
 const User = mongoose.model<IUser>("user", UserSchema);
 

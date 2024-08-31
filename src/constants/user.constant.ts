@@ -4,7 +4,7 @@ export const successMsg = {
 };
 
 export const errorMsg = {
-    admin_auth_error: `Admin authentication failed, invalid credentials.`,
-    admin_already_exist: `An admin already exist with provided email id.`,
-    restaurant_not_found: `Restaurant not found.`,
+    user_auth_error: `User authentication failed, invalid credentials.`,
+    user_already_exist: `User already exist with provided email id.`,
+    user_not_found: `User not found.`,
 };

@@ -1,11 +1,21 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
-import { CheckEmailExistsInput, CreateFoodInput, UserRegisterInput } from "../dto";
-import { GeneratePassword, GenerateResponseData, GenerateSalt, GenerateValidationErrorResponse, validateInput } from "../utility";
+import { CheckEmailExistsInput, CreateFoodInput, UserLoginInput, UserRegisterInput } from "../dto";
+import {
+    GenerateAccessToken,
+    GeneratePassword,
+    GenerateRefreshToken,
+    GenerateResponseData,
+    GenerateSalt,
+    GenerateToken,
+    GenerateValidationErrorResponse,
+    validateInput,
+    ValidatePassword,
+} from "../utility";
 
 import createHttpError, { InternalServerError } from "http-errors";
 import IUser from "../interfaces/IUser";
 import { User } from "../models/user.model";
-import { successMsg } from "../constants/user.constant";
+import { errorMsg, successMsg } from "../constants/user.constant";
 
 export const AddUserService = async (req: Request, res: Response, next: NextFunction) => {
     // const inputs = <CreateFoodInput>req.body; const errors = await validateInput(CreateFoodInput, inputs); if (errors.length > 0) return
@@ -49,13 +59,12 @@ export const CheckEmailExistService = async (req: Request, res: Response, next: 
     }
 };
 
-
 export const UserRegisterService: RequestHandler = async (req, res, next) => {
     const inputs = <UserRegisterInput>req.body;
     const errors = await validateInput(UserRegisterInput, inputs);
     if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
-    const { name, email, password, mobile, callingCode  } = inputs;
+    const { name, email, password, mobile, callingCode } = inputs;
 
     try {
         const salt = await GenerateSalt();
@@ -74,5 +83,75 @@ export const UserRegisterService: RequestHandler = async (req, res, next) => {
         return res.status(200).json(response);
     } catch (error) {
         return next(InternalServerError(error.message));
+    }
+};
+
+export const UserLoginService = async (req: Request, res: Response, next: NextFunction) => {
+    const inputs = <UserLoginInput>req.body;
+    const errors = await validateInput(UserLoginInput, inputs);
+    if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
+
+    const { email, password } = inputs;
+
+    try {
+        const user = await FindUser(undefined, email);
+        if (user) {
+            const validation = await ValidatePassword(password, user.passwordHash, user.salt);
+            if (validation) {
+                const accessToken = await GenerateAccessToken({ _id: user._id });
+                const refreshToken = await GenerateRefreshToken({ _id: user._id });
+
+                // const data = GenerateResponseData(signature, "POST", "Admin login", "admin/login");
+                const response = GenerateResponseData(
+                    {
+                        accessToken,
+                        refreshToken,
+                        user: { id: user._id, name: user.name, email: user.email },
+                    },
+                    successMsg.user_auth_success,
+                    200
+                );
+                // update social auth data
+                const socialAuthData = { provider: "email" as "email", providerId: user.email, accessToken: accessToken, refreshToken: refreshToken };
+                await updateOrAddSocialAuth(user, socialAuthData);
+                return res.status(200).json(response);
+            } else {
+                return next(createHttpError(401, errorMsg.user_auth_error));
+            }
+        }
+        return next(createHttpError(401, errorMsg.user_not_found));
+    } catch (error: any) {
+        return next(InternalServerError(error.message));
+    }
+};
+
+// Find Admin profile Find Admin by email address and id
+export const FindUser = async (id: String | undefined = "", email: string = "") => {
+    if (email) {
+        // return await Admin.findOne({ email: email }, "_id").exec().lean();
+        return await User.findOne({ email: email });
+    } else {
+        return await User.findById(id);
+    }
+};
+
+const updateOrAddSocialAuth = async (user, socialAuthData) => {
+    try {
+        const existingAuth = user.socialAuth.find((auth) => auth.provider === socialAuthData.provider);
+        if (existingAuth) {
+            // Update existing social auth method
+            existingAuth.providerId = socialAuthData.providerId;
+            existingAuth.accessToken = socialAuthData.accessToken;
+            existingAuth.refreshToken = socialAuthData.refreshToken;
+        } else {
+            // Add new social auth method
+            user.socialAuth.push(socialAuthData);
+        }
+
+        await user.save();
+        return user;
+    } catch (error) {
+        console.error("Error updating or adding social auth:", error);
+        throw error;
     }
 };

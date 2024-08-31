@@ -11,13 +11,13 @@ export class CreateCustomerInput {
     password: string;
 }
 
-export class UserLoginInput {
-    @IsEmail()
-    email: string;
+// export class UserLoginInput {
+//     @IsEmail()
+//     email: string;
 
-    @Length(6, 12)
-    password: string;
-}
+//     @Length(6, 12)
+//     password: string;
+// }
 
 export class OtpRequestInput {
     @IsString()

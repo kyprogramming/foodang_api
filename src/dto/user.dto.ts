@@ -41,3 +41,26 @@ export class UserRegisterInput {
     @IsNotEmpty({ message: "Password is required" })
     callingCode: string;
 }
+
+
+export class UserLoginInput {
+    // email
+    @IsEmail()
+    @Transform(({ value }) => value.toLowerCase().trim())
+    email: string;
+
+    // password
+    @IsString()
+    @IsNotEmpty({ message: "Password is required" })
+    @Length(8, 20, { message: "Password must be between 8 and 20 characters" })
+    @Matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {
+        message: "Password must contain at least one uppercase letter, one number, and one special character",
+    })
+    password: string;
+}
+
+
+
+export interface UserPayload {
+    _id: any;
+}
