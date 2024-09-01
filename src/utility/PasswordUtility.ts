@@ -5,35 +5,59 @@ import { envConfig } from "../config";
 
 import { RestaurantPayload } from "../dto";
 import { AuthPayload } from "../dto/auth.dto";
+const crypto = require("crypto");
 
 export const GenerateSalt = async () => {
     return await bcrypt.genSalt();
 };
 
-export const GeneratePassword = async (password: string, salt: string) => {
-    return await bcrypt.hash(password, salt);
+export const GeneratePassword = async (password: string, salt: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        crypto.pbkdf2(password, salt, 10000, 64, "sha512", (err, derivedKey) => {
+            if (err) reject(err);
+            resolve(derivedKey.toString("hex"));
+        });
+    });
 };
 
-export const ValidatePassword = async (enteredPassword: string, savedPassword: string, salt: string) => {
-    return (await GeneratePassword(enteredPassword, salt)) === savedPassword;
+export const ValidatePassword = async (enteredPassword: string, savedPassword: string, salt: string): Promise<boolean> => {
+    try {
+        const hashedPassword = await GeneratePassword(enteredPassword, salt);
+        console.log(`Generated password: ${hashedPassword}`);
+        console.log(`Saved password: ${savedPassword}`);
+        return hashedPassword === savedPassword;
+    } catch (error) {
+        console.error("Error validating password:", error);
+        return false;
+    }
 };
+
 // TODO: need to remove below function
 export const GenerateToken = async (payload: AuthPayload) => {
-    return jwt.sign(payload, envConfig?.APP_SECRET ?? "", { expiresIn: "90d" });
+    const accessToken = jwt.sign(payload, envConfig?.ACCESS_TOKEN_SECRET ?? "", { expiresIn: "1d" });
+    const refreshToken = jwt.sign(payload, envConfig?.REFRESH_TOKEN_SECRET ?? "", { expiresIn: "90d" });
+    return { accessToken, refreshToken };
 };
-export const GenerateAccessToken = async (payload: AuthPayload) => {
-    return jwt.sign(payload, envConfig?.ACCESS_TOKEN_SECRET ?? "", { expiresIn: "1d" });
+export const GenerateAccessToken = (payload: AuthPayload) => {
+    return jwt.sign(payload, envConfig?.ACCESS_TOKEN_SECRET ?? "", { algorithm: "HS256", expiresIn: "1h" });
 };
-export const GenerateRefreshToken = async (payload: AuthPayload) => {
-    return jwt.sign(payload, envConfig?.REFRESH_TOKEN_SECRET ?? "", { expiresIn: "90d" });
-};
+// export const GenerateRefreshToken = (payload: AuthPayload) => { return jwt.sign(payload, envConfig?.REFRESH_TOKEN_SECRET ?? "", { expiresIn: "90d" }); };
+
+export function GenerateOTP() {
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    return otp.toString();
+}
+
+export function GenerateRefreshToken() {
+    return crypto.randomBytes(40).toString("hex");
+}
 
 export const ValidateSignature = async (req: Request) => {
     const signature = req.get("Authorization");
 
     if (signature) {
         try {
-            const payload = jwt.verify(signature.split(" ")[1], envConfig?.APP_SECRET ?? "", { algorithms: ["HS256"] }) as AuthPayload;
+            const payload = jwt.verify(signature.split(" ")[1], envConfig?.ACCESS_TOKEN_SECRET ?? "", { algorithms: ["HS256"] }) as AuthPayload;
             req.user = payload;
             return true;
         } catch (err) {

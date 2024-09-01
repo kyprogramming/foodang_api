@@ -2,3 +2,30 @@
 {"level":"error","message":"Error: E11000 duplicate key error collection: food_order_dev.users index: addresses.placeId_1 dup key: { addresses.placeId: null }","service":"user-service","timestamp":"2024-08-30 17:47:22"}
 {"level":"error","message":"Error: E11000 duplicate key error collection: food_order_dev.users index: addresses.placeId_1 dup key: { addresses.placeId: null }","service":"user-service","timestamp":"2024-08-30 21:06:13"}
 {"level":"error","message":"Error: E11000 duplicate key error collection: food_order_dev.users index: addresses.placeId_1 dup key: { addresses.placeId: null }","service":"user-service","timestamp":"2024-08-30 21:08:14"}
+{"level":"error","message":"Error: User authentication failed, invalid credentials.","service":"user-service","timestamp":"2024-09-01 08:15:53"}
+{"level":"error","message":"Error: User authentication failed, invalid credentials.","service":"user-service","timestamp":"2024-09-01 08:15:53"}
+{"level":"error","message":"Error: Unexpected token '4', \"479487\" is not valid JSON","service":"user-service","timestamp":"2024-09-01 09:34:11"}
+{"level":"error","message":"Error: Unexpected token '6', \"661764\" is not valid JSON","service":"user-service","timestamp":"2024-09-01 09:39:18"}
+{"level":"error","message":"Error: User authentication failed, invalid credentials.","service":"user-service","timestamp":"2024-09-01 10:09:46"}
+{"level":"error","message":"Error: User authentication failed, invalid credentials.","service":"user-service","timestamp":"2024-09-01 10:09:46"}
+{"level":"error","message":"Error: User authentication failed, invalid credentials.","service":"user-service","timestamp":"2024-09-01 10:34:19"}
+{"level":"error","message":"Error: User authentication failed, invalid credentials.","service":"user-service","timestamp":"2024-09-01 10:34:19"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 11:23:04"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 11:23:04"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 11:31:10"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 11:33:47"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 11:33:49"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 11:34:49"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 11:35:19"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 11:42:33"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 11:42:33"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 11:46:20"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 11:46:20"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 11:59:21"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 11:59:21"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 12:10:23"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 12:10:23"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 12:12:30"}
+{"level":"error","message":"Error: Credentials are not valid.","service":"user-service","timestamp":"2024-09-01 12:12:31"}
+{"level":"error","message":"Error: OTP does not match or expired. Please request a new OTP","service":"user-service","timestamp":"2024-09-01 12:48:55"}
+{"level":"error","message":"Error: OTP does not match or expired. Please request a new OTP","service":"user-service","timestamp":"2024-09-01 12:49:09"}

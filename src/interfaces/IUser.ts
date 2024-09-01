@@ -1,13 +1,6 @@
 // Social Authentication Interface
 import { Document, Schema, Model } from "mongoose";
 
-interface ISocialAuth {
-    provider: "email" | "google" | "facebook";
-    providerId: string;
-    accessToken: string;
-    refreshToken?: string; // Optional
-}
-
 // Address Interface
 interface IAddress {
     formattedAddress: string;
@@ -35,29 +28,31 @@ interface IPreference {
 
 // User Interface
 export interface IUser extends Document {
-    email: string;
-    emailOtp?: string; // Optional
-    emailOtpExpiry?: Date; // Optional
-    emailVerified?: boolean; // Optional, default: false
-    passwordHash: string;
-    salt: string;
-    passwordResetToken?: string; // Optional
-    passwordResetExpires?: Date; // Optional
-    name: string;
-    profilePicture?: string; // Optional
-    mobile: string;
-    callingCode: string;
-    mobileOtp?: number; // Optional
-    mobileOtpExpiry?: Date; // Optional
-    mobileVerified?: boolean; // Optional, default: false
-    lastLogin?: Date; // Optional
-    isActive?: boolean; // Optional, default: true
-    preferences?: IPreference; // Optional
-    addresses?: IAddress[]; // Optional
-    socialAuth?: ISocialAuth[]; // Optional
-    role?: "admin" | "vendor" | "user" | "rider"; // Optional, default: "user"
-    cart?: ICart[]; // Optional
-    orders?: Schema.Types.ObjectId[]; // Optional, references to the order documents
+    name: string; // Required
+    email: string; // Required, unique, lowercase
+    emailOtp?: string;
+    emailOtpExpiry?: Date;
+    emailVerified?: boolean; // Default: false
+    password?: string;
+    salt?: string;
+    passwordResetToken?: string;
+    passwordResetExpires?: Date;
+    profilePicture?: string;
+    mobile?: string;
+    callingCode?: string;
+    mobileOtp?: number;
+    mobileOtpExpiry?: Date;
+    mobileVerified?: boolean; // Default: false
+    lastLogin?: Date;
+    isActive?: boolean; // Default: true
+    preferences?: IPreference;
+    addresses?: IAddress[];
+    googleId?: string; // Unique, sparse
+    facebookId?: string; // Unique, sparse
+    xId?: string; // Unique, sparse
+    authProvider: string[]; // Array of strings
+    refreshToken: string;
+    cart?: ICart[];
+    orders?: Schema.Types.ObjectId[];
 }
-
 export default IUser;

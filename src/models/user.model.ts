@@ -1,13 +1,8 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import { IUser } from "../interfaces";
 
-// Social Authentication Schema
-const SocialAuthSchema = new Schema({
-    provider: { type: String, enum: ["email", "google", "facebook"], required: true },
-    providerId: { type: String, required: true },
-    accessToken: { type: String, required: true },
-    refreshToken: String,
-});
+// Social Authentication Schema const SocialAuthSchema = new Schema({ provider: { type: String, enum: ["email", "google", "facebook"], required: true }, providerId: { type: String, required: true },
+// accessToken: { type: String, required: true }, refreshToken: String, });
 
 const addressSchema = new mongoose.Schema({
     formattedAddress: { type: String, required: true },
@@ -33,18 +28,18 @@ const PreferenceSchema = new Schema({
 
 const UserSchema = new Schema(
     {
-        email: { type: String, required: true, unique: true, lowercase: true },
+        name: { type: String, required: true }, //required
+        email: { type: String, required: true, unique: true, lowercase: true }, //required
         emailOtp: String,
         emailOtpExpiry: { type: Date },
         emailVerified: { type: Boolean, default: false },
-        passwordHash: { type: String, required: true },
-        salt: { type: String, required: true },
+        password: { type: String },
+        salt: { type: String },
         passwordResetToken: String,
         passwordResetExpires: Date,
-        name: { type: String, required: true },
         profilePicture: { type: String },
-        mobile: { type: String, required: true },
-        callingCode: { type: String, required: true },
+        mobile: { type: String },
+        callingCode: { type: String },
         mobileOtp: { type: Number },
         mobileOtpExpiry: { type: Date },
         mobileVerified: { type: Boolean, default: false },
@@ -52,19 +47,21 @@ const UserSchema = new Schema(
         isActive: { type: Boolean, default: true },
         preferences: PreferenceSchema,
         addresses: [addressSchema],
-
-        // Social authentication fields
-        socialAuth: [SocialAuthSchema],
-        role: { type: String, enum: ["admin", "vendor", "user", "rider"], default: "user" },
+        googleId: { type: String, unique: true, sparse: true },
+        facebookId: { type: String, unique: true, sparse: true },
+        xId: { type: String, unique: true, sparse: true },
+        authProvider: { type: [String], required: true }, // Array of strings
+        refreshToken: { type: String, unique: true, sparse: true },
         cart: [CartSchema],
         orders: [{ type: Schema.Types.ObjectId, ref: "order" }],
     },
     {
         toJSON: {
             transform(doc, ret) {
-                delete ret.passwordHash;
-                delete ret.salt;
                 delete ret.__v;
+                delete ret.password;
+                delete ret.salt;
+                delete ret.refreshToken;
                 delete ret.createdAt;
                 delete ret.updatedAt;
             },
@@ -73,11 +70,7 @@ const UserSchema = new Schema(
     }
 );
 
-
-// UserSchema.pre("save", function (next) {
-//     this.updatedAt = Date.now();
-//     next();
-// });
+// UserSchema.pre("save", function (next) { this.updatedAt = Date.now(); next(); });
 
 const User = mongoose.model<IUser>("user", UserSchema);
 

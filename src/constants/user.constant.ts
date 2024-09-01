@@ -1,6 +1,8 @@
 export const successMsg = {
-    user_auth_success: `User authenticated successfully.`,
-    user_create_success: `User created successfully.`,
+    user_auth_success: `Your are authenticated successfully.`,
+    user_create_success: `Your account created successfully.`,
+    user_email_verify_success: `Your email verified successfully.`,
+    user_logout_success: `You have been successfully logged out.`,
 };
 
 export const errorMsg = {

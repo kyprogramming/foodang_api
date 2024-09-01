@@ -6,6 +6,7 @@ import cors from "cors";
 import api from "./api";
 import { envConfig } from "./config";
 import { errorHandlerMiddleware, notFoundMiddleware } from "./middleware";
+// import passport from "./config/passport-setup";
 
 export default async (app: Application) => {
     const swaggerDocument = YAML.load(`${process.cwd()}/swagger/swagger.yaml`);
@@ -21,6 +22,8 @@ export default async (app: Application) => {
 
     // Load App Middleware
     app.use(apiPath, api);
+    // app.use(passport.initialize());
+    // app.use(passport.session());
     app.use(swaggerPath, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     app.use(notFoundMiddleware);
     app.use(errorHandlerMiddleware);
