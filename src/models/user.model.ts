@@ -45,15 +45,15 @@ const UserSchema = new Schema(
         mobileVerified: { type: Boolean, default: false },
         lastLogin: Date,
         isActive: { type: Boolean, default: true },
-        preferences: PreferenceSchema,
-        addresses: [addressSchema],
+        preferences: PreferenceSchema || undefined,
+        addresses: { type: [addressSchema], default: undefined },
         googleId: { type: String, unique: true, sparse: true },
         facebookId: { type: String, unique: true, sparse: true },
         xId: { type: String, unique: true, sparse: true },
-        authProvider: { type: [String], required: true }, // Array of strings
+        authProvider: { type: [String], required: true },
         refreshToken: { type: String, unique: true, sparse: true },
-        cart: [CartSchema],
-        orders: [{ type: Schema.Types.ObjectId, ref: "order" }],
+        cart: { type: [CartSchema], default: undefined },
+        orders: { type: [{ type: Schema.Types.ObjectId, ref: "order" }], default: undefined },
     },
     {
         toJSON: {

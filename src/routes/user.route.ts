@@ -19,7 +19,7 @@ interface Payload {
 type Provider = "email" | "google" | "facebook";
 
 // Get available Food Availability router.post("/", AddUser);
-router.post("/", UserRegister);
+router.post("/", UserRegister); 
 router.post("/verify-email-otp", VerifyEmailOTP);
 router.post("/login", UserLogin);
 router.get("/check-email/:email", CheckEmailExist);

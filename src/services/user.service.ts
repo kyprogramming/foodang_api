@@ -119,13 +119,14 @@ export const VerifyEmailOTPService = async (req: Request, res: Response, next: N
     const { email, otp } = req.body;
     try {
         const user = await User.findOne({ email: email });
-        if (!user) return next(InternalServerError("User not found."));
+        if (!user) return next(createHttpError(404, "User not found."));
 
         if (user.emailOtp !== otp && user.emailOtpExpiry > new Date(new Date().getTime())) {
-            return next(InternalServerError("OTP does not match or expired. Please request a new OTP"));
+            return next(createHttpError(400, "OTP does not match or expired. Please request a new OTP"));
         }
         user.emailVerified = true;
-        user.emailOtp = "";
+        user.emailOtp = undefined;
+        user.emailOtpExpiry = undefined;
         user.save();
         const response = GenerateResponseData({}, successMsg.user_email_verify_success, 200);
         return res.status(200).json(response);
@@ -162,9 +163,11 @@ export const UserLoginService = async (req: Request, res: Response, next: NextFu
             } else {
                 return next(createHttpError(401, "Credentials are not valid."));
             }
+        } else {
+            return next(createHttpError(404, errorMsg.user_not_found));
         }
-        return next(createHttpError(404, errorMsg.user_not_found));
     } catch (error: any) {
+        console.log(error);
         return next(InternalServerError(error.message));
     }
 };

@@ -8,5 +8,5 @@ export const successMsg = {
 export const errorMsg = {
     user_auth_error: `User authentication failed, invalid credentials.`,
     user_already_exist: `User already exist with provided email id.`,
-    user_not_found: `User not found.`,
+    user_not_found: `Email id is not registered, Please register.`,
 };
