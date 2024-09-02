@@ -195,7 +195,7 @@ export const UserLogoutService = async (req: Request, res: Response, next: NextF
     try {
         const user = await User.findOne({ _id: id });
         if (user) {
-            user.refreshToken = "";
+            user.refreshToken = undefined;
             user.save();
             const response = GenerateResponseData({}, successMsg.user_logout_success, 200);
             return res.status(200).json(response);
@@ -224,10 +224,12 @@ async function findOrCreateUser(idToken: string) {
             audience: "498117270511-dfrl1g10qhv935j52vvbbhtsibkssjpe.apps.googleusercontent.com",
         });
 
-        const { sub, email, name, email_verified } = ticket.getPayload();
+        const googlePayload = ticket.getPayload();
+        const { sub, email, name, email_verified, picture } = googlePayload;
+        // console.log("GOOGLE PAYLOAD:", payload);
 
         if (!email_verified) {
-            return { error: "Your email is not verified with Google. Please verify your email and try again." };
+            throw new Error("Your email is not verified with Google. Please verify your email and try again.");
         }
 
         const refreshToken = GenerateRefreshToken();
@@ -237,8 +239,11 @@ async function findOrCreateUser(idToken: string) {
         if (user) {
             if (!user.googleId) {
                 user.googleId = sub;
+                user.name = name;
                 user.authProvider.push("google");
                 user.refreshToken = refreshToken;
+                user.emailVerified = email_verified;
+                user.profilePicture = picture;
                 await user.save();
             }
         } else {
@@ -247,6 +252,8 @@ async function findOrCreateUser(idToken: string) {
                 email,
                 name,
                 authProvider: ["google"],
+                emailVerified: email_verified,
+                profilePicture: picture,
                 refreshToken: refreshToken,
             });
             await user.save();
@@ -254,7 +261,7 @@ async function findOrCreateUser(idToken: string) {
         // Return the user object (optionally generate and return JWT tokens)
         return { user, refreshToken };
     } catch (error) {
-        console.error("Error in findOrCreateUser:", error);
-        throw new Error("Failed to authenticate user");
+        console.error("ERROR: findOrCreateUser: ", error);
+        throw new Error("Failed while authenticating user in Google ");
     }
 }
