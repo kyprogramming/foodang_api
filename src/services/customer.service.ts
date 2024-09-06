@@ -24,57 +24,57 @@ import { errorMsg, successMsg } from "../constants/customer.constant";
 /** Customer signup
  * @param req @param res @param next @returns
  */
-export const CustomerSignUpService = async (req: Request, res: Response, next: NextFunction) => {
-    const inputs = <CreateCustomerInput>req.body;
-    const errors = await validateInput(CreateCustomerInput, inputs);
-    if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
+// export const CustomerSignUpService = async (req: Request, res: Response, next: NextFunction) => {
+//     const inputs = <CreateCustomerInput>req.body;
+//     const errors = await validateInput(CreateCustomerInput, inputs);
+//     if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
-    const { email, phone, password } = inputs;
+//     const { email, phone, password } = inputs;
 
-    try {
-        const customer = await Customer.find({ email: email });
+//     try {
+//         const customer = await Customer.find({ email: email });
 
-        if (!customer) {
-            return next(createHttpError(409, errorMsg.customer_already_exist));
-        }
+//         if (!customer) {
+//             return next(createHttpError(409, errorMsg.customer_already_exist));
+//         }
 
-        const salt = await GenerateSalt();
-        const userPassword = await GeneratePassword(password, salt);
-        const { otp, expiry } = GenerateOtp();
+//         const salt = await GenerateSalt();
+//         const userPassword = await GeneratePassword(password, salt);
+//         const { otp, expiry } = GenerateOtp();
 
-        const result = await Customer.create({
-            email: email,
-            password: userPassword,
-            salt: salt,
-            phone: phone,
-            otp: otp,
-            otp_expiry: expiry,
-            firstName: "",
-            lastName: "",
-            address: "",
-            verified: false,
-            lat: 0,
-            lng: 0,
-            orders: [],
-        });
+//         const result = await Customer.create({
+//             email: email,
+//             password: userPassword,
+//             salt: salt,
+//             phone: phone,
+//             otp: otp,
+//             otp_expiry: expiry,
+//             firstName: "",
+//             lastName: "",
+//             address: "",
+//             verified: false,
+//             lat: 0,
+//             lng: 0,
+//             orders: [],
+//         });
 
-        if (result) {
-            await SendOTP(otp, phone);
+//         if (result) {
+//             await SendOTP(otp, phone);
 
-            const signature = await GenerateToken({
-                _id: result._id,
-                email: result.email,
-                verified: result.verified,
-            });
-            const response = GenerateResponseData(signature, successMsg.customer_create_success, 200);
-            return res.status(200).json(response);
-        }
+//             const signature = await GenerateToken({
+//                 _id: result._id,
+//                 email: result.email,
+//                 verified: result.verified,
+//             });
+//             const response = GenerateResponseData(signature, successMsg.customer_create_success, 200);
+//             return res.status(200).json(response);
+//         }
 
-        return res.status(400).json({ msg: "Error while creating user" });
-    } catch (error: any) {
-        return next(InternalServerError(error.message));
-    }
-};
+//         return res.status(400).json({ msg: "Error while creating user" });
+//     } catch (error: any) {
+//         return next(InternalServerError(error.message));
+//     }
+// };
 
 /** Customer login
  * @param req @param res @param next @returns
@@ -149,33 +149,33 @@ export const CustomerOTPVerifyService = async (req: Request, res: Response, next
 /** Customer OTP request
  * @param req @param res @param next @returns
  */
-export const RequestOtpService = async (req: Request, res: Response, next: NextFunction) => {
-    const customer = req.user;
-    try {
-        if (customer) {
-            const profile = await Customer.findById(customer._id);
+// export const RequestOtpService = async (req: Request, res: Response, next: NextFunction) => {
+//     const customer = req.user;
+//     try {
+//         if (customer) {
+//             const profile = await Customer.findById(customer._id);
 
-            if (profile) {
-                if (profile?.verified) return next(createHttpError(401, errorMsg.customer_already_verified));
+//             if (profile) {
+//                 if (profile?.verified) return next(createHttpError(401, errorMsg.customer_already_verified));
 
-                const { otp, expiry } = GenerateOtp();
-                profile.otp = otp;
-                profile.otp_expiry = expiry;
+//                 const { otp, expiry } = GenerateOtp();
+//                 profile.otp = otp;
+//                 profile.otp_expiry = expiry;
 
-                await profile.save();
-                const sendCode = await SendOTP(otp, profile.phone);
+//                 await profile.save();
+//                 const sendCode = await SendOTP(otp, profile.phone);
 
-                if (!sendCode) return next(createHttpError(401, "Failed to verify your phone number"));
+//                 if (!sendCode) return next(createHttpError(401, "Failed to verify your phone number"));
 
-                const response = GenerateResponseData(null, "OTP sent to your registered Mobile Number!", 200);
-                return res.status(200).json(response);
-            }
-        }
-        return next(createHttpError(401, "Error with Requesting OTP"));
-    } catch (error: any) {
-        return next(InternalServerError(error.message));
-    }
-};
+//                 const response = GenerateResponseData(null, "OTP sent to your registered Mobile Number!", 200);
+//                 return res.status(200).json(response);
+//             }
+//         }
+//         return next(createHttpError(401, "Error with Requesting OTP"));
+//     } catch (error: any) {
+//         return next(InternalServerError(error.message));
+//     }
+// };
 
 // Get Customer profile
 export const GetCustomerProfileService = async (req: Request, res: Response, next: NextFunction) => {

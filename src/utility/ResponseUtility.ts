@@ -1,6 +1,6 @@
 import customResponse from "./customResponse";
 
-export const GenerateResponseData = (data, msg, code, type?, desc?, uri?) => {
+export const GenerateResponseData = (data, code, msg?, type?, desc?, uri?) => {
     let response: any = {};
 
     if (typeof data === "string") {

@@ -4,7 +4,7 @@ import {
     CreateOrderService,
     CreatePaymentService,
     CustomerLoginService,
-    CustomerSignUpService,
+    // CustomerSignUpService,
     CustomerOTPVerifyService,
     DeleteCartService,
     EditCustomerProfileService,
@@ -12,17 +12,17 @@ import {
     GetCustomerProfileService,
     GetOrderByIdService,
     GetOrdersService,
-    RequestOtpService,
+    // RequestOtpService,
     VerifyOfferService,
 } from "../services";
 
-export const CustomerSignUp = (req: Request, res: Response, next: NextFunction) => CustomerSignUpService(req, res, next);
+// export const CustomerSignUp = (req: Request, res: Response, next: NextFunction) => CustomerSignUpService(req, res, next);
 
 export const CustomerLogin = (req: Request, res: Response, next: NextFunction) => CustomerLoginService(req, res, next);
 
 export const CustomerOTPVerify = (req: Request, res: Response, next: NextFunction) => CustomerOTPVerifyService(req, res, next);
 
-export const RequestOtp = (req: Request, res: Response, next: NextFunction) => RequestOtpService(req, res, next);
+// export const RequestOtp = (req: Request, res: Response, next: NextFunction) => RequestOtpService(req, res, next);
 
 export const GetCustomerProfile = (req: Request, res: Response, next: NextFunction) => GetCustomerProfileService(req, res, next);
 

@@ -8,3 +8,4 @@ export * from "./order.model";
 export * from "./transaction.model";
 export * from "./rider.model";
 export * from "./user.model";
+export * from "./otp.model";

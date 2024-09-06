@@ -11,3 +11,4 @@ export * from "./IOrder";
 export * from "./ITransaction";
 export * from "./IRider";
 export * from "./IUser";
+export * from "./IOtp";

@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import { AddUser, CheckEmailExist, UserLogin, UserRegister, GoogleLogin, VerifyEmailOTP, UserLogout } from "../controllers";
+import { AddUser, CheckEmailExist, UserLogin, UserRegister, GoogleLogin, VerifyEmailOTP, UserLogout, SendOtp, VerifyMobileOtpAndRegister } from "../controllers";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
@@ -13,16 +13,18 @@ const client = new OAuth2Client("498117270511-dfrl1g10qhv935j52vvbbhtsibkssjpe.a
 interface Payload {
     email: string;
     name: string;
-    profilePicture: string;
+    profilePhoto: string;
 }
 
 type Provider = "email" | "google" | "facebook";
 
 // Get available Food Availability router.post("/", AddUser);
-router.post("/", UserRegister); 
+router.post("/register", UserRegister);
+router.post("/verify-mobile-otp-register-user", VerifyMobileOtpAndRegister);
 router.post("/verify-email-otp", VerifyEmailOTP);
 router.post("/login", UserLogin);
 router.get("/check-email/:email", CheckEmailExist);
+router.post("/send-otp", SendOtp);
 router.post("/auth/google", GoogleLogin);
 
 // Authentication

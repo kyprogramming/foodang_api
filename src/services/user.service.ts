@@ -11,6 +11,8 @@ import {
     validateInput,
     ValidatePassword,
     GenerateOTP,
+    SendOTP,
+    GenerateOtp,
 } from "../utility";
 
 import createHttpError, { InternalServerError } from "http-errors";
@@ -18,6 +20,8 @@ import IUser from "../interfaces/IUser";
 import { User } from "../models/user.model";
 import { errorMsg, successMsg } from "../constants/user.constant";
 import { OAuth2Client } from "google-auth-library";
+import IOtp from "../interfaces/IOtp";
+import { Otp } from "../models";
 
 export const AddUserService = async (req: Request, res: Response, next: NextFunction) => {
     // const inputs = <CreateFoodInput>req.body; const errors = await validateInput(CreateFoodInput, inputs); if (errors.length > 0) return
@@ -28,7 +32,7 @@ export const AddUserService = async (req: Request, res: Response, next: NextFunc
         const newUser = new User(sampleUser);
         const savedUser = await newUser.save();
         if (savedUser) {
-            const response = GenerateResponseData(savedUser, "User added successfully", 201);
+            const response = GenerateResponseData(savedUser, 201, "User added successfully");
             return res.status(200).json(response);
         }
         console.log("User added:", newUser);
@@ -45,20 +49,92 @@ export const CheckEmailExistService = async (req: Request, res: Response, next: 
 
     try {
         if (email) {
-            let user = await User.findOne({
-                email: email,
-                authProvider: { $in: ["email"] },
-            });
+            let user = await User.findOne({ email: email, authMethods: { $in: ["password"] } });
             let resp;
             if (user) {
-                resp = { exists: true, message: "Provided email already exists, please continue with login." };
+                resp = { exists: true };
             } else {
-                resp = { exists: false, message: "Provided email does not exist, please continue with register." };
+                resp = { exists: false };
             }
-            const response = GenerateResponseData({ exists: resp.exists }, resp.message, 200);
+            const data = resp.exists;
+            const response = GenerateResponseData(data, 200);
             return res.status(200).json(response);
         }
         return next(createHttpError(401, "Error while checking if email exist"));
+    } catch (error: any) {
+        return next(InternalServerError(error.message));
+    }
+};
+
+// User OTP request
+export const SendOtpService = async (req: Request, res: Response, next: NextFunction) => {
+    const { email, mobile, callingCode } = req.body;
+    try {
+        if (email && callingCode && mobile) {
+            // Insert OTP into the database
+            let generateOtp;
+            let otpObj: any = await Otp.findOne({ email, mobile, callingCode });
+            if (otpObj) {
+                if (new Date() > otpObj.expireAt) {
+                    generateOtp = GenerateOtp(); // generate new OTP once expired
+                    otpObj.opt = generateOtp.otp;
+                    otpObj.expireAt = generateOtp.expireAt;
+                    await otpObj.save();
+                }
+            } else {
+                generateOtp = GenerateOtp(); // generate new OTP once expired
+                const otpPayload: any = { email, mobile, callingCode, otp: generateOtp.otp, expireAt: generateOtp.expireAt };
+                const newOTP = new Otp(otpPayload);
+                await newOTP.save();
+            }
+            // TODO: uncomment below lines to sent OTP to mobile device
+
+            // const sendCode = await SendOTP(generateOtp.otp, callingCode, mobile);
+
+            // if (!sendCode) return next(createHttpError(401, "Failed to verify your phone number"));
+
+            const response = GenerateResponseData(null, 200);
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(401, "Error with Requesting OTP"));
+    } catch (error: any) {
+        return next(InternalServerError(error.message));
+    }
+};
+
+export const VerifyMobileOtpAndRegisterService = async (req: Request, res: Response, next: NextFunction) => {
+    const { email, displayName, password, callingCode, mobile, mobileOtp } = req.body;
+    try {
+        if (email && callingCode && mobile) {
+            const otpObj: any = await Otp.findOne({ email, mobile, callingCode });
+            if (otpObj) {
+                const otp = otpObj.otp;
+                if (mobileOtp === otp) {
+                    if (new Date() > otpObj.expireAt) {
+                        return next(createHttpError(401, "Verification failed, OTP has expired, try with resend OTP"));
+                    } else {
+                        const salt = await GenerateSalt();
+                        const passwordHash = await GeneratePassword(password, salt);
+                        await User.create({
+                            displayName,
+                            email,
+                            password: passwordHash,
+                            salt,
+                            mobile,
+                            callingCode,
+                            mobileVerified: true,
+                            authMethods: ["password"],
+                        });
+                    }
+                    await Otp.deleteOne({ email, mobile, callingCode });
+                } else {
+                    return next(createHttpError(400, "Verification failed, OTP doesn't match"));
+                }
+            }
+            const response = GenerateResponseData(null, 200);
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(401, "Error while User registration, please try again."));
     } catch (error: any) {
         return next(InternalServerError(error.message));
     }
@@ -69,43 +145,43 @@ export const UserRegisterService: RequestHandler = async (req, res, next) => {
     const errors = await validateInput(UserRegisterInput, inputs);
     if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
-    const { name, email, password, mobile, callingCode } = inputs;
+    const { displayName, email, password, mobile, callingCode } = req.body;
+    console.log(displayName, email, password, mobile, callingCode);
     try {
-        let user = await User.findOne({
-            email: email,
-        });
+        let user = await User.findOne({ email: email, authMethods: { $in: ["password"] } });
+        if (user && user.mobileVerified) return next(createHttpError(409, "User already exists with a verified email id."));
+        if (user && !user.mobileVerified) return next(createHttpError(403, "User already exists, however otp not verified yet."));
+
         const salt = await GenerateSalt();
         const passwordHash = await GeneratePassword(password, salt);
-        // const refreshToken = GenerateRefreshToken();
-        const emailOtp = GenerateOTP();
-        const emailOtpExpiry = new Date(new Date().getTime() + 10 * 60000);
-        if (user) {
-            user.name = name;
-            user.password = passwordHash;
-            user.mobile = mobile;
-            user.salt = salt;
-            user.callingCode = callingCode;
-            user.emailOtp = emailOtp;
-            user.emailOtpExpiry = emailOtpExpiry;
-            user.authProvider.push("email");
-            // user.refreshToken = refreshToken;
-            user.save();
-        } else {
+        // const emailOtp = GenerateOTP(); const emailOtpExpiry = new Date(new Date().getTime() + 10 * 60000);
+        if (!user) {
             user = await User.create({
-                name,
+                displayName,
                 email,
                 password: passwordHash,
                 salt,
                 mobile,
                 callingCode,
-                emailOtp,
-                emailOtpExpiry,
-                // refreshToken,
-                authProvider: ["email"],
+                authMethods: ["password"],
             });
+
+            // Generate OTP and send OTP to mobile
+            const { otp, expireAt } = GenerateOtp();
+            // const sendCode = await SendOTP(otp, callingCode, mobile);
+
+            // if (!sendCode) return next(createHttpError(401, "Failed to verify your phone number"));
+
+            // Insert OTP into the database
+            const otpPayload: any = { email, mobile, callingCode, otp, expireAt };
+            const newOTP = new Otp(otpPayload);
+            await newOTP.save();
+
+            const data = { expireAt };
+            const response = GenerateResponseData(null, 200);
+            return res.status(200).json(response);
+        } else {
         }
-        const response = GenerateResponseData(user, successMsg.user_create_success, 200);
-        return res.status(200).json(response);
 
         // TODO: send mail // await sendEmail();
     } catch (error) {
@@ -128,7 +204,7 @@ export const VerifyEmailOTPService = async (req: Request, res: Response, next: N
         user.emailOtp = undefined;
         user.emailOtpExpiry = undefined;
         user.save();
-        const response = GenerateResponseData({}, successMsg.user_email_verify_success, 200);
+        const response = GenerateResponseData(null, 200);
         return res.status(200).json(response);
     } catch (error) {
         console.error("Error verifying Google ID token:", error);
@@ -136,15 +212,14 @@ export const VerifyEmailOTPService = async (req: Request, res: Response, next: N
     }
 };
 
-export const UserLoginService = async (req: Request, res: Response, next: NextFunction) => {
+export const EmailLoginService = async (req: Request, res: Response, next: NextFunction) => {
     const inputs = <UserLoginInput>req.body;
     const errors = await validateInput(UserLoginInput, inputs);
     if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
     const { email, password } = inputs;
-
     try {
-        const user = await User.findOne({ email: email });
+        const user = await User.findOne({ email: email, authMethods: { $in: ["password"] } });
         if (user) {
             const validation = await ValidatePassword(password, user.password, user.salt);
             if (validation) {
@@ -153,12 +228,12 @@ export const UserLoginService = async (req: Request, res: Response, next: NextFu
 
                 user.refreshToken = refreshToken;
                 user.save();
-                const responseData = {
-                    user: { id: user._id, name: user.name, email: user.email },
+                const data = {
+                    user: { id: user._id, name: user.displayName, email: user.email },
                     accessToken,
                     refreshToken,
                 };
-                const response = GenerateResponseData(responseData, successMsg.user_auth_success, 200);
+                const response = GenerateResponseData(data, 200);
                 return res.status(200).json(response);
             } else {
                 return next(createHttpError(401, "Credentials are not valid."));
@@ -180,7 +255,7 @@ export const GoogleLoginService = async (req: Request, res: Response, next: Next
     try {
         const { user, refreshToken } = await findOrCreateUser(idToken);
         const accessToken = await GenerateAccessToken({ _id: user._id });
-        const response = GenerateResponseData({ user, accessToken, refreshToken }, successMsg.user_auth_success, 200);
+        const response = GenerateResponseData({ user, accessToken, refreshToken }, 200);
         return res.status(200).json(response);
     } catch (error) {
         console.error("Error verifying Google ID token:", error);
@@ -236,16 +311,14 @@ async function findOrCreateUser(idToken: string) {
 
         // Check if the user already exists by email
         let user = await User.findOne({ email });
+        if (user.authMethods.includes("google")) {
+            user.refreshToken = refreshToken;
+            user.lastLogin = Date.now();
+            await user.save();
+        }
         if (user) {
-            if (!user.googleId) {
-                user.googleId = sub;
-                user.name = name;
-                user.authProvider.push("google");
-                user.refreshToken = refreshToken;
-                user.emailVerified = email_verified;
-                user.profilePicture = picture;
-                await user.save();
-            }
+            // if (!user.googleId) { user.googleId = sub; user.name = name; user.authProvider.push("google"); user.refreshToken = refreshToken; user.emailVerified = email_verified; user.profilePhoto =
+            //     picture; await user.save(); } else { }
         } else {
             user = new User({
                 googleId: sub,
@@ -253,7 +326,7 @@ async function findOrCreateUser(idToken: string) {
                 name,
                 authProvider: ["google"],
                 emailVerified: email_verified,
-                profilePicture: picture,
+                profilePhoto: picture,
                 refreshToken: refreshToken,
             });
             await user.save();

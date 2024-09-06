@@ -4,6 +4,15 @@ import { IUser } from "../interfaces";
 // Social Authentication Schema const SocialAuthSchema = new Schema({ provider: { type: String, enum: ["email", "google", "facebook"], required: true }, providerId: { type: String, required: true },
 // accessToken: { type: String, required: true }, refreshToken: String, });
 
+// Schema for individual authentication providers
+
+const AuthProviderSchema = new Schema({
+    providerName: { type: String, required: true }, // e.g., "Google", "Facebook"
+    providerId: { type: String, required: true }, // Unique ID from the provider
+    providerPhotoURL: { type: String, default: undefined }, // Photo URL from the provider (optional)
+    profileName: { type: String }, // user profile name
+});
+
 const addressSchema = new mongoose.Schema({
     formattedAddress: { type: String, required: true },
     lat: { type: Number, required: true },
@@ -28,7 +37,7 @@ const PreferenceSchema = new Schema({
 
 const UserSchema = new Schema(
     {
-        name: { type: String, required: true }, //required
+        displayName: { type: String, required: true }, //required
         email: { type: String, required: true, unique: true, lowercase: true }, //required
         emailOtp: String,
         emailOtpExpiry: { type: Date },
@@ -37,23 +46,21 @@ const UserSchema = new Schema(
         salt: { type: String },
         passwordResetToken: String,
         passwordResetExpires: Date,
-        profilePicture: { type: String },
+        profilePhoto: { type: String },
         mobile: { type: String },
         callingCode: { type: String },
         mobileOtp: { type: Number },
         mobileOtpExpiry: { type: Date },
         mobileVerified: { type: Boolean, default: false },
-        lastLogin: Date,
+        lastLogin: { type: Number },
         isActive: { type: Boolean, default: true },
-        preferences: PreferenceSchema || undefined,
+        authMethods: { type: [String], enum: ["password", "google", "facebook"], default: [] },
+        providers: { type: [AuthProviderSchema], default: undefined },
         addresses: { type: [addressSchema], default: undefined },
-        googleId: { type: String, unique: true, sparse: true, default: undefined },
-        facebookId: { type: String, unique: true, sparse: true, default: undefined },
-        xId: { type: String, unique: true, sparse: true, default: undefined },
-        authProvider: { type: [String], required: true },
-        refreshToken: { type: String, unique: true, sparse: true , default: undefined },
         cart: { type: [CartSchema], default: undefined },
         orders: { type: [{ type: Schema.Types.ObjectId, ref: "order" }], default: undefined },
+        preferences: { type: [PreferenceSchema], default: undefined },
+        refreshToken: { type: String, unique: true, sparse: true, default: undefined },
     },
     {
         toJSON: {

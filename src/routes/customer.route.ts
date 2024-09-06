@@ -4,7 +4,7 @@ import {
     CreateOrder,
     CreatePayment,
     CustomerLogin,
-    CustomerSignUp,
+    // CustomerSignUp,
     CustomerOTPVerify,
     DeleteCart,
     EditCustomerProfile,
@@ -12,7 +12,7 @@ import {
     GetCustomerProfile,
     GetOrderById,
     GetOrders,
-    RequestOtp,
+    // RequestOtp,
     VerifyOffer,
 } from "../controllers";
 import { Authenticate } from "../middleware";
@@ -21,7 +21,7 @@ import { Offer } from "../models/offer.model";
 const router = express.Router();
 
 // Sign up / Create Customer
-router.post("/signup", CustomerSignUp);
+// router.post("/signup", CustomerSignUp);
 
 // Login
 router.post("/login", CustomerLogin);
@@ -33,7 +33,7 @@ router.use(Authenticate);
 router.patch("/verify", CustomerOTPVerify);
 
 //  OTP / request OTP
-router.get("/otp", RequestOtp);
+// router.get("/otp", RequestOtp);
 
 // Profile
 router.get("/profile", GetCustomerProfile);

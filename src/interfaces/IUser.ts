@@ -1,35 +1,37 @@
-// Social Authentication Interface
-import { Document, Schema, Model } from "mongoose";
+import { Document } from "mongoose";
 
-// Address Interface
+interface IAuthProvider {
+    providerName: string; // e.g., "Google", "Facebook"
+    providerId: string; // Unique ID from the provider
+    providerPhotoURL?: string; // Photo URL from the provider (optional)
+    profileName?: string; // User profile name (optional)
+}
+
 interface IAddress {
-    formattedAddress: string;
-    lat: number;
-    lng: number;
-    placeId?: string; // Optional, unique
-    placeName?: string; // Optional
-    types?: string[]; // Optional
-    isDefault?: boolean; // Optional, default: false
+    formattedAddress: string; // Required
+    lat: number; // Required
+    lng: number; // Required
+    placeId: string; // Required
+    placeName?: string; // Place name (optional)
+    types?: string[]; // Types (optional)
+    isDefault?: boolean; // Indicates if this is the default address (optional)
 }
 
-// Cart Interface
-interface ICart {
-    food: Schema.Types.ObjectId; // Reference to the food document
-    unit: number;
+interface ICartItem {
+    food: string; // ObjectId reference to "food"
+    unit: number; // Quantity of the food item
 }
 
-// Preference Interface
 interface IPreference {
-    notifications?: boolean; // Optional, default: true
-    theme?: "light" | "dark"; // Optional, default: "light"
-    locale?: string; // Optional
-    timezone?: string; // Optional
+    notifications?: boolean; // Default: true
+    theme?: "light" | "dark"; // Enum: ["light", "dark"], Default: "light"
+    locale?: string; // Locale (optional)
+    timezone?: string; // Timezone (optional)
 }
 
-// User Interface
 export interface IUser extends Document {
-    name: string; // Required
-    email: string; // Required, unique, lowercase
+    displayName: string; // Required
+    email: string; // Required, unique
     emailOtp?: string;
     emailOtpExpiry?: Date;
     emailVerified?: boolean; // Default: false
@@ -37,22 +39,20 @@ export interface IUser extends Document {
     salt?: string;
     passwordResetToken?: string;
     passwordResetExpires?: Date;
-    profilePicture?: string;
+    profilePhoto?: string;
     mobile?: string;
     callingCode?: string;
     mobileOtp?: number;
     mobileOtpExpiry?: Date;
     mobileVerified?: boolean; // Default: false
-    lastLogin?: Date;
+    lastLogin: number;
     isActive?: boolean; // Default: true
-    preferences?: IPreference;
+    providers?: IAuthProvider[];
+    authMethods: ("password" | "google" | "facebook")[]; // Array of authentication methods
     addresses?: IAddress[];
-    googleId?: string; // Unique, sparse
-    facebookId?: string; // Unique, sparse
-    xId?: string; // Unique, sparse
-    authProvider: string[]; // Array of strings
-    refreshToken: string;
-    cart?: ICart[];
-    orders?: Schema.Types.ObjectId[];
+    cart?: ICartItem[];
+    orders?: string[]; // Array of ObjectId references to "order"
+    preferences?: IPreference[];
+    refreshToken?: string; // Unique, sparse
 }
 export default IUser;

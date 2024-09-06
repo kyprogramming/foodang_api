@@ -44,7 +44,7 @@ const CustomerSchema = new Schema(
         passwordResetToken: String,
         passwordResetExpires: Date,
         name: { type: String },
-        profilePicture: { type: String },
+        profilePhoto: { type: String },
         address: { type: String },
         mobile: { type: String, required: true },
         mobileOtp: { type: Number },

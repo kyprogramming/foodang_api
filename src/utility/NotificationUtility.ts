@@ -7,19 +7,18 @@ import { twilioConfig, twilioClient } from "../config";
 /* ------------------- OTP --------------------- */
 
 export const GenerateOtp = () => {
-    const otp = Math.floor(10000 + Math.random() * 900000);
-    let expiry = new Date();
-    expiry.setTime(new Date().getTime() + 30 * 60 * 1000);
-
-    return { otp, expiry };
+    let otp:number = Math.floor(100000 + Math.random() * 900000);
+    let expireAt = new Date();
+    expireAt.setTime(new Date().getTime() + 5 * 60 * 1000);
+    return { otp, expireAt };
 };
 
-export const SendOTP = async (otp: number, toPhoneNumber: string) => {
+export const SendOTP = async (otp: number, callingCode: string, toPhoneNumber: string) => {
     try {
         return await twilioClient.messages.create({
-            body: `Your OTP is ${otp}`,
+            body: `Your XGo OTP is ${otp}`,
             from: twilioConfig.TWILIO_PHONE_NUMBER,
-            to: `+44${toPhoneNumber}`,
+            to: `${callingCode}${toPhoneNumber}`,
         });
     } catch (error: any) {
         console.log(error);
