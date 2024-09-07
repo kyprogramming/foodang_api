@@ -19,13 +19,13 @@ interface Payload {
 type Provider = "email" | "google" | "facebook";
 
 // Get available Food Availability router.post("/", AddUser);
-router.post("/register", UserRegister);
-router.post("/verify-mobile-otp-register-user", VerifyMobileOtpAndRegister);
-router.post("/verify-email-otp", VerifyEmailOTP);
-router.post("/login", UserLogin);
 router.get("/check-email/:email", CheckEmailExist);
 router.post("/send-otp", SendOtp);
+router.post("/register", VerifyMobileOtpAndRegister);
+router.post("/login", UserLogin);
 router.post("/auth/google", GoogleLogin);
+// router.post("/register", UserRegister);
+router.post("/verify-email-otp", VerifyEmailOTP);
 
 // Authentication
 router.use(Authenticate);

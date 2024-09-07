@@ -29,3 +29,13 @@
 {"level":"error","message":"Error: otp validation failed: otp: Path `otp` is required.","service":"user-service","statusCode":500,"timestamp":"2024-09-06 22:09:46"}
 {"level":"error","message":"Error: otp validation failed: otp: Path `otp` is required.","service":"user-service","statusCode":500,"timestamp":"2024-09-06 22:11:53"}
 {"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-06 22:40:59"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 06:02:59"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 06:05:38"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 06:20:39"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 06:21:48"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 06:22:57"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 06:29:47"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 06:30:35"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 06:31:11"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 06:31:18"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 06:31:22"}

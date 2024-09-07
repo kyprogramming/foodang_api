@@ -66,7 +66,7 @@ export const CheckEmailExistService = async (req: Request, res: Response, next: 
     }
 };
 
-// User OTP request
+// User OTP request to sent OTP on mobile device
 export const SendOtpService = async (req: Request, res: Response, next: NextFunction) => {
     const { email, mobile, callingCode } = req.body;
     try {
@@ -87,7 +87,7 @@ export const SendOtpService = async (req: Request, res: Response, next: NextFunc
                 const newOTP = new Otp(otpPayload);
                 await newOTP.save();
             }
-            // TODO: uncomment below lines to sent OTP to mobile device
+            //! TODO:  uncomment below lines to sent OTP to mobile device
 
             // const sendCode = await SendOTP(generateOtp.otp, callingCode, mobile);
 
@@ -134,7 +134,7 @@ export const VerifyMobileOtpAndRegisterService = async (req: Request, res: Respo
             const response = GenerateResponseData(null, 200);
             return res.status(200).json(response);
         }
-        return next(createHttpError(401, "Error while User registration, please try again."));
+        return next(createHttpError(500, "Failed to register user, please try again later"));
     } catch (error: any) {
         return next(InternalServerError(error.message));
     }
@@ -177,7 +177,6 @@ export const UserRegisterService: RequestHandler = async (req, res, next) => {
             const newOTP = new Otp(otpPayload);
             await newOTP.save();
 
-            const data = { expireAt };
             const response = GenerateResponseData(null, 200);
             return res.status(200).json(response);
         } else {
@@ -263,6 +262,61 @@ export const GoogleLoginService = async (req: Request, res: Response, next: Next
     }
 };
 
+
+async function findOrCreateUser(idToken: string) {
+    const client = new OAuth2Client("498117270511-dfrl1g10qhv935j52vvbbhtsibkssjpe.apps.googleusercontent.com");
+    try {
+        // Verify the Google ID token
+        const ticket = await client.verifyIdToken({
+            idToken,
+            audience: "498117270511-dfrl1g10qhv935j52vvbbhtsibkssjpe.apps.googleusercontent.com",
+        });
+
+        const googlePayload = ticket.getPayload();
+        const { sub, email, name, email_verified, picture } = googlePayload;
+        // console.log("GOOGLE PAYLOAD:", payload);
+
+        if (!email_verified) {
+            throw new Error("Your email is not verified with Google. Please verify your email and try again.");
+        }
+
+        const refreshToken = GenerateRefreshToken();
+
+        // Check if the user already exists by email
+        let user = await User.findOne({ email });
+        if (user) {
+            if (user.authMethods.includes("google")) {
+                user.refreshToken = refreshToken;
+                user.lastLogin = Date.now();
+                await user.save();
+            } else {
+                user.authMethods.push("google");
+                user.refreshToken = refreshToken;
+                user.lastLogin = Date.now();
+                user.providers = [{ providerName: "google", providerId: sub, providerPhotoURL: picture, profileName: name }]; // add provider
+                await user.save();
+            }
+        } else {
+            user = new User({
+                email,
+                displayName: name,
+                authMethods: ["google"],
+                emailVerified: email_verified,
+                refreshToken: refreshToken,
+                lastLogin: Date.now(),
+                providers: [{ providerName: "google", providerId: sub, providerPhotoURL: picture, profileName: name }],
+            });
+            await user.save();
+        }
+        // Return the user object (optionally generate and return JWT tokens)
+        return { user, refreshToken };
+    } catch (error) {
+        console.error("ERROR: findOrCreateUser: ", error);
+        throw new Error("Failed while authenticating user in Google ");
+    }
+}
+
+
 // Secured Services
 export const UserLogoutService = async (req: Request, res: Response, next: NextFunction) => {
     // TODO: validate user id
@@ -289,52 +343,3 @@ export const FindUser = async (id: String | undefined = "", email: string = "") 
         return await User.findById(id);
     }
 };
-
-async function findOrCreateUser(idToken: string) {
-    const client = new OAuth2Client("498117270511-dfrl1g10qhv935j52vvbbhtsibkssjpe.apps.googleusercontent.com");
-    try {
-        // Verify the Google ID token
-        const ticket = await client.verifyIdToken({
-            idToken,
-            audience: "498117270511-dfrl1g10qhv935j52vvbbhtsibkssjpe.apps.googleusercontent.com",
-        });
-
-        const googlePayload = ticket.getPayload();
-        const { sub, email, name, email_verified, picture } = googlePayload;
-        // console.log("GOOGLE PAYLOAD:", payload);
-
-        if (!email_verified) {
-            throw new Error("Your email is not verified with Google. Please verify your email and try again.");
-        }
-
-        const refreshToken = GenerateRefreshToken();
-
-        // Check if the user already exists by email
-        let user = await User.findOne({ email });
-        if (user.authMethods.includes("google")) {
-            user.refreshToken = refreshToken;
-            user.lastLogin = Date.now();
-            await user.save();
-        }
-        if (user) {
-            // if (!user.googleId) { user.googleId = sub; user.name = name; user.authProvider.push("google"); user.refreshToken = refreshToken; user.emailVerified = email_verified; user.profilePhoto =
-            //     picture; await user.save(); } else { }
-        } else {
-            user = new User({
-                googleId: sub,
-                email,
-                name,
-                authProvider: ["google"],
-                emailVerified: email_verified,
-                profilePhoto: picture,
-                refreshToken: refreshToken,
-            });
-            await user.save();
-        }
-        // Return the user object (optionally generate and return JWT tokens)
-        return { user, refreshToken };
-    } catch (error) {
-        console.error("ERROR: findOrCreateUser: ", error);
-        throw new Error("Failed while authenticating user in Google ");
-    }
-}
