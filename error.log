@@ -79,3 +79,50 @@
 {"level":"error","message":"Error: Email id is not registered, Please register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 17:57:30"}
 {"level":"error","message":"Error: Email id is not registered, Please register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 17:57:34"}
 {"level":"error","message":"Error: Email id is not registered, Please register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 17:57:42"}
+{"level":"error","message":"Error: Email id is not registered, Please register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 18:05:15"}
+{"level":"error","message":"Error: Email id is not registered, Please register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 18:05:42"}
+{"level":"error","message":"Error: Email id is not registered, Please register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 18:07:27"}
+{"level":"error","message":"Error: Email id is not registered, Please register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 18:11:42"}
+{"level":"error","message":"Error: Email id is not registered, Please register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 19:07:32"}
+{"level":"error","message":"Error: Email id is not registered, Please register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 19:07:53"}
+{"level":"error","message":"Error: Please check your email and password, and try again.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 19:31:34"}
+{"level":"error","message":"Error: Please check your email and password, and try again.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 19:35:07"}
+{"level":"error","message":"Error: Make sure you enter the correct email or sign up to create a new account.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 19:36:32"}
+{"level":"error","message":"Error: Make sure you enter the correct email or sign up to create a new account.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 19:37:46"}
+{"level":"error","message":"Error: Make sure you enter the correct email or sign up to create a new account.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 19:38:59"}
+{"level":"error","message":"Error: Make sure you enter the correct email or sign up to create a new account.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 19:39:28"}
+{"level":"error","message":"Error: Make sure you enter the correct email or sign up to create a new account.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 19:40:19"}
+{"level":"error","message":"Error: Make sure you enter the correct email or sign up to create a new account.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 19:42:20"}
+{"level":"error","message":"Error: Make sure you enter the correct email or sign up to create a new account.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 19:43:10"}
+{"level":"error","message":"Error: Email id is not registered with us._Continue to register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 20:32:08"}
+{"level":"error","message":"Error: Email id is not registered with us._Continue to register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 20:35:42"}
+{"level":"error","message":"Error: Email id is not registered with us._Continue to register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 20:36:14"}
+{"level":"error","message":"Error: Email id is not registered with us._Continue to register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 20:37:19"}
+{"level":"error","message":"Error: Email id is not registered with us._Continue to register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 20:37:45"}
+{"level":"error","message":"Error: Email id is not registered with us._Continue to register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 20:45:22"}
+{"level":"error","message":"Error: Email id is not registered with us._Continue to register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 20:45:28"}
+{"level":"error","message":"Error: Email id is not registered with us._Continue to register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 20:45:33"}
+{"level":"error","message":"Error: Email id is not registered with us._Continue to register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 20:45:39"}
+{"level":"error","message":"Error: Email id is not registered with us._Continue to register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 20:45:43"}
+{"level":"error","message":"Error: Email id is not registered with us._Continue to register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 20:45:48"}
+{"level":"error","message":"Error: Email id is not registered with us._Continue to register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 20:46:20"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 20:49:56"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 20:50:07"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 20:50:16"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 20:51:27"}
+{"level":"error","message":"Error: Email id is not registered with us._Continue to register.","service":"user-service","statusCode":404,"timestamp":"2024-09-07 21:02:30"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 21:03:15"}
+{"level":"error","message":"Error: Verification failed, OTP doesn't match","service":"user-service","statusCode":400,"timestamp":"2024-09-07 21:03:23"}
+{"level":"error","message":"Error: Invalid credentials._Verify your credentials.","service":"user-service","statusCode":401,"timestamp":"2024-09-07 21:43:50"}
+{"level":"error","message":"Error: Route - /api/v0/refresh-token  Not Found","service":"user-service","statusCode":404,"timestamp":"2024-09-07 21:43:50"}
+{"level":"error","message":"Error: Invalid credentials._Verify your credentials.","service":"user-service","statusCode":401,"timestamp":"2024-09-07 21:43:58"}
+{"level":"error","message":"Error: Route - /api/v0/refresh-token  Not Found","service":"user-service","statusCode":404,"timestamp":"2024-09-07 21:43:58"}
+{"level":"error","message":"Error: Invalid credentials._Verify your credentials.","service":"user-service","statusCode":401,"timestamp":"2024-09-07 21:44:06"}
+{"level":"error","message":"Error: Route - /api/v0/refresh-token  Not Found","service":"user-service","statusCode":404,"timestamp":"2024-09-07 21:44:06"}
+{"level":"error","message":"Error: Invalid credentials._Verify your credentials.","service":"user-service","statusCode":401,"timestamp":"2024-09-07 21:44:19"}
+{"level":"error","message":"Error: Route - /api/v0/refresh-token  Not Found","service":"user-service","statusCode":404,"timestamp":"2024-09-07 21:44:19"}
+{"level":"error","message":"Error: Invalid credentials._Verify your credentials.","service":"user-service","statusCode":401,"timestamp":"2024-09-07 21:45:10"}
+{"level":"error","message":"Error: Route - /api/v0/refresh-token  Not Found","service":"user-service","statusCode":404,"timestamp":"2024-09-07 21:45:10"}
+{"level":"error","message":"Error: Invalid credentials._Verify your credentials.","service":"user-service","statusCode":400,"timestamp":"2024-09-07 21:50:35"}
+{"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-07 21:57:26"}
+{"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-07 21:57:33"}

@@ -5,7 +5,7 @@ import { Transaction } from "../models";
 import {
     customResponse,
     GeneratePassword,
-    GenerateResponseData,
+    GenerateSuccessResponse,
     GenerateSalt,
     GenerateToken,
     GenerateValidationErrorResponse,
@@ -46,7 +46,7 @@ export const SignupAdminService: RequestHandler = async (req, res, next) => {
         });
 
         // TODO: send mail // await sendEmail();
-        const response = GenerateResponseData(createdAdmin, successMsg.admin_create_success, 200);
+        const response = GenerateSuccessResponse(createdAdmin, 200, successMsg.admin_create_success);
         return res.status(200).json(response);
     } catch (error) {
         return next(InternalServerError(error.message));
@@ -74,8 +74,8 @@ export const AdminLoginService = async (req: Request, res: Response, next: NextF
                     name: existingUser.name,
                 });
 
-                // const data = GenerateResponseData(signature, "POST", "Admin login", "admin/login");
-                const response = GenerateResponseData(signature, successMsg.admin_auth_success, 200);
+                // const data = GenerateSuccessResponse(signature, "POST", "Admin login", "admin/login");
+                const response = GenerateSuccessResponse(signature, 200, successMsg.admin_auth_success);
                 return res.status(200).json(response);
             }
         }
@@ -103,8 +103,8 @@ export const AdminLogoutService = async (req: Request, res: Response, next: Next
                     name: existingUser.name,
                 });
 
-                // const data = GenerateResponseData(signature, "POST", "Admin login", "admin/login");
-                const response = GenerateResponseData(signature, successMsg.admin_auth_success, 200);
+                // const data = GenerateSuccessResponse(signature, "POST", "Admin login", "admin/login");
+                const response = GenerateSuccessResponse(signature, 200, successMsg.admin_auth_success);
                 return res.status(200).json(response);
             }
         }
@@ -150,7 +150,7 @@ export const CreateRestaurantService = async (req: Request, res: Response, next:
             lng: 0,
         });
 
-        const response = GenerateResponseData(newRestaurant, successMsg.restaurant_create_success, 200);
+        const response = GenerateSuccessResponse(newRestaurant, 200, successMsg.restaurant_create_success);
         return res.status(200).json(response);
     } catch (error: any) {
         return next(InternalServerError(error.message));
@@ -162,7 +162,7 @@ export const GetRestaurantsService = async (req: Request, res: Response, next: N
     try {
         const restaurants = await Restaurant.find();
         if (restaurants) {
-            const response = GenerateResponseData(restaurants, successMsg.restaurant_create_success, 200);
+            const response = GenerateSuccessResponse(restaurants, 200, successMsg.restaurant_create_success);
             return res.status(200).json(response);
         }
         return next(createHttpError(404, errorMsg.restaurant_not_found));
@@ -179,7 +179,7 @@ export const GetRestaurantByIDService = async (req: Request, res: Response, next
     try {
         const restaurant = await FindRestaurant(restaurantId);
         if (restaurant) {
-            const response = GenerateResponseData(restaurant, successMsg.restaurant_found_success, 200);
+            const response = GenerateSuccessResponse(restaurant, 200, successMsg.restaurant_found_success);
             return res.status(200).json(response);
         }
         return next(createHttpError(404, errorMsg.restaurant_not_found));
@@ -193,7 +193,7 @@ export const GetTransactionsService = async (req: Request, res: Response, next: 
     try {
         const transactions = await Transaction.find();
         if (transactions) {
-            const response = GenerateResponseData(transactions, "Transactions data  found", 200);
+            const response = GenerateSuccessResponse(transactions, 200, "Transactions data  found");
             return res.status(200).json(response);
         }
         return next(createHttpError(404, "Transactions data not available"));
@@ -210,7 +210,7 @@ export const GetTransactionByIdService = async (req: Request, res: Response, nex
     try {
         const transaction = await Transaction.findById(transId);
         if (transaction) {
-            const response = GenerateResponseData(transaction, "Transaction data  found", 200);
+            const response = GenerateSuccessResponse(transaction, 200, "Transaction data  found");
             return res.status(200).json(response);
         }
         return next(createHttpError(404, "Transactions data not available"));
@@ -233,7 +233,7 @@ export const VerifyDeliveryUserService = async (req: Request, res: Response, nex
             profile.verified = status;
             const result = await profile.save();
 
-            const response = GenerateResponseData(result, "Transaction data  found", 200);
+            const response = GenerateSuccessResponse(result, 200, "Transaction data  found");
             return res.status(200).json(response);
         }
         return next(createHttpError(404, "Unable to verify Delivery User"));
@@ -247,7 +247,7 @@ export const GetDeliveryUsersService = async (req: Request, res: Response, next:
     try {
         const deliveryUsers = await DeliveryUser.find();
         if (deliveryUsers) {
-            const response = GenerateResponseData(deliveryUsers, "Transaction data  found", 200);
+            const response = GenerateSuccessResponse(deliveryUsers, 200, "Transaction data  found");
             return res.status(200).json(response);
         }
         return next(createHttpError(404, "Unable to get Delivery Users"));

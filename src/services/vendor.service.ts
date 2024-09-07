@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { CreateFoodInput } from "../dto";
-import { GenerateResponseData, GenerateValidationErrorResponse, validateInput } from "../utility";
+import { GenerateSuccessResponse, GenerateValidationErrorResponse, validateInput } from "../utility";
 
 import createHttpError, { InternalServerError } from "http-errors";
 import IVendor from "../interfaces/IVendor";
@@ -18,7 +18,7 @@ export const AddVendorService = async (req: Request, res: Response, next: NextFu
         const newVendor = new Vendor(sampleVendor);
         const savedVendor = await newVendor.save();
         if (savedVendor) {
-            const response = GenerateResponseData(savedVendor, "Vendor added successfully", 201);
+            const response = GenerateSuccessResponse(savedVendor, 201, "Vendor added successfully");
             return res.status(200).json(response);
         }
 

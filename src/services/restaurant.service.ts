@@ -3,7 +3,7 @@ import { CreateFoodInput, CreateOfferInputs, EditRestaurantInput, InactivateOffe
 import { Food } from "../models";
 import { Offer } from "../models/offer.model";
 import { Order } from "../models/order.model";
-import { GenerateResponseData, GenerateToken, GenerateValidationErrorResponse, validateInput, ValidatePassword } from "../utility";
+import { GenerateSuccessResponse, GenerateToken, GenerateValidationErrorResponse, validateInput, ValidatePassword } from "../utility";
 import { cloudinary } from "../config";
 import { deleteFile } from "../utility/deleteFiles";
 import { FindRestaurant } from ".";
@@ -32,7 +32,7 @@ export const RestaurantLoginService = async (req: Request, res: Response, next: 
                     email: existingUser.email,
                     name: existingUser.name,
                 });
-                const response = GenerateResponseData(signature, "Authenticated successfully.", 200);
+                const response = GenerateSuccessResponse(signature, 200, "Authenticated successfully.", );
                 return res.status(200).json(response);
             }
         }
@@ -52,7 +52,7 @@ export const GetRestaurantProfileService = async (req: Request, res: Response, n
     try {
         if (user) {
             const existingRestaurant = await FindRestaurant(user._id);
-            const response = GenerateResponseData(existingRestaurant, "Profile data found.", 200);
+            const response = GenerateSuccessResponse(existingRestaurant, 200, "Profile data found.");
             return res.status(200).json(response);
         }
         return next(createHttpError(401, "restaurant Information Not Found"));
@@ -125,7 +125,7 @@ export const UpdateRestaurantCoverImageService = async (req: Request, res: Respo
                 }
                 restaurant.coverImages.push(imageUrlList);
                 const saveResult = await restaurant.save();
-                const response = GenerateResponseData(saveResult, "Profile updated successfully.", 201);
+                const response = GenerateSuccessResponse(saveResult, 201, "Profile updated successfully.");
                 return res.status(200).json(response);
             }
         }
@@ -156,7 +156,7 @@ export const UpdateRestaurantStatusService = async (req: Request, res: Response,
                 }
                 const saveResult = await existingRestaurant.save();
 
-                const response = GenerateResponseData(saveResult, "Profile data saved.", 200);
+                const response = GenerateSuccessResponse(saveResult, 200, "Profile data saved.");
                 return res.status(200).json(response);
             }
         }
@@ -216,7 +216,7 @@ export const AddFoodService = async (req: Request, res: Response, next: NextFunc
                     restaurant.foods.push(food);
                     const result = await restaurant.save();
 
-                    const response = GenerateResponseData(result, "Profile data found.", 200);
+                    const response = GenerateSuccessResponse(result, 200, "Profile data found.");
                     return res.status(200).json(response);
                 }
             }
@@ -238,7 +238,7 @@ export const GetFoodsService = async (req: Request, res: Response, next: NextFun
             const foods = await Food.find({ restaurantId: user._id });
 
             if (foods !== null) {
-                const response = GenerateResponseData(foods, "data found.", 200);
+                const response = GenerateSuccessResponse(foods, 200, "data found.");
                 return res.status(200).json(response);
             }
         }
@@ -261,7 +261,7 @@ export const GetCurrentOrdersService = async (req: Request, res: Response, next:
             const orders = await Order.find({ restaurantId: user._id }).populate("items.food");
 
             if (orders) {
-                const response = GenerateResponseData(orders, "data found.", 200);
+                const response = GenerateSuccessResponse(orders, 200, "data found.");
                 return res.status(200).json(response);
             }
         }
@@ -282,7 +282,7 @@ export const GetOrderDetailsService = async (req: Request, res: Response, next: 
             const order = await Order.findById(orderId).populate("items.food");
 
             if (order) {
-                const response = GenerateResponseData(order, "Data found.", 200);
+                const response = GenerateSuccessResponse(order, 200, "Data found.");
                 return res.status(200).json(response);
             }
         }
@@ -312,7 +312,7 @@ export const ProcessOrderService = async (req: Request, res: Response, next: Nex
             const orderResult = await order.save();
 
             if (orderResult) {
-                const response = GenerateResponseData(orderResult, "order processed.", 200);
+                const response = GenerateSuccessResponse(orderResult, 200, "order processed.");
                 return res.status(200).json(response);
             }
         }
@@ -353,7 +353,7 @@ export const AddOfferService = async (req: Request, res: Response, next: NextFun
                     minValue,
                     restaurants: [restaurant],
                 });
-                const response = GenerateResponseData(offer, "Offer added.", 201);
+                const response = GenerateSuccessResponse(offer,201, "Offer added.");
                 return res.status(200).json(response);
             }
         }
@@ -390,7 +390,7 @@ export const GetOffersService = async (req: Request, res: Response, next: NextFu
                     }
                 });
             }
-            const response = GenerateResponseData(currentOffer, "Offer found.", 200);
+            const response = GenerateSuccessResponse(currentOffer, 200, "Offer found.");
             return res.status(200).json(response);
         }
         return next(createHttpError(404, "Offers Not available"));
@@ -434,7 +434,7 @@ export const EditOfferService = async (req: Request, res: Response, next: NextFu
 
                     const result = await currentOffer.save();
 
-                    const response = GenerateResponseData(result, "Offer added.", 200);
+                    const response = GenerateSuccessResponse(result, 200, "Offer added.");
                     return res.status(200).json(response);
                 }
             }
@@ -468,7 +468,7 @@ export const DeleteOfferService = async (req: Request, res: Response, next: Next
                     currentOffer.isActive = !currentOffer.isActive;
                     const result = await currentOffer.save();
 
-                    const response = GenerateResponseData(result, "offer inactivated.", 200);
+                    const response = GenerateSuccessResponse(result, 200, "offer inactivated.");
                     return res.status(200).json(response);
                 }
             }

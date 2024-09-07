@@ -3,7 +3,6 @@ export interface IResponseT<T = null> {
     data?: T;
     statusCode: number;
     message: string;
-    detailMessage?: string;
     error?: any;
 }
 

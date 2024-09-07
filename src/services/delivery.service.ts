@@ -6,7 +6,7 @@ import { Customer, DeliveryUser, Food, Restaurant } from "../models";
 import { Offer } from "../models";
 import { Order } from "../models";
 import { Transaction } from "../models";
-import { GenerateOtp, GeneratePassword, GenerateResponseData, GenerateSalt, GenerateToken, GenerateValidationErrorResponse, SendOTP, validateInput, ValidatePassword } from "../utility";
+import { GenerateOtp, GeneratePassword, GenerateSuccessResponse, GenerateSalt, GenerateToken, GenerateValidationErrorResponse, SendOTP, validateInput, ValidatePassword } from "../utility";
 import createHttpError, { InternalServerError } from "http-errors";
 
 /** Delivery user signup
@@ -45,7 +45,7 @@ export const DeliverySignUpService = async (req: Request, res: Response, next: N
                 email: result.email,
                 verified: result.verified,
             });
-            const response = GenerateResponseData(signature, "User created", 201);
+            const response = GenerateSuccessResponse(signature, 201, "User created");
             return res.status(201).json(response);
         }
         return next(createHttpError(401, "Error while creating Delivery user"));
@@ -82,7 +82,7 @@ export const DeliveryLoginService = async (req: Request, res: Response, next: Ne
                     verified: deliveryUser.verified,
                 };
 
-                const response = GenerateResponseData(data, "Login successful.", 200);
+                const response = GenerateSuccessResponse(data, 200, "Login successful.");
                 return res.status(200).json(response);
             }
         }
@@ -103,7 +103,7 @@ export const GetDeliveryProfileService = async (req: Request, res: Response, nex
             const profile = await DeliveryUser.findById(deliveryUser._id);
 
             if (profile) {
-                const response = GenerateResponseData(profile, "Profile data found.", 200);
+                const response = GenerateSuccessResponse(profile, 200, "Profile data found.");
                 return res.status(200).json(response);
             }
         }
@@ -136,7 +136,7 @@ export const EditDeliveryProfileService = async (req: Request, res: Response, ne
                 profile.address = address;
                 const result = await profile.save();
 
-                const response = GenerateResponseData(result, "Profile data updated.", 201);
+                const response = GenerateSuccessResponse(result, 201, "Profile data updated.");
                 return res.status(201).json(response);
             }
         }
@@ -169,7 +169,7 @@ export const UpdateDeliveryUserStatusService = async (req: Request, res: Respons
 
                 const result = await profile.save();
 
-                const response = GenerateResponseData(result, "profile status updated", 201);
+                const response = GenerateSuccessResponse(result, 201, "profile status updated");
                 return res.status(201).json(response);
             }
         }

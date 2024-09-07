@@ -1,12 +1,12 @@
 import { IResponseT } from "../interfaces";
 
-export const customResponse = <T>({ success, data, error, message, statusCode }: IResponseT<T>) => {
+export const customResponse = <T>({ success, data, statusCode, message, error }: IResponseT<T>) => {
     return {
         success,
         data,
-        error,
-        message,
         statusCode,
+        message,
+        error,
     };
 };
 

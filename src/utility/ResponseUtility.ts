@@ -1,37 +1,50 @@
 import customResponse from "./customResponse";
 
-export const GenerateResponseData = (data, code, msg?, type?, desc?, uri?) => {
-    let response: any = {};
+type SuccessResponse<T> = {
+    success: boolean;
+    data: T;
+    statusCode: number;
+    message?: string;
+    detailMsg?: string;
+    request?: {
+        type?: string;
+        description?: string;
+        url?: string;
+    };
+};
 
+export const GenerateSuccessResponse = <T>(
+    data: T | string,
+    statusCode: number,
+    message?: string,
+    detailMsg?: string,
+    type?: string,
+    desc?: string,
+    uri?: string
+): SuccessResponse<T | string | any[]> => {
+    let responseData: T | string | any[];
+
+    // Determine if `data` is string or an object
     if (typeof data === "string") {
-        response.message = data;
+        responseData = data; // If string, set directly as the response message
     } else if (typeof data === "object") {
         if (Array.isArray(data)) {
-            if (data.every((item) => typeof item === "object" && item !== null)) {
-                response = data;
-            } else {
-                response = [...data];
-            }
+            responseData = [...data]; // If array, spread into a new array
         } else if (data !== null) {
-            response = data;
+            responseData = { ...data }; // If it's an object, copy the object
+        } else {
+            responseData = "Unexpected data type"; // Handle potential null case
         }
-    } else {
-        response.message = "Unexpected data type";
-        response.error = "Data type not supported";
     }
-
-    // TODO: needs to be added in future
-
-    // response.request = { type: type, description: desc, url: `${envConfig.API_URL}/${envConfig.API_VERSION}/${uri}` };
-
-    return customResponse<typeof data>({
+    // Construct the full response
+    return {
         success: true,
-        data: response,
-        message: msg,
-        statusCode: code,
-    });
-
-    // return response;
+        data: responseData,
+        statusCode,
+        message,
+        detailMsg,
+        // request: type || desc || uri ? { type, description: desc, url: uri ? `https://your-api-url/${uri}` : undefined } : undefined,
+    };
 };
 
 export const GenerateValidationErrorResponse = (errors) => {

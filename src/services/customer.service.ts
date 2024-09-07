@@ -9,7 +9,7 @@ import { Transaction } from "../models";
 import {
     GenerateOtp,
     GeneratePassword,
-    GenerateResponseData,
+    GenerateSuccessResponse,
     GenerateSalt,
     GenerateToken,
     GenerateValidationErrorResponse,
@@ -66,7 +66,7 @@ import { errorMsg, successMsg } from "../constants/customer.constant";
 //                 email: result.email,
 //                 verified: result.verified,
 //             });
-//             const response = GenerateResponseData(signature, successMsg.customer_create_success, 200);
+//             const response = GenerateSuccessResponse(signature, 200, successMsg.customer_create_success, );
 //             return res.status(200).json(response);
 //         }
 
@@ -97,7 +97,7 @@ export const CustomerLoginService = async (req: Request, res: Response, next: Ne
                     verified: customer.verified,
                 });
 
-                const response = GenerateResponseData(signature, successMsg.customer_auth_success, 200);
+                const response = GenerateSuccessResponse(signature,200, successMsg.customer_auth_success);
                 return res.status(200).json(response);
             }
         }
@@ -135,7 +135,7 @@ export const CustomerOTPVerifyService = async (req: Request, res: Response, next
                         verified: verifiedCustomer.verified,
                     });
 
-                    const response = GenerateResponseData(signature, successMsg.customer_verify_success, 200);
+                    const response = GenerateSuccessResponse(signature,200, successMsg.customer_verify_success, );
                     return res.status(200).json(response);
                 }
             }
@@ -167,7 +167,7 @@ export const CustomerOTPVerifyService = async (req: Request, res: Response, next
 
 //                 if (!sendCode) return next(createHttpError(401, "Failed to verify your phone number"));
 
-//                 const response = GenerateResponseData(null, "OTP sent to your registered Mobile Number!", 200);
+//                 const response = GenerateSuccessResponse(null, 200, "OTP sent to your registered Mobile Number!");
 //                 return res.status(200).json(response);
 //             }
 //         }
@@ -186,7 +186,7 @@ export const GetCustomerProfileService = async (req: Request, res: Response, nex
             const profile = await Customer.findById(customer._id);
 
             if (profile) {
-                const response = GenerateResponseData(profile, "Profile data found.", 200);
+                const response = GenerateSuccessResponse(profile, 200, "Profile data found.");
                 return res.status(200).json(response);
             }
         }
@@ -217,7 +217,7 @@ export const EditCustomerProfileService = async (req: Request, res: Response, ne
                 profile.lng = lng;
                 const result = await profile.save();
 
-                const response = GenerateResponseData(result, "Profile data found.", 200);
+                const response = GenerateSuccessResponse(result,200, "Profile data found.", );
                 return res.status(200).json(response);
             }
         }
@@ -268,7 +268,7 @@ export const AddToCartService = async (req: Request, res: Response, next: NextFu
                         profile.cart = cartItems as any;
                         const cartResult = await profile.save();
 
-                        const response = GenerateResponseData(cartResult.cart, "Added to the cart.", 200);
+                        const response = GenerateSuccessResponse(cartResult.cart,200, "Added to the cart.", );
                         return res.status(200).json(response);
                     }
                 }
@@ -291,7 +291,7 @@ export const GetCartService = async (req: Request, res: Response, next: NextFunc
             const profile = await Customer.findById(customer._id);
 
             if (profile) {
-                const response = GenerateResponseData(profile.cart, "Cart data found.", 200);
+                const response = GenerateSuccessResponse(profile.cart,200, "Cart data found.");
                 return res.status(200).json(response);
             }
         }
@@ -315,7 +315,7 @@ export const DeleteCartService = async (req: Request, res: Response, next: NextF
                 profile.cart = [] as any;
                 const cartResult = await profile.save();
 
-                const response = GenerateResponseData(cartResult, "Cart is cleared.", 200);
+                const response = GenerateSuccessResponse(cartResult,200, "Cart is cleared.", );
                 return res.status(200).json(response);
             }
         }
@@ -340,7 +340,7 @@ export const VerifyOfferService = async (req: Request, res: Response, next: Next
 
             if (appliedOffer) {
                 if (appliedOffer.isActive) {
-                    const response = GenerateResponseData(appliedOffer, "Offer is Valid.", 200);
+                    const response = GenerateSuccessResponse(appliedOffer,200, "Offer is Valid.");
                     return res.status(200).json(response);
                 }
             }
@@ -386,7 +386,7 @@ export const CreatePaymentService = async (req: Request, res: Response, next: Ne
         });
 
         //return transaction
-        const response = GenerateResponseData(transaction, "Payment successful.", 200);
+        const response = GenerateSuccessResponse(transaction,200, "Payment successful." );
         return res.status(200).json(response);
     } catch (error: any) {
         return next(InternalServerError(error.message));
@@ -466,7 +466,7 @@ export const CreateOrderService = async (req: Request, res: Response, next: Next
 
                     const profileResponse = await profile?.save();
 
-                    const response = GenerateResponseData(profileResponse, "Order created successfully.", 200);
+                    const response = GenerateSuccessResponse(profileResponse, 200, "Order created successfully.");
                     return res.status(200).json(response);
                 }
             }
@@ -486,7 +486,7 @@ export const GetOrdersService = async (req: Request, res: Response, next: NextFu
         if (customer) {
             const profile = await Customer.findById(customer._id).populate("orders");
             if (profile) {
-                const response = GenerateResponseData(profile.orders, "Order found.", 200);
+                const response = GenerateSuccessResponse(profile.orders, 200, "Order found.");
                 return res.status(200).json(response);
             }
         }
@@ -509,7 +509,7 @@ export const GetOrderByIdService = async (req: Request, res: Response, next: Nex
             const profile = await Customer.findById(customer?._id).populate("orders");
             const order = profile?.orders.find((order) => order._id.equals(orderId));
             if (order) {
-                const response = GenerateResponseData(order, "Order found.", 200);
+                const response = GenerateSuccessResponse(order, 200, "Order found.");
                 return res.status(200).json(response);
             }
         }

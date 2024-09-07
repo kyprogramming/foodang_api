@@ -4,7 +4,7 @@ import {
     GenerateAccessToken,
     GeneratePassword,
     GenerateRefreshToken,
-    GenerateResponseData,
+    GenerateSuccessResponse,
     GenerateSalt,
     GenerateToken,
     GenerateValidationErrorResponse,
@@ -18,7 +18,7 @@ import {
 import createHttpError, { InternalServerError } from "http-errors";
 import IUser from "../interfaces/IUser";
 import { User } from "../models/user.model";
-import { errorMsg, successMsg } from "../constants/user.constant";
+import { SuccessMessages, ErrorMessages } from "../constants/user.messages";
 import { OAuth2Client } from "google-auth-library";
 import IOtp from "../interfaces/IOtp";
 import { Otp } from "../models";
@@ -32,7 +32,7 @@ export const AddUserService = async (req: Request, res: Response, next: NextFunc
         const newUser = new User(sampleUser);
         const savedUser = await newUser.save();
         if (savedUser) {
-            const response = GenerateResponseData(savedUser, 201, "User added successfully");
+            const response = GenerateSuccessResponse(savedUser, 201, "User added successfully");
             return res.status(200).json(response);
         }
         console.log("User added:", newUser);
@@ -52,15 +52,15 @@ export const CheckEmailExistService = async (req: Request, res: Response, next: 
             let user = await User.findOne({ email: email, authMethods: { $in: ["password"] } });
             let resp;
             if (user) {
-                resp = { exists: true };
+                resp = { exists: true, message: ErrorMessages.USER_ALREADY_EXIST};
             } else {
-                resp = { exists: false };
+                resp = { exists: false, message: ErrorMessages.USER_NOT_FOUND };
             }
             const data = { exists: resp.exists };
-            const response = GenerateResponseData(data, 200);
+            const response = GenerateSuccessResponse(data, 200, resp.message);
             return res.status(200).json(response);
         }
-        return next(createHttpError(401, "Error while checking if email exist"));
+        return next(createHttpError(401, ErrorMessages.USER_VERIFY_ERROR));
     } catch (error: any) {
         return next(InternalServerError(error.message));
     }
@@ -93,7 +93,7 @@ export const SendOtpService = async (req: Request, res: Response, next: NextFunc
 
             // if (!sendCode) return next(createHttpError(401, "Failed to verify your phone number"));
 
-            const response = GenerateResponseData(null, 200);
+            const response = GenerateSuccessResponse(null, 200);
             return res.status(200).json(response);
         }
         return next(createHttpError(401, "Error with Requesting OTP"));
@@ -111,7 +111,7 @@ export const VerifyMobileOtpAndRegisterService = async (req: Request, res: Respo
                 const otp = otpObj.otp;
                 if (mobileOtp === otp) {
                     if (new Date() > otpObj.expireAt) {
-                        return next(createHttpError(401, "Verification failed, OTP has expired, try with resend OTP"));
+                        return next(createHttpError(401, ErrorMessages.USER_EXPIRED_OTP));
                     } else {
                         let user = await User.findOne({ email: email });
                         const salt = await GenerateSalt();
@@ -145,7 +145,7 @@ export const VerifyMobileOtpAndRegisterService = async (req: Request, res: Respo
                     return next(createHttpError(400, "Verification failed, OTP doesn't match"));
                 }
             }
-            const response = GenerateResponseData(null, 200);
+            const response = GenerateSuccessResponse(null, 200);
             return res.status(200).json(response);
         }
         return next(createHttpError(500, "Failed to register user, please try again later"));
@@ -191,7 +191,7 @@ export const UserRegisterService: RequestHandler = async (req, res, next) => {
             const newOTP = new Otp(otpPayload);
             await newOTP.save();
 
-            const response = GenerateResponseData(null, 200);
+            const response = GenerateSuccessResponse(null, 200);
             return res.status(200).json(response);
         } else {
         }
@@ -217,7 +217,7 @@ export const VerifyEmailOTPService = async (req: Request, res: Response, next: N
         user.emailOtp = undefined;
         user.emailOtpExpiry = undefined;
         user.save();
-        const response = GenerateResponseData(null, 200);
+        const response = GenerateSuccessResponse(null, 200);
         return res.status(200).json(response);
     } catch (error) {
         console.error("Error verifying Google ID token:", error);
@@ -246,13 +246,13 @@ export const EmailLoginService = async (req: Request, res: Response, next: NextF
                     accessToken,
                     refreshToken,
                 };
-                const response = GenerateResponseData(data, 200);
+                const response = GenerateSuccessResponse(data, 200, SuccessMessages.USER_AUTH_SUCCESS);
                 return res.status(200).json(response);
             } else {
-                return next(createHttpError(401, "Credentials are not valid."));
+                return next(createHttpError(400, ErrorMessages.USER_INVALID_CREDENTIALS));
             }
         } else {
-            return next(createHttpError(404, errorMsg.user_not_found));
+            return next(createHttpError(404, ErrorMessages.USER_NOT_FOUND));
         }
     } catch (error: any) {
         console.log(error);
@@ -268,7 +268,7 @@ export const GoogleLoginService = async (req: Request, res: Response, next: Next
     try {
         const { user, refreshToken } = await findOrCreateUser(idToken);
         const accessToken = await GenerateAccessToken({ _id: user._id });
-        const response = GenerateResponseData({ user, accessToken, refreshToken }, 200);
+        const response = GenerateSuccessResponse({ user, accessToken, refreshToken }, 200);
         return res.status(200).json(response);
     } catch (error) {
         console.error("Error verifying Google ID token:", error);
@@ -332,16 +332,17 @@ async function findOrCreateUser(idToken: string) {
 // Secured Services
 export const UserLogoutService = async (req: Request, res: Response, next: NextFunction) => {
     // TODO: validate user id
-    const id = req.user._id;
+  const id = req.user._id;
+  console.log('User Id logged out', id);
     try {
         const user = await User.findOne({ _id: id });
         if (user) {
             user.refreshToken = undefined;
             user.save();
-            const response = GenerateResponseData({}, successMsg.user_logout_success, 200);
+            const response = GenerateSuccessResponse(null, 200, SuccessMessages.USER_LOGOUT_SUCCESS);
             return res.status(200).json(response);
         }
-        return next(createHttpError(404, errorMsg.user_not_found));
+        return next(createHttpError(404, ErrorMessages.USER_NOT_FOUND));
     } catch (error: any) {
         return next(InternalServerError(error.message));
     }

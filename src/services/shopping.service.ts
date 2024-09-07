@@ -3,7 +3,7 @@ import { Restaurant } from "../models";
 import { Offer } from "../models/offer.model";
 import { IFood } from "../interfaces";
 import { PostcodeInput } from "../dto";
-import { GenerateResponseData, GenerateValidationErrorResponse, validateInput } from "../utility";
+import { GenerateSuccessResponse, GenerateValidationErrorResponse, validateInput } from "../utility";
 import createHttpError, { InternalServerError } from "http-errors";
 
 /** GetFoodAvailabilityService
@@ -22,7 +22,7 @@ export const GetFoodAvailabilityService = async (req: Request, res: Response, ne
             .populate("foods");
 
         if (result.length > 0) {
-            const response = GenerateResponseData(result, "data found.", 200);
+            const response = GenerateSuccessResponse(result, 200, "data found.");
             return res.status(200).json(response);
         }
         return next(createHttpError(401, "data Not found!"));
@@ -45,7 +45,7 @@ export const GetTopRestaurantsService = async (req: Request, res: Response, next
             .limit(10);
 
         if (result.length > 0) {
-            const response = GenerateResponseData(result, "Restaurants data found.", 200);
+            const response = GenerateSuccessResponse(result, 200, "Restaurants data found.");
             return res.status(200).json(response);
         }
         return next(createHttpError(401, "data Not found!"));
@@ -73,7 +73,7 @@ export const GetFoodsIn30MinService = async (req: Request, res: Response, next: 
                 const foods = restaurant.foods as [IFood];
                 foodResult.push(...foods.filter((food) => food.readyTime <= 30));
             });
-            const response = GenerateResponseData(foodResult, "Food data found.", 200);
+            const response = GenerateSuccessResponse(foodResult, 200, "Food data found.");
             return res.status(200).json(response);
         }
         return next(createHttpError(404, "data Not found!"));
@@ -98,7 +98,7 @@ export const SearchFoodsService = async (req: Request, res: Response, next: Next
         if (result.length > 0) {
             let foodResult: any = [];
             result.map((item) => foodResult.push(...item.foods));
-            const response = GenerateResponseData(foodResult, "Food data found.", 200);
+            const response = GenerateSuccessResponse(foodResult, 200, "Food data found.");
             return res.status(200).json(response);
         }
         return next(createHttpError(404, "data not found"));
@@ -119,7 +119,7 @@ export const RestaurantByIdService = async (req: Request, res: Response, next: N
         const result = await Restaurant.findById(id).populate("foods");
 
         if (result) {
-            const response = GenerateResponseData(result, "Restaurant data found.", 200);
+            const response = GenerateSuccessResponse(result, 200, "Restaurant data found.");
             return res.status(200).json(response);
         }
 
@@ -141,7 +141,7 @@ export const GetAvailableOffersService = async (req: Request, res: Response, nex
         const offers = await Offer.find({ postcode: postcode, isActive: true });
 
         if (offers) {
-            const response = GenerateResponseData(offers, "Offer data found.", 200);
+            const response = GenerateSuccessResponse(offers, 200, "Offer data found.");
             return res.status(200).json(response);
         }
 
