@@ -56,7 +56,7 @@ export const CheckEmailExistService = async (req: Request, res: Response, next: 
             } else {
                 resp = { exists: false };
             }
-            const data = resp.exists;
+            const data = { exists: resp.exists };
             const response = GenerateResponseData(data, 200);
             return res.status(200).json(response);
         }
@@ -113,18 +113,32 @@ export const VerifyMobileOtpAndRegisterService = async (req: Request, res: Respo
                     if (new Date() > otpObj.expireAt) {
                         return next(createHttpError(401, "Verification failed, OTP has expired, try with resend OTP"));
                     } else {
+                        let user = await User.findOne({ email: email });
                         const salt = await GenerateSalt();
                         const passwordHash = await GeneratePassword(password, salt);
-                        await User.create({
-                            displayName,
-                            email,
-                            password: passwordHash,
-                            salt,
-                            mobile,
-                            callingCode,
-                            mobileVerified: true,
-                            authMethods: ["password"],
-                        });
+                        if (user) {
+                            if (!user.authMethods.includes("password")) {
+                                user.authMethods.push("password");
+                                user.salt = salt;
+                                user.password = passwordHash;
+                                user.displayName = displayName;
+                                user.mobile = mobile;
+                                user.callingCode = callingCode;
+                                user.mobileVerified = true;
+                                await user.save();
+                            }
+                        } else {
+                            await User.create({
+                                displayName,
+                                email,
+                                password: passwordHash,
+                                salt,
+                                mobile,
+                                callingCode,
+                                mobileVerified: true,
+                                authMethods: ["password"],
+                            });
+                        }
                     }
                     await Otp.deleteOne({ email, mobile, callingCode });
                 } else {
@@ -224,7 +238,7 @@ export const EmailLoginService = async (req: Request, res: Response, next: NextF
             if (validation) {
                 const accessToken = await GenerateAccessToken({ _id: user._id });
                 const refreshToken = await GenerateRefreshToken();
-
+                user.lastLogin = Date.now();
                 user.refreshToken = refreshToken;
                 user.save();
                 const data = {
@@ -261,7 +275,6 @@ export const GoogleLoginService = async (req: Request, res: Response, next: Next
         return next(InternalServerError(error.message));
     }
 };
-
 
 async function findOrCreateUser(idToken: string) {
     const client = new OAuth2Client("498117270511-dfrl1g10qhv935j52vvbbhtsibkssjpe.apps.googleusercontent.com");
@@ -315,7 +328,6 @@ async function findOrCreateUser(idToken: string) {
         throw new Error("Failed while authenticating user in Google ");
     }
 }
-
 
 // Secured Services
 export const UserLogoutService = async (req: Request, res: Response, next: NextFunction) => {
