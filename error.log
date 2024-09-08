@@ -126,3 +126,8 @@
 {"level":"error","message":"Error: Invalid credentials._Verify your credentials.","service":"user-service","statusCode":400,"timestamp":"2024-09-07 21:50:35"}
 {"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-07 21:57:26"}
 {"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-07 21:57:33"}
+{"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-08 04:35:26"}
+{"level":"error","message":"Error: Route - /apiv0/user/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmRjYjE5MjAzYjNhY2NmMWE5MjM0ZDciLCJpYXQiOjE3MjU3Nzg2NjgsImV4cCI6MTcyNTc4MjI2OH0.MeRhGDLUEIROBkk8s5qd2SHQ21G0JF2Wb2auAlyE5_k  Not Found","service":"user-service","statusCode":404,"timestamp":"2024-09-08 08:08:12"}
+{"level":"error","message":"Error: Route - /favicon.ico  Not Found","service":"user-service","statusCode":404,"timestamp":"2024-09-08 08:08:12"}
+{"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-08 09:58:52"}
+{"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-08 09:59:51"}

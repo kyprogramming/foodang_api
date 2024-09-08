@@ -11,7 +11,7 @@ export class CreateCustomerInput {
     password: string;
 }
 
-// export class UserLoginInput {
+// export class LoginInput {
 //     @IsEmail()
 //     email: string;
 

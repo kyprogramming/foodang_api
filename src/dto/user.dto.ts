@@ -10,7 +10,7 @@ export class CheckEmailExistsInput {
     email: string;
 }
 
-export class UserRegisterInput {
+export class RegisterInput {
     // email
     @IsString()
     @Length(1, 50, { message: "Email cannot exceed 50 characters" })
@@ -42,8 +42,7 @@ export class UserRegisterInput {
     callingCode: string;
 }
 
-
-export class UserLoginInput {
+export class LoginInput {
     // email
     @IsEmail()
     @Transform(({ value }) => value.toLowerCase().trim())
@@ -58,8 +57,6 @@ export class UserLoginInput {
     })
     password: string;
 }
-
-
 
 export interface UserPayload {
     _id: any;

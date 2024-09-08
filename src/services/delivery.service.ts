@@ -1,7 +1,7 @@
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import express, { Request, Response, NextFunction } from "express";
-import { CartItem, CreateCustomerInput, CreateDeliveryUserInput, EditCustomerProfileInput, OrderInputs, UserLoginInput } from "../dto";
+import { CartItem, CreateCustomerInput, CreateDeliveryUserInput, EditCustomerProfileInput, OrderInputs, LoginInput } from "../dto";
 import { Customer, DeliveryUser, Food, Restaurant } from "../models";
 import { Offer } from "../models";
 import { Order } from "../models";
@@ -58,8 +58,8 @@ export const DeliverySignUpService = async (req: Request, res: Response, next: N
  * @param req @param res @param next @returns
  */
 export const DeliveryLoginService = async (req: Request, res: Response, next: NextFunction) => {
-    const inputs = <UserLoginInput>req.body;
-    const errors = await validateInput(UserLoginInput, inputs);
+    const inputs = <LoginInput>req.body;
+    const errors = await validateInput(LoginInput, inputs);
     if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
     const { email, password } = inputs;

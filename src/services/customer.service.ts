@@ -1,7 +1,7 @@
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import express, { Request, Response, NextFunction } from "express";
-import { CartItem, CreateCustomerInput, CreatePaymentInput, EditCustomerProfileInput, OrderInputs, OtpRequestInput, RequestUserInput, UserLoginInput } from "../dto";
+import { CartItem, CreateCustomerInput, CreatePaymentInput, EditCustomerProfileInput, OrderInputs, OtpRequestInput, RequestUserInput, LoginInput } from "../dto";
 import { Customer, DeliveryUser, Food, Restaurant } from "../models";
 import { Offer } from "../models/offer.model";
 import { Order } from "../models/order.model";
@@ -80,8 +80,8 @@ import { errorMsg, successMsg } from "../constants/customer.constant";
  * @param req @param res @param next @returns
  */
 export const CustomerLoginService = async (req: Request, res: Response, next: NextFunction) => {
-    const inputs = <UserLoginInput>req.body;
-    const errors = await validateInput(UserLoginInput, inputs);
+    const inputs = <LoginInput>req.body;
+    const errors = await validateInput(LoginInput, inputs);
     if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
     const { email, password } = inputs;
@@ -97,7 +97,7 @@ export const CustomerLoginService = async (req: Request, res: Response, next: Ne
                     verified: customer.verified,
                 });
 
-                const response = GenerateSuccessResponse(signature,200, successMsg.customer_auth_success);
+                const response = GenerateSuccessResponse(signature, 200, successMsg.customer_auth_success);
                 return res.status(200).json(response);
             }
         }
@@ -135,7 +135,7 @@ export const CustomerOTPVerifyService = async (req: Request, res: Response, next
                         verified: verifiedCustomer.verified,
                     });
 
-                    const response = GenerateSuccessResponse(signature,200, successMsg.customer_verify_success, );
+                    const response = GenerateSuccessResponse(signature, 200, successMsg.customer_verify_success);
                     return res.status(200).json(response);
                 }
             }
@@ -217,7 +217,7 @@ export const EditCustomerProfileService = async (req: Request, res: Response, ne
                 profile.lng = lng;
                 const result = await profile.save();
 
-                const response = GenerateSuccessResponse(result,200, "Profile data found.", );
+                const response = GenerateSuccessResponse(result, 200, "Profile data found.");
                 return res.status(200).json(response);
             }
         }
@@ -268,7 +268,7 @@ export const AddToCartService = async (req: Request, res: Response, next: NextFu
                         profile.cart = cartItems as any;
                         const cartResult = await profile.save();
 
-                        const response = GenerateSuccessResponse(cartResult.cart,200, "Added to the cart.", );
+                        const response = GenerateSuccessResponse(cartResult.cart, 200, "Added to the cart.");
                         return res.status(200).json(response);
                     }
                 }
@@ -291,7 +291,7 @@ export const GetCartService = async (req: Request, res: Response, next: NextFunc
             const profile = await Customer.findById(customer._id);
 
             if (profile) {
-                const response = GenerateSuccessResponse(profile.cart,200, "Cart data found.");
+                const response = GenerateSuccessResponse(profile.cart, 200, "Cart data found.");
                 return res.status(200).json(response);
             }
         }
@@ -315,7 +315,7 @@ export const DeleteCartService = async (req: Request, res: Response, next: NextF
                 profile.cart = [] as any;
                 const cartResult = await profile.save();
 
-                const response = GenerateSuccessResponse(cartResult,200, "Cart is cleared.", );
+                const response = GenerateSuccessResponse(cartResult, 200, "Cart is cleared.");
                 return res.status(200).json(response);
             }
         }
@@ -340,7 +340,7 @@ export const VerifyOfferService = async (req: Request, res: Response, next: Next
 
             if (appliedOffer) {
                 if (appliedOffer.isActive) {
-                    const response = GenerateSuccessResponse(appliedOffer,200, "Offer is Valid.");
+                    const response = GenerateSuccessResponse(appliedOffer, 200, "Offer is Valid.");
                     return res.status(200).json(response);
                 }
             }
@@ -386,7 +386,7 @@ export const CreatePaymentService = async (req: Request, res: Response, next: Ne
         });
 
         //return transaction
-        const response = GenerateSuccessResponse(transaction,200, "Payment successful." );
+        const response = GenerateSuccessResponse(transaction, 200, "Payment successful.");
         return res.status(200).json(response);
     } catch (error: any) {
         return next(InternalServerError(error.message));

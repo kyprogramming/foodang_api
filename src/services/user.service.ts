@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
-import { CheckEmailExistsInput, CreateFoodInput, UserLoginInput, UserRegisterInput } from "../dto";
+import { CheckEmailExistsInput, CreateFoodInput, LoginInput, RegisterInput } from "../dto";
 import {
     GenerateAccessToken,
     GeneratePassword,
@@ -13,6 +13,8 @@ import {
     GenerateOTP,
     SendOTP,
     GenerateOtp,
+    GenerateResetToken,
+    VerifyResetToken,
 } from "../utility";
 
 import createHttpError, { InternalServerError } from "http-errors";
@@ -22,6 +24,7 @@ import { SuccessMessages, ErrorMessages } from "../constants/user.messages";
 import { OAuth2Client } from "google-auth-library";
 import IOtp from "../interfaces/IOtp";
 import { Otp } from "../models";
+import { envConfig, sendResetPasswordEmail } from "../config";
 
 export const AddUserService = async (req: Request, res: Response, next: NextFunction) => {
     // const inputs = <CreateFoodInput>req.body; const errors = await validateInput(CreateFoodInput, inputs); if (errors.length > 0) return
@@ -52,11 +55,11 @@ export const CheckEmailExistService = async (req: Request, res: Response, next: 
             let user = await User.findOne({ email: email, authMethods: { $in: ["password"] } });
             let resp;
             if (user) {
-                resp = { exists: true, message: ErrorMessages.USER_ALREADY_EXIST};
+                resp = { exists: true, message: ErrorMessages.USER_ALREADY_EXIST };
             } else {
                 resp = { exists: false, message: ErrorMessages.USER_NOT_FOUND };
             }
-            const data = { exists: resp.exists };
+            const data = { exists: resp.exists, message: resp.message };
             const response = GenerateSuccessResponse(data, 200, resp.message);
             return res.status(200).json(response);
         }
@@ -154,9 +157,9 @@ export const VerifyMobileOtpAndRegisterService = async (req: Request, res: Respo
     }
 };
 
-export const UserRegisterService: RequestHandler = async (req, res, next) => {
-    const inputs = <UserRegisterInput>req.body;
-    const errors = await validateInput(UserRegisterInput, inputs);
+export const RegisterService: RequestHandler = async (req, res, next) => {
+    const inputs = <RegisterInput>req.body;
+    const errors = await validateInput(RegisterInput, inputs);
     if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
     const { displayName, email, password, mobile, callingCode } = req.body;
@@ -203,7 +206,7 @@ export const UserRegisterService: RequestHandler = async (req, res, next) => {
 };
 
 export const VerifyEmailOTPService = async (req: Request, res: Response, next: NextFunction) => {
-    // const inputs = <UserLoginInput>req.body; const errors = await validateInput(UserLoginInput, inputs); if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
+    // const inputs = <LoginInput>req.body; const errors = await validateInput(LoginInput, inputs); if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
     // TODO: validate OTP
     const { email, otp } = req.body;
     try {
@@ -226,8 +229,8 @@ export const VerifyEmailOTPService = async (req: Request, res: Response, next: N
 };
 
 export const EmailLoginService = async (req: Request, res: Response, next: NextFunction) => {
-    const inputs = <UserLoginInput>req.body;
-    const errors = await validateInput(UserLoginInput, inputs);
+    const inputs = <LoginInput>req.body;
+    const errors = await validateInput(LoginInput, inputs);
     if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
     const { email, password } = inputs;
@@ -261,7 +264,7 @@ export const EmailLoginService = async (req: Request, res: Response, next: NextF
 };
 
 export const GoogleLoginService = async (req: Request, res: Response, next: NextFunction) => {
-    // const inputs = <UserLoginInput>req.body; const errors = await validateInput(UserLoginInput, inputs); if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
+    // const inputs = <LoginInput>req.body; const errors = await validateInput(LoginInput, inputs); if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
     // TODO: validate idToken
     const { idToken } = req.body;
@@ -329,11 +332,60 @@ async function findOrCreateUser(idToken: string) {
     }
 }
 
+export const ForgotPasswordService = async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = <CheckEmailExistsInput>(<unknown>req.body);
+    const errors = await validateInput(CheckEmailExistsInput, { email });
+    if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
+
+    try {
+        if (email) {
+            let user = await User.findOne({ email: email, authMethods: { $in: ["password"] } });
+            if (!user) return next(createHttpError(401, ErrorMessages.USER_NOT_FOUND));
+            const payload = { _id: user.id };
+            const resetToken = GenerateResetToken(payload);
+            user.passwordResetToken = resetToken;
+            await user.save();
+
+            // Send email with reset link
+            const resetLink = `${envConfig.SERVICE_URL}/user/reset-password?token=${resetToken}`;
+            await sendResetPasswordEmail(user.email, user.displayName, resetLink);
+            const response = GenerateSuccessResponse(null, 200, SuccessMessages.USER_PWD_RESET_LINK_SENT_SUCCESS);
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(401, ErrorMessages.USER_VERIFY_ERROR));
+    } catch (error: any) {
+        return next(InternalServerError(error.message));
+    }
+};
+
+export const ResetPasswordService = async (req: Request, res: Response, next: NextFunction) => {
+    // const { email } = <CheckEmailExistsInput>(<unknown>req.body); const errors = await validateInput(CheckEmailExistsInput, { email }); if (errors.length > 0) return
+    // res.status(400).json(GenerateValidationErrorResponse(errors));
+    const { token, newPassword } = req.body;
+    try {
+        const decoded: any = VerifyResetToken(token);
+        // Find the user
+        let user = await User.findOne({ _id: decoded._id });
+        if (!user || user.passwordResetToken !== token) {
+            return next(createHttpError(400, ErrorMessages.USER_INVALID_TOKEN));
+        }
+        const salt = await GenerateSalt();
+        const hashedPassword = await GeneratePassword(newPassword, salt);
+        user.password = hashedPassword;
+        user.passwordResetToken = undefined;
+        user.passwordResetExpires = undefined;
+        await user.save();
+
+        const response = GenerateSuccessResponse(null, 200, SuccessMessages.USER_PWD_RESET_SUCCESS);
+        return res.status(200).json(response);
+    } catch (error: any) {
+        return next(InternalServerError(error.message));
+    }
+};
 // Secured Services
 export const UserLogoutService = async (req: Request, res: Response, next: NextFunction) => {
     // TODO: validate user id
-  const id = req.user._id;
-  console.log('User Id logged out', id);
+    const id = req.user._id;
     try {
         const user = await User.findOne({ _id: id });
         if (user) {

@@ -7,6 +7,7 @@ export const envConfig = {
     API_URL: process?.env?.API_URL,
     API_VERSION: process?.env?.API_VERSION,
     SWAGGER_DOCS: process?.env?.SWAGGER_DOCS,
+    SERVICE_URL: `${process?.env?.API_BASE_URL}${process?.env?.API_URL}${process?.env?.API_VERSION}`,
 
     PORT: process?.env?.PORT || 8000,
     NODE_ENV: process?.env?.NODE_ENV || "development",
