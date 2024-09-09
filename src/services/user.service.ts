@@ -15,6 +15,8 @@ import {
     GenerateOtp,
     GenerateResetToken,
     VerifyResetToken,
+    GenerateResetPasswordLink,
+    GenerateOtpWithExpiry,
 } from "../utility";
 
 import createHttpError, { InternalServerError } from "http-errors";
@@ -27,8 +29,8 @@ import { Otp } from "../models";
 import { envConfig, sendResetPasswordEmail } from "../config";
 
 export const AddUserService = async (req: Request, res: Response, next: NextFunction) => {
-    // const inputs = <CreateFoodInput>req.body; const errors = await validateInput(CreateFoodInput, inputs); if (errors.length > 0) return
-    // res.status(400).json(GenerateValidationErrorResponse(errors)); const { name, description, category, foodType, readyTime, price } = inputs; const user = req.user;
+    // const inputs = <CreateFoodInput>req.body; const errors = await validateInput(CreateFoodInput, inputs); if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors)); const { name, description, category, foodType, readyTime, price } = inputs; const user =
+    // req.user;
 
     const sampleUser = req.body;
     try {
@@ -206,21 +208,20 @@ export const RegisterService: RequestHandler = async (req, res, next) => {
 };
 
 export const VerifyEmailOTPService = async (req: Request, res: Response, next: NextFunction) => {
-    // const inputs = <LoginInput>req.body; const errors = await validateInput(LoginInput, inputs); if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
-    // TODO: validate OTP
+    // const inputs = <LoginInput>req.body; const errors = await validateInput(LoginInput, inputs); if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors)); TODO: validate OTP
     const { email, otp } = req.body;
     try {
         const user = await User.findOne({ email: email });
         if (!user) return next(createHttpError(404, "User not found."));
 
         if (user.emailOtp !== otp && user.emailOtpExpiry > new Date(new Date().getTime())) {
-            return next(createHttpError(400, "OTP does not match or expired. Please request a new OTP"));
+            return next(createHttpError(400, ErrorMessages.USER_EMAIL_OTP_VERIFY_ERROR));
         }
         user.emailVerified = true;
         user.emailOtp = undefined;
         user.emailOtpExpiry = undefined;
         user.save();
-        const response = GenerateSuccessResponse(null, 200);
+        const response = GenerateSuccessResponse(null, 200, SuccessMessages.USER_EMAIL_OTP_VERIFY_SUCCESS);
         return res.status(200).json(response);
     } catch (error) {
         console.error("Error verifying Google ID token:", error);
@@ -342,14 +343,19 @@ export const ForgotPasswordService = async (req: Request, res: Response, next: N
             let user = await User.findOne({ email: email, authMethods: { $in: ["password"] } });
             if (!user) return next(createHttpError(401, ErrorMessages.USER_NOT_FOUND));
             const payload = { _id: user.id };
-            const resetToken = GenerateResetToken(payload);
-            user.passwordResetToken = resetToken;
+            const { otp, expiresAt } = GenerateOtpWithExpiry();
+            //  const resetToken = GenerateResetToken(payload);
+            //*  user.passwordResetToken = resetToken;
+            user.emailOtp = otp;
+            user.emailOtpExpiry = expiresAt;
             await user.save();
 
-            // Send email with reset link
-            const resetLink = `${envConfig.SERVICE_URL}/user/reset-password?token=${resetToken}`;
-            await sendResetPasswordEmail(user.email, user.displayName, resetLink);
-            const response = GenerateSuccessResponse(null, 200, SuccessMessages.USER_PWD_RESET_LINK_SENT_SUCCESS);
+            //* Send email with reset link
+
+            // const resetLink = `${envConfig.SERVICE_URL}/user/reset-password?token=${resetToken}`; const resetLink = GenerateResetPasswordLink(resetToken);
+
+            // await sendResetPasswordEmail(user.email, user.displayName, otp); // TODO: remove comment to send OTP in mail
+            const response = GenerateSuccessResponse(null, 200, SuccessMessages.USER_EMAIL_OTP_SENT_SUCCESS);
             return res.status(200).json(response);
         }
         return next(createHttpError(401, ErrorMessages.USER_VERIFY_ERROR));
@@ -359,21 +365,19 @@ export const ForgotPasswordService = async (req: Request, res: Response, next: N
 };
 
 export const ResetPasswordService = async (req: Request, res: Response, next: NextFunction) => {
-    // const { email } = <CheckEmailExistsInput>(<unknown>req.body); const errors = await validateInput(CheckEmailExistsInput, { email }); if (errors.length > 0) return
-    // res.status(400).json(GenerateValidationErrorResponse(errors));
-    const { token, newPassword } = req.body;
+    // const { email } = <CheckEmailExistsInput>(<unknown>req.body); const errors = await validateInput(CheckEmailExistsInput, { email }); if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
+    const { email, password } = req.body;
     try {
-        const decoded: any = VerifyResetToken(token);
-        // Find the user
-        let user = await User.findOne({ _id: decoded._id });
-        if (!user || user.passwordResetToken !== token) {
-            return next(createHttpError(400, ErrorMessages.USER_INVALID_TOKEN));
+        // const decoded: any = VerifyResetToken(token); Find the user
+        console.log(`Email: ${email} , Password:${password}`);
+        let user = await User.findOne({ email });
+        if (!user) {
+            return next(createHttpError(400, ErrorMessages.USER_NOT_FOUND));
         }
         const salt = await GenerateSalt();
-        const hashedPassword = await GeneratePassword(newPassword, salt);
+        const hashedPassword = await GeneratePassword(password, salt);
+        user.salt = salt;
         user.password = hashedPassword;
-        user.passwordResetToken = undefined;
-        user.passwordResetExpires = undefined;
         await user.save();
 
         const response = GenerateSuccessResponse(null, 200, SuccessMessages.USER_PWD_RESET_SUCCESS);

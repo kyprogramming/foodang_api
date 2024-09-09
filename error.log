@@ -131,3 +131,14 @@
 {"level":"error","message":"Error: Route - /favicon.ico  Not Found","service":"user-service","statusCode":404,"timestamp":"2024-09-08 08:08:12"}
 {"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-08 09:58:52"}
 {"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-08 09:59:51"}
+{"level":"error","message":"Error: jwt malformed","service":"user-service","statusCode":500,"timestamp":"2024-09-08 10:14:03"}
+{"level":"error","message":"Error: jwt must be provided","service":"user-service","statusCode":500,"timestamp":"2024-09-09 06:12:41"}
+{"level":"error","message":"Error: Email id is not registered with us._Continue to register.","service":"user-service","statusCode":400,"timestamp":"2024-09-09 06:22:18"}
+{"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-09 06:24:37"}
+{"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-09 06:24:44"}
+{"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-09 06:31:08"}
+{"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-09 06:31:15"}
+{"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-09 06:31:24"}
+{"level":"error","message":"Error: OTP verification failed._OTP doesn't match or expired.🌝","service":"user-service","statusCode":400,"timestamp":"2024-09-09 06:37:19"}
+{"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-09 06:41:40"}
+{"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-09 06:41:46"}

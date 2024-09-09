@@ -35,7 +35,7 @@ export const sendEmail = async () => {
     }
 };
 
-export const sendResetPasswordEmail = async (to: string, name: string, resetLink: string) => {
+export const sendResetPasswordEmail = async (to: string, name: string, otp: string) => {
     const request = {
         Messages: [
             {
@@ -44,8 +44,8 @@ export const sendResetPasswordEmail = async (to: string, name: string, resetLink
                 Subject: "Password Reset",
                 // TextPart: ``, //TODO: TextPart is not working properly, need to verify - optional
                 HTMLPart: `<h5>Hi ${name},</h5> 
-                <p>You have requested for a password reset. Click the below link to reset your password.</p>
-                <b>Password reset link</b>: ${resetLink}
+                <p>You have requested for a password reset. Use below OTP to reset your password.</p>
+                <b>OTP</b>: ${otp}
                 <h3>XGo Team</h3>`,
             },
         ],

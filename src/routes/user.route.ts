@@ -12,10 +12,10 @@ router.post("/send-otp", SendOtp);
 router.post("/register", VerifyMobileOtpAndRegister);
 router.post("/login", Login);
 router.post("/forgot-password", ForgotPassword);
+router.post("/verify-email-otp", VerifyEmailOTP);
 router.post("/reset-password", ResetPassword);
 router.post("/auth/google", GoogleLogin);
 // router.post("/register", Register);
-router.post("/verify-email-otp", VerifyEmailOTP);
 
 // Authentication
 router.use(Authenticate);

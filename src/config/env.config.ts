@@ -9,6 +9,8 @@ export const envConfig = {
     SWAGGER_DOCS: process?.env?.SWAGGER_DOCS,
     SERVICE_URL: `${process?.env?.API_BASE_URL}${process?.env?.API_URL}${process?.env?.API_VERSION}`,
 
+    ANDROID_APP:`${process?.env?.ANDROID_APP}`,
+
     PORT: process?.env?.PORT || 8000,
     NODE_ENV: process?.env?.NODE_ENV || "development",
     APP_SECRET: process?.env?.APP_SECRET,
