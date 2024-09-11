@@ -2,17 +2,15 @@ import { Types } from "mongoose";
 
 interface IVendor extends Document {
     vendor_name: string;
-    vendor_info: {
-        address: {
-            street: string;
-            city: string;
-            state: string;
-            postal_code: string;
-            country: string;
-        };
-        phone: string;
-        email: string;
-        website: string;
+    phone: string;
+    email: string;
+    website: string;
+    address: {
+        street: string;
+        city: string;
+        state: string;
+        postal_code: string;
+        country: string;
     };
     primary_contact_person: {
         first_name: string;

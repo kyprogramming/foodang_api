@@ -142,3 +142,5 @@
 {"level":"error","message":"Error: OTP verification failed._OTP doesn't match or expired.🌝","service":"user-service","statusCode":400,"timestamp":"2024-09-09 06:37:19"}
 {"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-09 06:41:40"}
 {"level":"error","message":"Error: Authentication failed._Invalid credentials.😢","service":"user-service","statusCode":400,"timestamp":"2024-09-09 06:41:46"}
+{"level":"error","message":"Error: Route - /favicon.ico  Not Found","service":"user-service","statusCode":404,"timestamp":"2024-09-11 07:36:57"}
+{"level":"error","message":"Error: Route - /api/v0/vendors  Not Found","service":"user-service","statusCode":404,"timestamp":"2024-09-11 07:37:16"}

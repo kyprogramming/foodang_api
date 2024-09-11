@@ -13,17 +13,6 @@ const addressSchema = new Schema(
     { _id: false }
 );
 
-// Define the ContactInfo schema
-const contactInfoSchema = new Schema(
-    {
-        address: { type: addressSchema, required: true },
-        phone: { type: String, required: true },
-        email: { type: String, required: true },
-        website: { type: String, required: true },
-    },
-    { _id: false }
-);
-
 // Define the PrimaryContactPerson schema
 const primaryContactPersonSchema = new Schema(
     {
@@ -40,9 +29,12 @@ const primaryContactPersonSchema = new Schema(
 const vendorSchema = new Schema(
     {
         vendor_name: { type: String, required: true },
-        contact_info: { type: contactInfoSchema, required: true },
+        phone: { type: String, required: true },
+        email: { type: String, required: true },
+        website: { type: String },
+        address: { type: addressSchema, required: true },
         primary_contact_person: { type: primaryContactPersonSchema, required: true },
-        restaurant_ids: [{ type: Schema.Types.ObjectId, ref: "restaurant" }],
+        restaurant_ids: { type: [{ type: Schema.Types.ObjectId, ref: "restaurant" }], default: undefined },
     },
     {
         timestamps: true,
