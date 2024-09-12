@@ -39,7 +39,7 @@ export const GetVendorsService = async (req: Request, res: Response, next: NextF
          const skip = (page - 1) * pageSize; // Skip for pagination
 
         // Fetch the vendors with pagination
-        const vendors = await Vendor.find().select("name email id").skip(skip).limit(pageSize);
+        const vendors = await Vendor.find().select("name email id");//.skip(skip).limit(pageSize);
         const vendorsWithSeqNo = vendors.map((vendor, index) => ({
             seqNo: skip + index + 1, 
             ...vendor.toObject(),
@@ -55,3 +55,21 @@ export const GetVendorsService = async (req: Request, res: Response, next: NextF
         return next(InternalServerError(error.message));
     }
 };
+
+export const GetVendorDataService = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const vendorId = req.params.id;
+
+        // Fetch the vendors with pagination
+        const vendor = await Vendor.find({_id:vendorId})
+
+        if (vendor) {
+            const response = GenerateSuccessResponse(vendor, 200, "Vendor load successfully");
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(404, "Error while loading vendor."));
+    } catch (error: any) {
+        return next(InternalServerError(error.message));
+    }
+};
+
