@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 interface IVendor extends Document {
-    vendor_name: string;
+    name: string;
     phone: string;
     email: string;
     website: string;

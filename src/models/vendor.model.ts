@@ -28,7 +28,7 @@ const primaryContactPersonSchema = new Schema(
 // Define the Vendor schema
 const vendorSchema = new Schema(
     {
-        vendor_name: { type: String, required: true },
+        name: { type: String, required: true },
         phone: { type: String, required: true },
         email: { type: String, required: true },
         website: { type: String },
