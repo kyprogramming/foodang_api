@@ -32,6 +32,7 @@ const vendorSchema = new Schema(
         phone: { type: String, required: true },
         email: { type: String, required: true },
         website: { type: String },
+        active: { type: Boolean, default: true },
         address: { type: addressSchema, required: true },
         primary_contact_person: { type: primaryContactPersonSchema, required: true },
         restaurant_ids: { type: [{ type: Schema.Types.ObjectId, ref: "restaurant" }], default: undefined },

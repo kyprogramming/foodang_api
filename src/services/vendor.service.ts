@@ -31,20 +31,24 @@ export const AddVendorService = async (req: Request, res: Response, next: NextFu
 // Get restaurants list
 export const GetVendorsService = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        //  const page = parseInt(req.query.page) || 1; // Current page number from query parameters
-        //  const pageSize = parseInt(req.query.pageSize) || 10; // Page size from query parameters
+        //  const page = parseInt(req.query.page) || 1; // Current page number from query parameters const pageSize = parseInt(req.query.pageSize) || 10; // Page size from query parameters
         //  const skip = (page - 1) * pageSize; // Skip for pagination
-         const page = 1; // Current page number from query parameters
-         const pageSize = 10; // Page size from query parameters
-         const skip = (page - 1) * pageSize; // Skip for pagination
+        const page = 1; // Current page number from query parameters
+        const pageSize = 10; // Page size from query parameters
+        const skip = (page - 1) * pageSize; // Skip for pagination
 
         // Fetch the vendors with pagination
-        const vendors = await Vendor.find().select("name email id");//.skip(skip).limit(pageSize);
+
+        // const result = await Vendor.updateMany(
+        //      {}, // Condition: Match all documents
+        //      { $set: { active: true } } // Update operation: Add new field and set its value
+        // ).exec();
+        
+        const vendors = await Vendor.find({active:true}).select("name email id"); //.skip(skip).limit(pageSize);
         const vendorsWithSeqNo = vendors.map((vendor, index) => ({
-            seqNo: skip + index + 1, 
+            seqNo: skip + index + 1,
             ...vendor.toObject(),
         }));
-
 
         if (vendorsWithSeqNo) {
             const response = GenerateSuccessResponse(vendorsWithSeqNo, 200, "Vendor load successfully");
@@ -61,7 +65,7 @@ export const GetVendorDataService = async (req: Request, res: Response, next: Ne
         const vendorId = req.params.id;
 
         // Fetch the vendors with pagination
-        const vendor = await Vendor.find({_id:vendorId})
+        const vendor = await Vendor.find({ _id: vendorId });
 
         if (vendor) {
             const response = GenerateSuccessResponse(vendor, 200, "Vendor load successfully");
@@ -72,4 +76,42 @@ export const GetVendorDataService = async (req: Request, res: Response, next: Ne
         return next(InternalServerError(error.message));
     }
 };
+
+export const UpdateVendorService = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const vendorId = req.params.id;
+        const payload = req.body; // Data coming from the client to update the vendor
+
+        console.log("vendorId",vendorId);
+        console.log("values", payload);
+
+        // Update the vendor data
+        const updatedVendor = await Vendor.findByIdAndUpdate(vendorId, payload, { new: true });
+        if (updatedVendor) {
+            const response = GenerateSuccessResponse(updatedVendor, 200, "Vendor updated successfully");
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(404, "Error while loading vendor."));
+    } catch (error: any) {
+        return next(InternalServerError(error.message));
+    }
+};
+
+export const DeleteVendorService = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const vendorId = req.params.id;
+        // Soft delete the vendor data
+        const deletedVendor = await Vendor.findOneAndUpdate({ _id: vendorId }, { active: false }, { new: true });
+        if (deletedVendor) {
+            const response = GenerateSuccessResponse(deletedVendor, 200, "Vendor deleted successfully");
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(404, "Error while loading vendor."));
+    } catch (error: any) {
+        return next(InternalServerError(error.message));
+    }
+};
+
+
+
 

@@ -5,6 +5,7 @@ interface IVendor extends Document {
     phone: string;
     email: string;
     website: string;
+    active: Boolean; 
     address: {
         street: string;
         city: string;
