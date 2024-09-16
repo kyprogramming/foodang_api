@@ -123,7 +123,7 @@ export const CreateRestaurantService = async (req: Request, res: Response, next:
     const { name, address, postcode, foodType, email, password, ownerName, phone } = <CreateRestaurantInput>req.body;
 
     try {
-        const restaurant = await FindRestaurant("", email);
+        const restaurant = null;// await FindRestaurant("", email);
         if (restaurant !== null) {
             return next(createHttpError(422, `Restaurant email - ${email} is already exists.`));
         }
@@ -177,7 +177,7 @@ export const GetRestaurantByIDService = async (req: Request, res: Response, next
     if (!isValidMongooseObjectId(restaurantId)) return next(createHttpError(422, `Invalid request parameter`));
 
     try {
-        const restaurant = await FindRestaurant(restaurantId);
+        const restaurant = {}; //await FindRestaurant(restaurantId);
         if (restaurant) {
             const response = GenerateSuccessResponse(restaurant, 200, successMsg.restaurant_found_success);
             return res.status(200).json(response);
@@ -267,10 +267,10 @@ export const FindAdmin = async (id: String | undefined = "", email: string = "")
 };
 
 // Find Restaurant by email address and id
-export const FindRestaurant = async (id: String | undefined, email?: string) => {
-    if (email) {
-        return await Restaurant.findOne({ email: email });
-    } else {
-        return await Restaurant.findById(id);
-    }
-};
+// export const FindRestaurant = async (id: String | undefined, email?: string) => {
+//     if (email) {
+//         return await Restaurant.findOne({ email: email });
+//     } else {
+//         return await Restaurant.findById(id);
+//     }
+// };

@@ -6,18 +6,7 @@ import { Customer, DeliveryUser, Food, Restaurant } from "../models";
 import { Offer } from "../models/offer.model";
 import { Order } from "../models/order.model";
 import { Transaction } from "../models";
-import {
-    GenerateOtp,
-    GeneratePassword,
-    GenerateSuccessResponse,
-    GenerateSalt,
-    GenerateToken,
-    GenerateValidationErrorResponse,
-    isValidMongooseObjectId,
-    SendOTP,
-    validateInput,
-    ValidatePassword,
-} from "../utility";
+import { GenerateOtp, GeneratePassword, GenerateSuccessResponse, GenerateSalt, GenerateToken, GenerateValidationErrorResponse, isValidMongooseObjectId, SendOTP, validateInput, ValidatePassword } from "../utility";
 import createHttpError, { InternalServerError } from "http-errors";
 import { errorMsg, successMsg } from "../constants/customer.constant";
 
@@ -339,7 +328,7 @@ export const VerifyOfferService = async (req: Request, res: Response, next: Next
             const appliedOffer = await Offer.findById(offerId);
 
             if (appliedOffer) {
-                if (appliedOffer.isActive) {
+                if (appliedOffer.active) {
                     const response = GenerateSuccessResponse(appliedOffer, 200, "Offer is Valid.");
                     return res.status(200).json(response);
                 }
@@ -367,7 +356,7 @@ export const CreatePaymentService = async (req: Request, res: Response, next: Ne
         if (offerId) {
             const appliedOffer = await Offer.findById(offerId);
 
-            if (appliedOffer?.isActive) {
+            if (appliedOffer?.active) {
                 payableAmount = payableAmount - appliedOffer.offerAmount;
             }
         }
@@ -539,12 +528,12 @@ const assignOrderForDelivery = async (orderId: any, restaurantId: string) => {
     // find the restaurant
     const restaurant = await Restaurant.findById(restaurantId);
     if (restaurant) {
-        const areaCode = restaurant.postcode;
-        const restaurantLat = restaurant.lat;
-        const restaurantLng = restaurant.lng;
+        // const areaCode = restaurant.postcode;
+        // const restaurantLat = restaurant.lat;
+        // const restaurantLng = restaurant.lng;
 
         //find the available Delivery person
-        const deliveryPerson = await DeliveryUser.find({ postcode: areaCode, verified: true, isAvailable: true });
+        const deliveryPerson = null; // await DeliveryUser.find({ postcode: areaCode, verified: true, isAvailable: true });
         if (deliveryPerson && deliveryPerson?.length > 0) {
             // Check the nearest delivery person and assign the order
 

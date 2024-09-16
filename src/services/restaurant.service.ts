@@ -6,7 +6,7 @@ import { Order } from "../models/order.model";
 import { GenerateSuccessResponse, GenerateToken, GenerateValidationErrorResponse, validateInput, ValidatePassword } from "../utility";
 import { cloudinary } from "../config";
 import { deleteFile } from "../utility/deleteFiles";
-import { FindRestaurant } from ".";
+// import { FindRestaurant } from ".";
 import createHttpError, { InternalServerError } from "http-errors";
 
 /** RestaurantLoginService
@@ -22,7 +22,7 @@ export const RestaurantLoginService = async (req: Request, res: Response, next: 
     const { email, password } = inputs;
 
     try {
-        const existingUser = await FindRestaurant("", email);
+        const existingUser = null;//await FindRestaurant("", email);
 
         if (existingUser !== null) {
             const validation = await ValidatePassword(password, existingUser.password, existingUser.salt);
@@ -32,7 +32,7 @@ export const RestaurantLoginService = async (req: Request, res: Response, next: 
                     email: existingUser.email,
                     name: existingUser.name,
                 });
-                const response = GenerateSuccessResponse(signature, 200, "Authenticated successfully.", );
+                const response = GenerateSuccessResponse(signature, 200, "Authenticated successfully.");
                 return res.status(200).json(response);
             }
         }
@@ -51,7 +51,7 @@ export const GetRestaurantProfileService = async (req: Request, res: Response, n
     const user = req.user;
     try {
         if (user) {
-            const existingRestaurant = await FindRestaurant(user._id);
+            const existingRestaurant = null; // await FindRestaurant(user._id);
             const response = GenerateSuccessResponse(existingRestaurant, 200, "Profile data found.");
             return res.status(200).json(response);
         }
@@ -74,7 +74,7 @@ export const UpdateRestaurantProfileService = async (req: Request, res: Response
 
     try {
         if (user) {
-            const existingRestaurant = await FindRestaurant(user._id);
+            const existingRestaurant = null; // await FindRestaurant(user._id);
 
             if (existingRestaurant !== null) {
                 existingRestaurant.name = name;
@@ -101,7 +101,7 @@ export const UpdateRestaurantCoverImageService = async (req: Request, res: Respo
     const user = req.user;
     try {
         if (user) {
-            const restaurant = await FindRestaurant(user._id);
+            const restaurant = null; // await FindRestaurant(user._id);
             const imageUrlList: any[] = [];
 
             if (restaurant !== null) {
@@ -146,7 +146,7 @@ export const UpdateRestaurantStatusService = async (req: Request, res: Response,
 
     try {
         if (user) {
-            const existingRestaurant = await FindRestaurant(user._id);
+            const existingRestaurant = await null; // FindRestaurant(user._id);
 
             if (existingRestaurant !== null) {
                 existingRestaurant.serviceAvailable = !existingRestaurant.serviceAvailable;
@@ -181,7 +181,7 @@ export const AddFoodService = async (req: Request, res: Response, next: NextFunc
 
     try {
         if (user) {
-            const restaurant = await FindRestaurant(user._id);
+            const restaurant = await null; // FindRestaurant(user._id);
             if (restaurant !== null) {
                 const imageUrlList: any[] = [];
                 if (req.files) {
@@ -330,12 +330,12 @@ export const AddOfferService = async (req: Request, res: Response, next: NextFun
     const errors = await validateInput(CreateOfferInputs, inputs);
     if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
-    const { title, description, offerType, offerAmount, postcode, promocode, promoType, startValidity, endValidity, bank, bins, minValue, isActive } = inputs;
+    const { title, description, offerType, offerAmount, postcode, promocode, promoType, startValidity, endValidity, bank, bins, minValue, active } = inputs;
     const user = req.user;
 
     try {
         if (user) {
-            const restaurant = await FindRestaurant(user._id);
+            const restaurant = null; // await FindRestaurant(user._id);
 
             if (restaurant) {
                 const offer = await Offer.create({
@@ -349,11 +349,11 @@ export const AddOfferService = async (req: Request, res: Response, next: NextFun
                     startValidity,
                     endValidity,
                     bank,
-                    isActive,
+                    active,
                     minValue,
                     restaurants: [restaurant],
                 });
-                const response = GenerateSuccessResponse(offer,201, "Offer added.");
+                const response = GenerateSuccessResponse(offer, 201, "Offer added.");
                 return res.status(200).json(response);
             }
         }
@@ -407,7 +407,7 @@ export const EditOfferService = async (req: Request, res: Response, next: NextFu
     const errors = await validateInput(CreateOfferInputs, inputs);
     if (errors.length > 0) return res.status(400).json(GenerateValidationErrorResponse(errors));
 
-    const { title, description, offerType, offerAmount, postcode, promocode, promoType, startValidity, endValidity, bank, bins, minValue, isActive } = inputs;
+    const { title, description, offerType, offerAmount, postcode, promocode, promoType, startValidity, endValidity, bank, bins, minValue, active } = inputs;
     const user = req.user;
     const offerId = req.params.id;
 
@@ -416,7 +416,7 @@ export const EditOfferService = async (req: Request, res: Response, next: NextFu
             const currentOffer = await Offer.findById(offerId);
 
             if (currentOffer) {
-                const restaurant = await FindRestaurant(user._id);
+                const restaurant = null; // await FindRestaurant(user._id);
 
                 if (restaurant) {
                     (currentOffer.title = title),
@@ -429,7 +429,7 @@ export const EditOfferService = async (req: Request, res: Response, next: NextFu
                         (currentOffer.endValidity = endValidity),
                         (currentOffer.bank = bank),
                         (currentOffer.bins = bins),
-                        (currentOffer.isActive = isActive),
+                        (currentOffer.active = active),
                         (currentOffer.minValue = minValue);
 
                     const result = await currentOffer.save();
@@ -455,17 +455,17 @@ export const DeleteOfferService = async (req: Request, res: Response, next: Next
 
     const user = req.user;
     const offerId = req.params.id;
-    // const { isActive } = inputs;
+    // const { active } = inputs;
 
     try {
         if (user) {
             const currentOffer = await Offer.findById(offerId);
 
             if (currentOffer) {
-                const restaurant = await FindRestaurant(user._id);
+                const restaurant = null; // await FindRestaurant(user._id);
 
                 if (restaurant) {
-                    currentOffer.isActive = !currentOffer.isActive;
+                    currentOffer.active = !currentOffer.active;
                     const result = await currentOffer.save();
 
                     const response = GenerateSuccessResponse(result, 200, "offer inactivated.");

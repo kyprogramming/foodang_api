@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import { IUser } from "../interfaces";
+import { CommandInstance } from "twilio/lib/rest/preview/wireless/command";
 
 // Social Authentication Schema const SocialAuthSchema = new Schema({ provider: { type: String, enum: ["email", "google", "facebook"], required: true }, providerId: { type: String, required: true },
 // accessToken: { type: String, required: true }, refreshToken: String, });
@@ -35,15 +36,21 @@ const PreferenceSchema = new Schema({
     timezone: String,
 });
 
+
+// Define the common fields
+const commonFields = {
+    displayName: { type: String, required: true },
+    email: { type: String, required: true, unique: true, lowercase: true },
+    password: { type: String, required: true },
+    salt: { type: String },
+};
+
 const UserSchema = new Schema(
     {
-        displayName: { type: String, required: true }, //required
-        email: { type: String, required: true, unique: true, lowercase: true }, //required
+        ...commonFields,
         emailOtp: String,
         emailOtpExpiry: { type: Date },
         emailVerified: { type: Boolean, default: false },
-        password: { type: String },
-        salt: { type: String },
         passwordResetToken: String,
         passwordResetExpires: Date,
         profilePhoto: { type: String },
@@ -53,7 +60,7 @@ const UserSchema = new Schema(
         mobileOtpExpiry: { type: Date },
         mobileVerified: { type: Boolean, default: false },
         lastLogin: { type: Number },
-        isActive: { type: Boolean, default: true },
+        active: { type: Boolean, default: true },
         authMethods: { type: [String], enum: ["password", "google", "facebook"], default: [] },
         providers: { type: [AuthProviderSchema], default: undefined },
         addresses: { type: [addressSchema], default: undefined },

@@ -14,7 +14,7 @@ export interface IOffer extends Document {
     bank: [any];
     bins: [any];
     postcode: string;
-    isActive: boolean;
+    active: boolean;
 }
 
 export default IOffer;

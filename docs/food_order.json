@@ -445,7 +445,7 @@
                         "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\r\n    \"title\": \"100 Off on Week Days\",\r\n    \"description\": \"Get 100 OFF on week days for every order. Applicable for week days. Minimum order INR 250 or above\",\r\n    \"offerType\": \"VENDOR\",\r\n    \"offerAmount\": 100,\r\n    \"postcode\": \"EH127BU\",\r\n    \"promocode\": \"OFFER100\",\r\n    \"promoType\": \"ALL\",\r\n    \"startValidity\": \"\",\r\n    \"endValidity\": \"\",\r\n    \"bank\": \"\",\r\n    \"isActive\": true,\r\n    \"minValue\": 250\r\n}",
+                            "raw": "{\r\n    \"title\": \"100 Off on Week Days\",\r\n    \"description\": \"Get 100 OFF on week days for every order. Applicable for week days. Minimum order INR 250 or above\",\r\n    \"offerType\": \"VENDOR\",\r\n    \"offerAmount\": 100,\r\n    \"postcode\": \"EH127BU\",\r\n    \"promocode\": \"OFFER100\",\r\n    \"promoType\": \"ALL\",\r\n    \"startValidity\": \"\",\r\n    \"endValidity\": \"\",\r\n    \"bank\": \"\",\r\n    \"active\": true,\r\n    \"minValue\": 250\r\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -492,7 +492,7 @@
                         "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\r\n    \"title\": \"200 Off on Week Days\",\r\n    \"description\": \"Get 200 OFF on week days for every order. Applicable for week days. Minimum order INR 250 or above\",\r\n    \"offerType\": \"VENDOR\",\r\n    \"offerAmount\": 200,\r\n    \"postcode\": \"EH127BU\",\r\n    \"promocode\": \"OFFER200\",\r\n    \"promoType\": \"ALL\",\r\n    \"startValidity\": \"\",\r\n    \"endValidity\": \"\",\r\n    \"bank\": \"\",\r\n    \"isActive\": true,\r\n    \"minValue\": 500\r\n}",
+                            "raw": "{\r\n    \"title\": \"200 Off on Week Days\",\r\n    \"description\": \"Get 200 OFF on week days for every order. Applicable for week days. Minimum order INR 250 or above\",\r\n    \"offerType\": \"VENDOR\",\r\n    \"offerAmount\": 200,\r\n    \"postcode\": \"EH127BU\",\r\n    \"promocode\": \"OFFER200\",\r\n    \"promoType\": \"ALL\",\r\n    \"startValidity\": \"\",\r\n    \"endValidity\": \"\",\r\n    \"bank\": \"\",\r\n    \"active\": true,\r\n    \"minValue\": 500\r\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"

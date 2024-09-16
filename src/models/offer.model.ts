@@ -16,7 +16,7 @@ const OfferSchema = new Schema(
         bank: [{ type: String }],
         bins: [{ type: Number }],
         postcode: { type: String, require: true },
-        isActive: Boolean,
+        active: Boolean,
     },
     {
         toJSON: {

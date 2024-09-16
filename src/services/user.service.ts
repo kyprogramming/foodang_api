@@ -47,6 +47,32 @@ export const AddUserService = async (req: Request, res: Response, next: NextFunc
     }
 };
 
+
+// Get restaurants list
+export const GetUsersService = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        //  const page = parseInt(req.query.page) || 1; // Current page number from query parameters const pageSize = parseInt(req.query.pageSize) || 10; // Page size from query parameters
+        //  const skip = (page - 1) * pageSize; // Skip for pagination
+        const page = 1; // Current page number from query parameters
+        const pageSize = 10; // Page size from query parameters
+        const skip = (page - 1) * pageSize; // Skip for pagination
+      
+        const users = await User.find({ active: true }).select("displayName email callingCode mobile"); //.skip(skip).limit(pageSize);
+        const usersWithSeqNo = users.map((vendor, index) => ({
+            seqNo: skip + index + 1,
+            ...vendor.toObject(),
+        }));
+
+        if (usersWithSeqNo) {
+            const response = GenerateSuccessResponse(usersWithSeqNo, 200, "User(s) load successfully");
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(404, "Error while loading vendor."));
+    } catch (error: any) {
+        return next(InternalServerError(error.message));
+    }
+};
+
 export const CheckEmailExistService = async (req: Request, res: Response, next: NextFunction) => {
     const { email } = <CheckEmailExistsInput>(<unknown>req.params);
     const errors = await validateInput(CheckEmailExistsInput, { email });

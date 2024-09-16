@@ -32,11 +32,11 @@ export class CreateOfferInputs {
     bank: [any];
     bins: [any];
     postcode: string;
-    isActive: boolean;
+    active: boolean;
 }
 
 export class InactivateOfferInputs {
-    isActive: boolean;
+    active: boolean;
 }
 
 export class MulterFile {

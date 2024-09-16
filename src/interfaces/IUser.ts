@@ -46,7 +46,7 @@ export interface IUser extends Document {
     mobileOtpExpiry?: Date;
     mobileVerified?: boolean; // Default: false
     lastLogin: number;
-    isActive?: boolean; // Default: true
+    active?: boolean; // Default: true
     providers?: IAuthProvider[];
     authMethods: ("password" | "google" | "facebook")[]; // Array of authentication methods
     addresses?: IAddress[];

@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { GenerateSuccessResponse } from "../utility";
 
 import createHttpError, { InternalServerError } from "http-errors";
-import { Rider } from "../models/rider.model";
+import Rider from "../models/rider.model";
 
 export const GetRidersService = async (req: Request, res: Response, next: NextFunction) => {
     try {

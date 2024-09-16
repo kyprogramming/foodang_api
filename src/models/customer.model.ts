@@ -51,7 +51,7 @@ const CustomerSchema = new Schema(
         mobileOtpExpiry: { type: Date },
         mobileVerified: { type: Boolean, default: false },
         lastLogin: Date,
-        isActive: { type: Boolean, default: true },
+        active: { type: Boolean, default: true },
         preferences: PreferenceSchema,
         addresses: [addressSchema], // Array of addresses
 

@@ -43,8 +43,8 @@ export const GetVendorsService = async (req: Request, res: Response, next: NextF
         //      {}, // Condition: Match all documents
         //      { $set: { active: true } } // Update operation: Add new field and set its value
         // ).exec();
-        
-        const vendors = await Vendor.find({active:true}).select("name email id"); //.skip(skip).limit(pageSize);
+        // const vendors = await Vendor.find({ active: true });
+        const vendors = await Vendor.find().select("name email id active"); //.skip(skip).limit(pageSize);
         const vendorsWithSeqNo = vendors.map((vendor, index) => ({
             seqNo: skip + index + 1,
             ...vendor.toObject(),

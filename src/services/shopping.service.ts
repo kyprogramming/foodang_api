@@ -17,14 +17,14 @@ export const GetFoodAvailabilityService = async (req: Request, res: Response, ne
     const { postcode } = inputs;
 
     try {
-        const result = await Restaurant.find({ postcode: postcode, serviceAvailable: true })
-            .sort([["rating", "descending"]])
-            .populate("foods");
+        // const result = await Restaurant.find({ postcode: postcode, serviceAvailable: true })
+        //     .sort([["rating", "descending"]])
+        //     .populate("foods");
 
-        if (result.length > 0) {
-            const response = GenerateSuccessResponse(result, 200, "data found.");
-            return res.status(200).json(response);
-        }
+        // if (result.length > 0) {
+        //     const response = GenerateSuccessResponse(result, 200, "data found.");
+        //     return res.status(200).json(response);
+        // }
         return next(createHttpError(401, "data Not found!"));
     } catch (error: any) {
         return next(InternalServerError(error.message));
@@ -40,14 +40,14 @@ export const GetTopRestaurantsService = async (req: Request, res: Response, next
     const postcode = req.params.postcode;
 
     try {
-        const result = await Restaurant.find({ postcode: postcode, serviceAvailable: true })
-            .sort([["rating", "descending"]])
-            .limit(10);
+        const result = null;// await Restaurant.find({ postcode: postcode, serviceAvailable: true })
+            // .sort([["rating", "descending"]])
+            // .limit(10);
 
-        if (result.length > 0) {
-            const response = GenerateSuccessResponse(result, 200, "Restaurants data found.");
-            return res.status(200).json(response);
-        }
+        // if (result.length > 0) {
+        //     const response = GenerateSuccessResponse(result, 200, "Restaurants data found.");
+        //     return res.status(200).json(response);
+        // }
         return next(createHttpError(401, "data Not found!"));
     } catch (error: any) {
         return next(InternalServerError(error.message));
@@ -63,15 +63,15 @@ export const GetFoodsIn30MinService = async (req: Request, res: Response, next: 
     const postcode = req.params.postcode;
 
     try {
-        const result = await Restaurant.find({ postcode: postcode, serviceAvailable: true })
-            .sort([["rating", "descending"]])
-            .populate("foods");
+        const result = null; // await Restaurant.find({ postcode: postcode, serviceAvailable: true })
+        // .sort([["rating", "descending"]])
+        // .populate("foods");
 
         if (result.length > 0) {
             let foodResult: any = [];
             result.map((restaurant) => {
-                const foods = restaurant.foods as [IFood];
-                foodResult.push(...foods.filter((food) => food.readyTime <= 30));
+                // const foods = restaurant.foods as [IFood];
+                // foodResult.push(...foods.filter((food) => food.readyTime <= 30));
             });
             const response = GenerateSuccessResponse(foodResult, 200, "Food data found.");
             return res.status(200).json(response);
@@ -91,13 +91,13 @@ export const SearchFoodsService = async (req: Request, res: Response, next: Next
 
     try {
         const result = await Restaurant.find({
-            postcode: postcode,
-            serviceAvailable: true,
+            // postcode: postcode,
+            // serviceAvailable: true,
         }).populate("foods");
 
         if (result.length > 0) {
             let foodResult: any = [];
-            result.map((item) => foodResult.push(...item.foods));
+            // result.map((item) => foodResult.push(...item.foods));
             const response = GenerateSuccessResponse(foodResult, 200, "Food data found.");
             return res.status(200).json(response);
         }
@@ -138,7 +138,7 @@ export const GetAvailableOffersService = async (req: Request, res: Response, nex
     const postcode = req.params.postcode;
 
     try {
-        const offers = await Offer.find({ postcode: postcode, isActive: true });
+        const offers = await Offer.find({ postcode: postcode, active: true });
 
         if (offers) {
             const response = GenerateSuccessResponse(offers, 200, "Offer data found.");

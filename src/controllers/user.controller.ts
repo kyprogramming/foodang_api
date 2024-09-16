@@ -11,9 +11,11 @@ import {
     VerifyMobileOtpAndRegisterService,
     ForgotPasswordService,
     ResetPasswordService,
+    GetUsersService,
 } from "../services";
 
 export const AddUser = (req: Request, res: Response, next: NextFunction) => AddUserService(req, res, next);
+export const GetUsers = (req: Request, res: Response, next: NextFunction) => GetUsersService(req, res, next);
 export const CheckEmailExist = (req: Request, res: Response, next: NextFunction) => CheckEmailExistService(req, res, next);
 export const SendOtp = (req: Request, res: Response, next: NextFunction) => SendOtpService(req, res, next);
 export const VerifyMobileOtpAndRegister = (req: Request, res: Response, next: NextFunction) => VerifyMobileOtpAndRegisterService(req, res, next);
