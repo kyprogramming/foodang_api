@@ -21,7 +21,7 @@ import {
 
 import createHttpError, { InternalServerError } from "http-errors";
 import IUser from "../interfaces/IUser";
-import { User } from "../models/user.model";
+import  User  from "../models/user.model";
 import { SuccessMessages, ErrorMessages } from "../constants/user.messages";
 import { OAuth2Client } from "google-auth-library";
 import IOtp from "../interfaces/IOtp";
@@ -47,7 +47,6 @@ export const AddUserService = async (req: Request, res: Response, next: NextFunc
     }
 };
 
-
 // Get restaurants list
 export const GetUsersService = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -56,7 +55,7 @@ export const GetUsersService = async (req: Request, res: Response, next: NextFun
         const page = 1; // Current page number from query parameters
         const pageSize = 10; // Page size from query parameters
         const skip = (page - 1) * pageSize; // Skip for pagination
-      
+
         const users = await User.find({ active: true }).select("displayName email callingCode mobile"); //.skip(skip).limit(pageSize);
         const usersWithSeqNo = users.map((vendor, index) => ({
             seqNo: skip + index + 1,
@@ -425,6 +424,20 @@ export const UserLogoutService = async (req: Request, res: Response, next: NextF
             return res.status(200).json(response);
         }
         return next(createHttpError(404, ErrorMessages.USER_NOT_FOUND));
+    } catch (error: any) {
+        return next(InternalServerError(error.message));
+    }
+};
+
+export const GetUserByIdService = async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params.id;
+    try {
+        const user = await User.find({ _id: userId });
+        if (user) {
+            const response = GenerateSuccessResponse(user, 200, "User loaded successfully");
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(404, "Error while loading vendor."));
     } catch (error: any) {
         return next(InternalServerError(error.message));
     }

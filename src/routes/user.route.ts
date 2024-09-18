@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import { AddUser, CheckEmailExist, Login, Register, GoogleLogin, VerifyEmailOTP, UserLogout, SendOtp, VerifyMobileOtpAndRegister, ForgotPassword, ResetPassword, GetUsers } from "../controllers";
+import { AddUser, CheckEmailExist, Login, Register, GoogleLogin, VerifyEmailOTP, UserLogout, SendOtp, VerifyMobileOtpAndRegister, ForgotPassword, ResetPassword, GetUsers, GetUserById } from "../controllers";
 import passport from "passport";
 
 import { OAuth2Client } from "google-auth-library";
@@ -17,6 +17,7 @@ router.post("/reset-password", ResetPassword);
 router.post("/auth/google", GoogleLogin);
 // router.post("/register", Register);
 router.get("/", GetUsers);
+router.get("/:id", GetUserById);
 
 // Authentication
 router.use(Authenticate);

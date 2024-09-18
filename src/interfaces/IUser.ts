@@ -29,7 +29,7 @@ interface IPreference {
     timezone?: string; // Timezone (optional)
 }
 
-export interface IUser extends Document {
+interface IUser extends Document {
     displayName: string; // Required
     email: string; // Required, unique
     emailOtp?: string;

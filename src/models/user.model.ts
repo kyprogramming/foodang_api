@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { IUser } from "../interfaces";
+// import IUser  from "../interfaces";
 import { CommandInstance } from "twilio/lib/rest/preview/wireless/command";
+import IUser from "../interfaces/IUser";
 
 // Social Authentication Schema const SocialAuthSchema = new Schema({ provider: { type: String, enum: ["email", "google", "facebook"], required: true }, providerId: { type: String, required: true },
 // accessToken: { type: String, required: true }, refreshToken: String, });
@@ -83,9 +84,6 @@ const UserSchema = new Schema(
         timestamps: true,
     }
 );
-
-// UserSchema.pre("save", function (next) { this.updatedAt = Date.now(); next(); });
-
 const User = mongoose.model<IUser>("user", UserSchema);
 
-export { User };
+export default User;
