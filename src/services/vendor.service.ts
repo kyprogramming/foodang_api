@@ -101,7 +101,10 @@ export const DeleteVendorService = async (req: Request, res: Response, next: Nex
     try {
         const vendorId = req.params.id;
         // Soft delete the vendor data
-        const deletedVendor = await Vendor.findOneAndUpdate({ _id: vendorId }, { active: false }, { new: true });
+        // const deletedVendor = await Vendor.findOneAndUpdate({ _id: vendorId }, { active: false }, { new: true });
+        
+        // Hard delete the vendor data
+        const deletedVendor = await Vendor.findByIdAndDelete({ _id: vendorId });
         if (deletedVendor) {
             const response = GenerateSuccessResponse(deletedVendor, 200, "Vendor deleted successfully");
             return res.status(200).json(response);
