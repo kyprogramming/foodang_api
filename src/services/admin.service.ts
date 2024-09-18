@@ -13,7 +13,7 @@ import {
     ValidatePassword,
     validateInput,
 } from "../utility";
-import { Admin } from "../models/admin.model";
+import Admin  from "../models/admin.model";
 import { envConfig, sendEmail } from "../config";
 import createHttpError, { InternalServerError } from "http-errors";
 import { errorMsg, successMsg } from "../constants/admin.constant";
@@ -70,8 +70,8 @@ export const AdminLoginService = async (req: Request, res: Response, next: NextF
             if (validation) {
                 const signature = await GenerateToken({
                     _id: existingUser._id,
-                    email: existingUser.email,
-                    name: existingUser.name,
+                    // email: existingUser.email,
+                    // name: existingUser.name,
                 });
 
                 // const data = GenerateSuccessResponse(signature, "POST", "Admin login", "admin/login");
@@ -104,7 +104,7 @@ export const AdminLogoutService = async (req: Request, res: Response, next: Next
                 });
 
                 // const data = GenerateSuccessResponse(signature, "POST", "Admin login", "admin/login");
-                const response = GenerateSuccessResponse(signature, 200, successMsg.admin_auth_success);
+                const response = GenerateSuccessResponse("signature", 200, successMsg.admin_auth_success);
                 return res.status(200).json(response);
             }
         }

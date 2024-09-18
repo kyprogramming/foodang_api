@@ -8,9 +8,9 @@ const AdminSchema = new Schema(
         phone: { type: String },
         email: { type: String, required: true },
         password: { type: String, required: true },
-        googleId: { type: String },
-        facebookId: { type: String },
         salt: { type: String, required: true },
+        refreshToken:{ type: String },
+        googleId: { type: String },
     },
     {
         toJSON: {
@@ -28,4 +28,4 @@ const AdminSchema = new Schema(
 
 const Admin = mongoose.model<IAdmin>("admin", AdminSchema);
 
-export { Admin };
+export default Admin;

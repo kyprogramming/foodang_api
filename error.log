@@ -1,0 +1,2 @@
+{"level":"error","message":"Error: Admin authentication failed, invalid credentials.","service":"user-service","statusCode":401,"timestamp":"2024-09-18 22:07:59"}
+{"level":"error","message":"Error: Expected \"payload\" to be a plain object.","service":"user-service","statusCode":500,"timestamp":"2024-09-18 22:11:40"}

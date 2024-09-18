@@ -41,7 +41,7 @@ export const ValidatePassword = async (enteredPassword: string, savedPassword: s
 // TODO: need to remove below function
 export const GenerateToken = async (payload: AuthPayload) => {
     const accessToken = jwt.sign(payload, envConfig?.ACCESS_TOKEN_SECRET ?? "", { expiresIn: "1d" });
-    const refreshToken = jwt.sign(payload, envConfig?.REFRESH_TOKEN_SECRET ?? "", { expiresIn: "90d" });
+    const refreshToken = jwt.sign({}, envConfig?.REFRESH_TOKEN_SECRET ?? "", { expiresIn: "90d" });
     return { accessToken, refreshToken };
 };
 export const GenerateAccessToken = (payload: AuthPayload) => {
