@@ -2,21 +2,12 @@ import { RequestHandler, Request, Response, NextFunction } from "express";
 import { SignupAdminInput, CreateRestaurantInput, AdminLoginInput, VerifyDeliveryUserInput } from "../dto";
 import { DeliveryUser, Restaurant } from "../models";
 import { Transaction } from "../models";
-import {
-    customResponse,
-    GeneratePassword,
-    GenerateSuccessResponse,
-    GenerateSalt,
-    GenerateToken,
-    GenerateValidationErrorResponse,
-    isValidMongooseObjectId,
-    ValidatePassword,
-    validateInput,
-} from "../utility";
-import Admin  from "../models/admin.model";
+import { customResponse, GeneratePassword, GenerateSuccessResponse, GenerateSalt, GenerateToken, GenerateValidationErrorResponse, isValidMongooseObjectId, ValidatePassword, validateInput, VerifyAccessToken } from "../utility";
+import Admin from "../models/admin.model";
 import { envConfig, sendEmail } from "../config";
 import createHttpError, { InternalServerError } from "http-errors";
 import { errorMsg, successMsg } from "../constants/admin.constant";
+import { encryptObject } from "../utility/encryptionUtility";
 
 /** Admin Signup Service
  * @param req @param res @param next @returns
@@ -64,18 +55,43 @@ export const AdminLoginService = async (req: Request, res: Response, next: NextF
     const { email, password } = inputs;
 
     try {
-        const existingUser = await FindAdmin(undefined, email);
-        if (existingUser) {
-            const validation = await ValidatePassword(password, existingUser.password, existingUser.salt);
+        const adminUser = await Admin.findOne({ email: email });
+        if (adminUser) {
+            const validation = await ValidatePassword(password, adminUser.password, adminUser.salt);
             if (validation) {
                 const signature = await GenerateToken({
-                    _id: existingUser._id,
-                    // email: existingUser.email,
-                    // name: existingUser.name,
+                    _id: adminUser._id,
+                    email: adminUser.email,
+                    name: adminUser.name,
                 });
 
-                // const data = GenerateSuccessResponse(signature, "POST", "Admin login", "admin/login");
-                const response = GenerateSuccessResponse(signature, 200, successMsg.admin_auth_success);
+                // res.cookie("token", signature.accessToken, {
+                //     httpOnly: true, //  XSS protection
+                //     secure: process.env.NODE_ENV === "production", // Ensure cookies are only sent over HTTPS in production
+                //     sameSite: "strict", // CSRF protection
+                //     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+                // });
+                
+                // res.cookie("x_token", signature.refreshToken, {
+                //     httpOnly: true, //  XSS protection
+                //     secure: process.env.NODE_ENV === "production", // Ensure cookies are only sent over HTTPS in production
+                //     sameSite: "strict", // CSRF protection
+                //     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+                // });
+
+                adminUser.refreshToken = signature.refreshToken;
+                await adminUser.save();
+
+                const data = {
+                    user: {
+                        _id: adminUser._id,
+                        email: adminUser.email,
+                        name: adminUser.name
+                    },
+                    token: encryptObject(signature.accessToken),
+                    x_token: encryptObject(signature.refreshToken),
+                };
+                const response = GenerateSuccessResponse(data, 200, successMsg.admin_auth_success);
                 return res.status(200).json(response);
             }
         }
@@ -85,6 +101,26 @@ export const AdminLoginService = async (req: Request, res: Response, next: NextF
     }
 };
 
+export const ValidateTokenService = async (req: Request, res: Response, next: NextFunction) => {
+    const { token } = req.cookies;
+
+    if (!token) {
+        return res.status(401).json({ message: "No token provided" });
+    }
+
+    try {
+        const response = await VerifyAccessToken(token);
+        if (response) {
+            const response = GenerateSuccessResponse(undefined, 200, successMsg.admin_auth_success);
+                return res.status(200).json(response);
+        }
+        return next(createHttpError(401, errorMsg.admin_auth_error));
+    } catch (error: any) {
+        return next(InternalServerError(error.message));
+    }
+};
+
+
 export const AdminLogoutService = async (req: Request, res: Response, next: NextFunction) => {
     const inputs = <AdminLoginInput>req.body;
     const errors = await validateInput(AdminLoginInput, inputs);
@@ -93,14 +129,14 @@ export const AdminLogoutService = async (req: Request, res: Response, next: Next
     const { email, password } = inputs;
 
     try {
-        const existingUser = await FindAdmin(undefined, email);
-        if (existingUser) {
-            const validation = await ValidatePassword(password, existingUser.password, existingUser.salt);
+        const adminUser = await FindAdmin(undefined, email);
+        if (adminUser) {
+            const validation = await ValidatePassword(password, adminUser.password, adminUser.salt);
             if (validation) {
                 const signature = await GenerateToken({
-                    _id: existingUser._id,
-                    email: existingUser.email,
-                    name: existingUser.name,
+                    _id: adminUser._id,
+                    email: adminUser.email,
+                    name: adminUser.name,
                 });
 
                 // const data = GenerateSuccessResponse(signature, "POST", "Admin login", "admin/login");
@@ -123,7 +159,7 @@ export const CreateRestaurantService = async (req: Request, res: Response, next:
     const { name, address, postcode, foodType, email, password, ownerName, phone } = <CreateRestaurantInput>req.body;
 
     try {
-        const restaurant = null;// await FindRestaurant("", email);
+        const restaurant = null; // await FindRestaurant("", email);
         if (restaurant !== null) {
             return next(createHttpError(422, `Restaurant email - ${email} is already exists.`));
         }
@@ -266,11 +302,4 @@ export const FindAdmin = async (id: String | undefined = "", email: string = "")
     }
 };
 
-// Find Restaurant by email address and id
-// export const FindRestaurant = async (id: String | undefined, email?: string) => {
-//     if (email) {
-//         return await Restaurant.findOne({ email: email });
-//     } else {
-//         return await Restaurant.findById(id);
-//     }
-// };
+// Find Restaurant by email address and id export const FindRestaurant = async (id: String | undefined, email?: string) => { if (email) { return await Restaurant.findOne({ email: email }); } else { return await Restaurant.findById(id); } };

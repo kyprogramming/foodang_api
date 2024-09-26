@@ -1,5 +1,5 @@
 import Cloudinary from "cloudinary";
-import envConfig from "./env.config";
+import {envConfig} from "./env.config";
 
 export const cloudinary = Cloudinary.v2;
 
@@ -10,4 +10,4 @@ cloudinary.config({
     api_secret: envConfig.CLOUDINARY_API_SECRET,
 });
 
-export default cloudinary;
+// export default cloudinary;

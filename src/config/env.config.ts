@@ -9,13 +9,14 @@ export const envConfig = {
     SWAGGER_DOCS: process?.env?.SWAGGER_DOCS,
     SERVICE_URL: `${process?.env?.API_BASE_URL}${process?.env?.API_URL}${process?.env?.API_VERSION}`,
 
-    ANDROID_APP:`${process?.env?.ANDROID_APP}`,
+    ANDROID_APP: `${process?.env?.ANDROID_APP}`,
+    ENCRYPTION_KEY: `${process?.env?.ENCRYPTION_KEY}`,
 
     PORT: process?.env?.PORT || 8000,
     NODE_ENV: process?.env?.NODE_ENV || "development",
     APP_SECRET: process?.env?.APP_SECRET,
-    ACCESS_TOKEN_SECRET: process?.env?.ACCESS_TOKEN_SECRET,
-    REFRESH_TOKEN_SECRET: process?.env?.ACCESS_TOKEN_SECRET,
+    ACCESS_TOKEN_SECRET: process?.env?.ACCESS_TOKEN_SECRET || "",
+    REFRESH_TOKEN_SECRET: process?.env?.REFRESH_TOKEN_SECRET,
     PWD: process?.env?.PWD,
     MONGODB_CON: process?.env?.MONGODB_CON || "",
     TEST_ENV_MONGODB_CON: process?.env?.TEST_ENV_MONGODB_CON,
@@ -46,4 +47,4 @@ export const envConfig = {
     // process?.env?.REST_PASSWORD_LINK_EXPIRE_TIME,
 };
 
-export default envConfig;
+// export default envConfig;

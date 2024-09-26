@@ -1,7 +1,7 @@
 import express from "express";
 import App from "./app";
 import { connectDB } from "./config";
-import { envConfig } from "./config";
+import  {envConfig}  from "./config";
 import logger from "./logger";
 
 const startServer = async () => {

@@ -266,7 +266,7 @@ export const EmailLoginService = async (req: Request, res: Response, next: NextF
             const validation = await ValidatePassword(password, user.password, user.salt);
             if (validation) {
                 const accessToken = await GenerateAccessToken({ _id: user._id });
-                const refreshToken = await GenerateRefreshToken();
+                const refreshToken = await GenerateRefreshToken({ _id: user._id });
                 user.lastLogin = Date.now();
                 user.refreshToken = refreshToken;
                 user.save();
@@ -322,7 +322,7 @@ async function findOrCreateUser(idToken: string) {
             throw new Error("Your email is not verified with Google. Please verify your email and try again.");
         }
 
-        const refreshToken = GenerateRefreshToken();
+        const refreshToken = GenerateRefreshToken({ _id: sub });
 
         // Check if the user already exists by email
         let user = await User.findOne({ email });

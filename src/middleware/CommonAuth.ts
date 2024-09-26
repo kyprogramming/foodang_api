@@ -1,6 +1,7 @@
 import { Request, NextFunction, Response } from "express";
 import { AuthPayload, UserPayload } from "../dto";
-import { ValidateSignature } from "../utility";
+import { ValidateSignature } from "../middleware/auth/authHandler";
+
 
 declare global {
     namespace Express {
@@ -11,11 +12,12 @@ declare global {
     }
 }
 
-export const Authenticate = async (req: Request, res: Response, next: NextFunction) => {
-    const signature = await ValidateSignature(req);
-    if (signature) {
-        return next();
-    } else {
-        return res.json({ message: "User Not authorised" });
-    }
+export const Authenticate = async (req: Request, res: any, next: NextFunction) => {
+    await ValidateSignature(req, res, next);
+    
+    // if (signature) {
+    //     return next();
+    // } else {
+    //     return res.json({ message: "User Not authorised" });
+    // }
 };

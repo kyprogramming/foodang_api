@@ -106,3 +106,9 @@ export class VerifyDeliveryUserInput {
     @IsNotEmpty()
     status: string;
 }
+
+export class AdminPayload {
+    _id: any;
+    email: string;
+    name: string;
+}

@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import { Authenticate } from "../middleware";
-import { AdminSignup, AdminLogin, CreateRestaurant, GetDeliveryUsers, GetTransactionById, GetTransactions, GetRestaurantByID, GetRestaurants, VerifyDeliveryUser, AdminLogout } from "../controllers";
+import { AdminSignup, AdminLogin, CreateRestaurant, GetDeliveryUsers, GetTransactionById, GetTransactions, GetRestaurantByID, GetRestaurants, VerifyDeliveryUser, AdminLogout, ValidateToken } from "../controllers";
 import passport from "passport";
 
 const router = express.Router();
@@ -12,6 +12,7 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
 // Signup and login
 router.post("/", AdminSignup);
 router.post("/login", AdminLogin);
+router.get("/validate-token", ValidateToken);
 
 // Authentication
 router.use(Authenticate);

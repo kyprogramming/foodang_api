@@ -10,11 +10,14 @@ import {
     VerifyDeliveryUserService,
     GetDeliveryUsersService,
     AdminLogoutService,
+    ValidateTokenService,
 } from "../services";
 
 export const AdminSignup = (req: Request, res: Response, next: NextFunction) => SignupAdminService(req, res, next);
 
 export const AdminLogin = (req: Request, res: Response, next: NextFunction) => AdminLoginService(req, res, next);
+
+export const ValidateToken = (req: Request, res: Response, next: NextFunction) => ValidateTokenService(req, res, next);
 
 export const AdminLogout = (req: Request, res: Response, next: NextFunction) => AdminLogoutService(req, res, next);
 

@@ -1,4 +1,5 @@
 import customResponse from "./customResponse";
+// import {encryptObject} from '../utility/encryptionUtility'
 
 type SuccessResponse<T> = {
     success: boolean;
@@ -37,7 +38,7 @@ export const GenerateSuccessResponse = <T>(
         }
     }
     // Construct the full response
-    return {
+    const resObj = {
         success: true,
         data: responseData,
         statusCode,
@@ -45,6 +46,7 @@ export const GenerateSuccessResponse = <T>(
         detailMsg,
         // request: type || desc || uri ? { type, description: desc, url: uri ? `https://your-api-url/${uri}` : undefined } : undefined,
     };
+    return resObj;
 };
 
 export const GenerateValidationErrorResponse = (errors) => {
