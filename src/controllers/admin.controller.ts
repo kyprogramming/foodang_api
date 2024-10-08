@@ -1,17 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import {
-    SignupAdminService,
-    AdminLoginService,
-    CreateRestaurantService,
-    GetRestaurantsService,
-    GetRestaurantByIDService,
-    GetTransactionsService,
-    GetTransactionByIdService,
-    VerifyDeliveryUserService,
-    GetDeliveryUsersService,
-    AdminLogoutService,
-    ValidateTokenService,
-} from "../services";
+import { SignupAdminService, AdminLoginService, CreateRestaurantService, GetRestaurantsService, GetRestaurantByIdService, GetTransactionsService, GetTransactionByIdService, VerifyDeliveryUserService, GetDeliveryUsersService, AdminLogoutService, ValidateTokenService, GetRestaurantsByVendorIdService } from "../services";
 
 export const AdminSignup = (req: Request, res: Response, next: NextFunction) => SignupAdminService(req, res, next);
 
@@ -25,7 +13,8 @@ export const CreateRestaurant = (req: Request, res: Response, next: NextFunction
 
 export const GetRestaurants = (req: Request, res: Response, next: NextFunction) => GetRestaurantsService(req, res, next);
 
-export const GetRestaurantByID = (req: Request, res: Response, next: NextFunction) => GetRestaurantByIDService(req, res, next);
+export const GetRestaurantById = (req: Request, res: Response, next: NextFunction) => GetRestaurantByIdService(req, res, next);
+export const GetRestaurantsByVendorId = (req: Request, res: Response, next: NextFunction) => GetRestaurantsByVendorIdService(req, res, next);
 
 export const GetTransactions = (req: Request, res: Response, next: NextFunction) => GetTransactionsService(req, res, next);
 

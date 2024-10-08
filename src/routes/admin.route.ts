@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import { Authenticate } from "../middleware";
-import { AdminSignup, AdminLogin, CreateRestaurant, GetDeliveryUsers, GetTransactionById, GetTransactions, GetRestaurantByID, GetRestaurants, VerifyDeliveryUser, AdminLogout, ValidateToken } from "../controllers";
+import { AdminSignup, AdminLogin, CreateRestaurant, GetDeliveryUsers, GetTransactionById, GetTransactions, GetRestaurantById, GetRestaurants, VerifyDeliveryUser, AdminLogout, ValidateToken, GetRestaurantsByVendorId } from "../controllers";
 import passport from "passport";
 
 const router = express.Router();
@@ -14,13 +14,15 @@ router.post("/", AdminSignup);
 router.post("/login", AdminLogin);
 router.get("/validate-token", ValidateToken);
 
+router.get("/restaurants", GetRestaurants);
+router.get("/restaurants/vendor/:id", GetRestaurantsByVendorId);
+
 // Authentication
 router.use(Authenticate);
 
 // Create and find restaurants
 router.post("/restaurant", CreateRestaurant);
-router.get("/restaurants", GetRestaurants);
-router.get("/restaurant/:id", GetRestaurantByID);
+router.get("/restaurant/:id", GetRestaurantById);
 
 // Get transactions details
 router.get("/transactions", GetTransactions);

@@ -1,7 +1,7 @@
 
 import IFood from "./IFood";
 
-import { Document, Types } from "mongoose";
+import { Document, Schema, Types } from "mongoose";
 // import { IMenuItem } from "./MenuItem"; // Assuming MenuItem is in a separate file
 
 interface IAddress {
@@ -32,21 +32,20 @@ interface IOwner {
 }
 
 export interface IRestaurant extends Document {
+    email: string;
+    password: string;
     name: string;
     description: string;
+    vendorId: Schema.Types.ObjectId;
     address: IAddress;
-    contactDetails: IContactDetails;
-    openingHours: IOpeningHours;
-    cuisine: string[];
-    rating: number;
-    numberOfReviews: number;
     averageDeliveryTime: number;
-    priceRange: string;
-    isActive: boolean;
-    // menu: Types.DocumentArray<IMenuItem>;
-    images: { url: string; altText: string }[];
-    owner: IOwner;
-    paymentMethods: string[];
+    minOrder: number;
+    saleTax: number;
+    shopCategory: string;
+    cuisine: string[];
+    imageUrl: string;
+    logoUrl: string;
+    active: boolean;
     createdAt: Date;
     updatedAt: Date;
 }

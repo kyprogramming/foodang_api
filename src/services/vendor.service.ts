@@ -50,6 +50,8 @@ export const GetVendorsService = async (req: Request, res: Response, next: NextF
             ...vendor.toObject(),
         }));
 
+        // await new Promise<void>((resolve) => setTimeout(() => resolve(), 1000)); // create delay
+
         if (vendorsWithSeqNo) {
             const response = GenerateSuccessResponse(vendorsWithSeqNo, 200, "Vendor load successfully");
             return res.status(200).json(response);

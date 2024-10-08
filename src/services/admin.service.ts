@@ -8,6 +8,7 @@ import { envConfig, sendEmail } from "../config";
 import createHttpError, { InternalServerError } from "http-errors";
 import { errorMsg, successMsg } from "../constants/admin.constant";
 import { encryptObject } from "../utility/encryptionUtility";
+import mongoose from "mongoose";
 
 /** Admin Signup Service
  * @param req @param res @param next @returns
@@ -71,7 +72,7 @@ export const AdminLoginService = async (req: Request, res: Response, next: NextF
                 //     sameSite: "strict", // CSRF protection
                 //     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
                 // });
-                
+
                 // res.cookie("x_token", signature.refreshToken, {
                 //     httpOnly: true, //  XSS protection
                 //     secure: process.env.NODE_ENV === "production", // Ensure cookies are only sent over HTTPS in production
@@ -86,7 +87,7 @@ export const AdminLoginService = async (req: Request, res: Response, next: NextF
                     user: {
                         _id: adminUser._id,
                         email: adminUser.email,
-                        name: adminUser.name
+                        name: adminUser.name,
                     },
                     token: encryptObject(signature.accessToken),
                     x_token: encryptObject(signature.refreshToken),
@@ -112,14 +113,13 @@ export const ValidateTokenService = async (req: Request, res: Response, next: Ne
         const response = await VerifyAccessToken(token);
         if (response) {
             const response = GenerateSuccessResponse(undefined, 200, successMsg.admin_auth_success);
-                return res.status(200).json(response);
+            return res.status(200).json(response);
         }
         return next(createHttpError(401, errorMsg.admin_auth_error));
     } catch (error: any) {
         return next(InternalServerError(error.message));
     }
 };
-
 
 export const AdminLogoutService = async (req: Request, res: Response, next: NextFunction) => {
     const inputs = <AdminLoginInput>req.body;
@@ -207,8 +207,24 @@ export const GetRestaurantsService = async (req: Request, res: Response, next: N
     }
 };
 
+// Get restaurants list by vendor id
+export const GetRestaurantsByVendorIdService = async (req: Request, res: Response, next: NextFunction) => {
+    const vendorId = req.params.id;
+    // const objectId = new mongoose.Types.ObjectId(_vendorId);
+    try {
+        const restaurants = await Restaurant.find({ vendorId }).populate({ path: "vendorId", select: "name email" }).exec();
+        if (restaurants) {
+            const response = GenerateSuccessResponse(restaurants, 200, successMsg.restaurant_create_success);
+            return res.status(200).json(response);
+        }
+        return next(createHttpError(404, errorMsg.restaurant_not_found));
+    } catch (error: any) {
+        return next(InternalServerError(error.message));
+    }
+};
+
 // Get restaurant by id
-export const GetRestaurantByIDService = async (req: Request, res: Response, next: NextFunction) => {
+export const GetRestaurantByIdService = async (req: Request, res: Response, next: NextFunction) => {
     const restaurantId = req.params.id;
     if (!isValidMongooseObjectId(restaurantId)) return next(createHttpError(422, `Invalid request parameter`));
 
